@@ -1,0 +1,263 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|d:\\fptu\\1_prn232\\code\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema\\controllers\\identityuserendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|solutionrelative:bookingticketcinema\\controllers\\identityuserendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|d:\\fptu\\1_prn232\\code\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema\\dto\\userregistrationmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|solutionrelative:bookingticketcinema\\dto\\userregistrationmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|d:\\fptu\\1_prn232\\code\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema\\dto\\editprofilevm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|solutionrelative:bookingticketcinema\\dto\\editprofilevm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|d:\\fptu\\1_prn232\\code\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|solutionrelative:bookingticketcinema\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|d:\\fptu\\1_prn232\\code\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|solutionrelative:bookingticketcinema\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|d:\\fptu\\1_prn232\\code\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema\\extensions\\swaggerextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|solutionrelative:bookingticketcinema\\extensions\\swaggerextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|d:\\fptu\\1_prn232\\code\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema\\extensions\\identityextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|solutionrelative:bookingticketcinema\\extensions\\identityextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|d:\\fptu\\1_prn232\\code\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema\\extensions\\efcoreextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|solutionrelative:bookingticketcinema\\extensions\\efcoreextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|d:\\fptu\\1_prn232\\code\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema\\extensions\\appconfigextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|solutionrelative:bookingticketcinema\\extensions\\appconfigextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|d:\\fptu\\1_prn232\\code\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema\\dto\\resetpasswordvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|solutionrelative:bookingticketcinema\\dto\\resetpasswordvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|d:\\fptu\\1_prn232\\code\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema\\dto\\forgotpasswordvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|solutionrelative:bookingticketcinema\\dto\\forgotpasswordvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|d:\\fptu\\1_prn232\\code\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema\\models\\appsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|solutionrelative:bookingticketcinema\\models\\appsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|d:\\fptu\\1_prn232\\code\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|solutionrelative:bookingticketcinema\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:6:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UserRegistrationModel.cs",
+              "DocumentMoniker": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\DTO\\UserRegistrationModel.cs",
+              "RelativeDocumentMoniker": "BookingTicketCinema\\DTO\\UserRegistrationModel.cs",
+              "ToolTip": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\DTO\\UserRegistrationModel.cs",
+              "RelativeToolTip": "BookingTicketCinema\\DTO\\UserRegistrationModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T13:32:53.294Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "IdentityUserEndpoints.cs",
+              "DocumentMoniker": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Controllers\\IdentityUserEndpoints.cs",
+              "RelativeDocumentMoniker": "BookingTicketCinema\\Controllers\\IdentityUserEndpoints.cs",
+              "ToolTip": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Controllers\\IdentityUserEndpoints.cs",
+              "RelativeToolTip": "BookingTicketCinema\\Controllers\\IdentityUserEndpoints.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAYwA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T12:54:32.269Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EditProfileVm.cs",
+              "DocumentMoniker": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\DTO\\EditProfileVm.cs",
+              "RelativeDocumentMoniker": "BookingTicketCinema\\DTO\\EditProfileVm.cs",
+              "ToolTip": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\DTO\\EditProfileVm.cs",
+              "RelativeToolTip": "BookingTicketCinema\\DTO\\EditProfileVm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T12:53:54.836Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\appsettings.json",
+              "RelativeDocumentMoniker": "BookingTicketCinema\\appsettings.json",
+              "ToolTip": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\appsettings.json",
+              "RelativeToolTip": "BookingTicketCinema\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-10-15T12:40:00.791Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Program.cs",
+              "RelativeDocumentMoniker": "BookingTicketCinema\\Program.cs",
+              "ToolTip": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Program.cs",
+              "RelativeToolTip": "BookingTicketCinema\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T12:52:24.512Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AppConfigExtensions.cs",
+              "DocumentMoniker": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Extensions\\AppConfigExtensions.cs",
+              "RelativeDocumentMoniker": "BookingTicketCinema\\Extensions\\AppConfigExtensions.cs",
+              "ToolTip": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Extensions\\AppConfigExtensions.cs",
+              "RelativeToolTip": "BookingTicketCinema\\Extensions\\AppConfigExtensions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T12:57:19.589Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "EFCoreExtensions.cs",
+              "DocumentMoniker": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Extensions\\EFCoreExtensions.cs",
+              "RelativeDocumentMoniker": "BookingTicketCinema\\Extensions\\EFCoreExtensions.cs",
+              "ToolTip": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Extensions\\EFCoreExtensions.cs",
+              "RelativeToolTip": "BookingTicketCinema\\Extensions\\EFCoreExtensions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T12:57:19.463Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "IdentityExtensions.cs",
+              "DocumentMoniker": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Extensions\\IdentityExtensions.cs",
+              "RelativeDocumentMoniker": "BookingTicketCinema\\Extensions\\IdentityExtensions.cs",
+              "ToolTip": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Extensions\\IdentityExtensions.cs",
+              "RelativeToolTip": "BookingTicketCinema\\Extensions\\IdentityExtensions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T12:57:53.903Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "SwaggerExtensions.cs",
+              "DocumentMoniker": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Extensions\\SwaggerExtensions.cs",
+              "RelativeDocumentMoniker": "BookingTicketCinema\\Extensions\\SwaggerExtensions.cs",
+              "ToolTip": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Extensions\\SwaggerExtensions.cs",
+              "RelativeToolTip": "BookingTicketCinema\\Extensions\\SwaggerExtensions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T12:59:08.139Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ResetPasswordVm.cs",
+              "DocumentMoniker": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\DTO\\ResetPasswordVm.cs",
+              "RelativeDocumentMoniker": "BookingTicketCinema\\DTO\\ResetPasswordVm.cs",
+              "ToolTip": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\DTO\\ResetPasswordVm.cs",
+              "RelativeToolTip": "BookingTicketCinema\\DTO\\ResetPasswordVm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T12:54:10.332Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ForgotPasswordVm.cs",
+              "DocumentMoniker": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\DTO\\ForgotPasswordVm.cs",
+              "RelativeDocumentMoniker": "BookingTicketCinema\\DTO\\ForgotPasswordVm.cs",
+              "ToolTip": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\DTO\\ForgotPasswordVm.cs",
+              "RelativeToolTip": "BookingTicketCinema\\DTO\\ForgotPasswordVm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T12:54:03.668Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "AppSettings.cs",
+              "DocumentMoniker": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Models\\AppSettings.cs",
+              "RelativeDocumentMoniker": "BookingTicketCinema\\Models\\AppSettings.cs",
+              "ToolTip": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Models\\AppSettings.cs",
+              "RelativeToolTip": "BookingTicketCinema\\Models\\AppSettings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T12:47:23.315Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "User.cs",
+              "DocumentMoniker": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Models\\User.cs",
+              "RelativeDocumentMoniker": "BookingTicketCinema\\Models\\User.cs",
+              "ToolTip": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Models\\User.cs",
+              "RelativeToolTip": "BookingTicketCinema\\Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T12:47:34.236Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
