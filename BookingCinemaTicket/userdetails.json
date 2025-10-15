@@ -1,0 +1,58 @@
+[
+    {
+        "email": "admin1_m_age51@gmail.com",
+        "password": "admin1_m_age51",
+        "fullName": "Admin 1",
+        "role": "Admin",
+        "gender": "Male",
+        "age": 51
+    },
+    {
+        "email": "manager1_f_age36@gmail.com",
+        "password": "manager1_f_age36",
+        "fullName": "Manager 1",
+        "role": "Manager",
+        "gender": "Female",
+        "age": 36
+    },
+    {
+        "email": "manager2_m_age40@gmail.com",
+        "password": "manager2_m_age40",
+        "fullName": "Manager 2",
+        "role": "Manager",
+        "gender": "Male",
+        "age": 40
+    },
+    {
+        "email": "customer1_f_age21@gmail.com",
+        "password": "customer1_f_age21",
+        "fullName": "Customer 1",
+        "role": "Customer",
+        "gender": "Female",
+        "age": 21
+    },
+    {
+        "email": "customer2_m_age21@gmail.com",
+        "password": "customer2_m_age21",
+        "fullName": "Customer 2",
+        "role": "Customer",
+        "gender": "Male",
+        "age": 21
+    },
+    {
+        "email": "customer3_m_age9@gmail.com",
+        "password": "customer3_m_age9",
+        "fullName": "Customer 3",
+        "role": "Customer",
+        "gender": "Male",
+        "age": 18
+    },
+    {
+        "email": "customer4_f_age9@gmail.com",
+        "password": "customer4_f_age9",
+        "fullName": "Customer 4",
+        "role": "Customer",
+        "gender": "Female",
+        "age": 19
+    }
+]
