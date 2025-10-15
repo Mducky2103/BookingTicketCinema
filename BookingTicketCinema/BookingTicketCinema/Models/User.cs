@@ -15,5 +15,8 @@ namespace BookingTicketCinema.Models
 
         [PersonalData]
         public DateOnly DOB { get; set; }
+
+        public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+        public ICollection<VoucherRedemption> VoucherRedemptions { get; set; } = new List<VoucherRedemption>();
     }
 }
