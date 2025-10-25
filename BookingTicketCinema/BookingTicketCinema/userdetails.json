@@ -1,0 +1,51 @@
+[
+    {
+        "email": "minhk21112003@gmail.com",
+        "password": "12345@",
+        "fullName": "Đức Minh",
+        "role": "Admin",
+        "gender": "Male",
+        "age": 22
+    },
+    {
+        "email": "ducminh211103@gmail.com",
+        "password": "12345@",
+        "fullName": "Đức Minh",
+        "role": "Admin",
+        "gender": "Male",
+        "age": 21
+    },
+    {
+        "email": "staff1@gmail.com",
+        "password": "staff1@",
+        "fullName": "Staff 1",
+        "role": "Staff",
+        "gender": "Female",
+        "age": 25
+    },
+    {
+        "email": "staff2@gmail.com",
+        "password": "12345@",
+        "fullName": "Staff 2",
+        "role": "Staff",
+        "gender": "Male",
+        "age": 26
+    },
+    {
+        "email": "customer1@gmail.com",
+        "password": "12345@",
+        "fullName": "Customer 1",
+        "role": "Customer",
+        "gender": "Male",
+        "age": 16
+    },
+    {
+        "email": "customer2@gmail.com",
+        "password": "123456@",
+        "fullName": "Customer 2",
+        "role": "Customer",
+        "gender": "Male",
+        "age": 35
+    }
+
+]

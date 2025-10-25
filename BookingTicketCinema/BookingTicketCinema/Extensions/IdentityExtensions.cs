@@ -25,6 +25,7 @@ namespace BookingTicketCinema.Extensions
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
                 options.User.RequireUniqueEmail = true;
+                options.Password.RequiredLength = 6;
             });
             return services;
         }

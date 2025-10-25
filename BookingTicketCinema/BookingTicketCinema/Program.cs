@@ -2,6 +2,9 @@ using BookingTicketCinema.Models;
 using BookingTicketCinema.Services;
 using BookingTicketCinema.Controllers;
 using BookingTicketCinema.Extensions;
+using BookingTicketCinema.Services.Interface;
+using BookingTicketCinema.Repositories.Interface;
+using BookingTicketCinema.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,9 @@ builder.Services.AddSwaggerExplorer()
                             .ConfigureIdentityOptions()
                             .AddIdentityAuth(builder.Configuration);
 builder.Services.AddSingleton<EmailService>();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

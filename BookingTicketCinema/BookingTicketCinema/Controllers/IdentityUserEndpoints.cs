@@ -39,6 +39,15 @@ namespace BookingTicketCinema.Controllers
             var result = await userManager.CreateAsync(
                 user,
                 userRegistrationModel.Password);
+            if (!result.Succeeded)
+            {
+                // Nếu tạo thất bại (ví dụ: mật khẩu sai format), trả lỗi rõ ràng
+                return Results.BadRequest(new
+                {
+                    message = "User creation failed.",
+                    errors = result.Errors.Select(e => e.Description)
+                });
+            }
             await userManager.AddToRoleAsync(user, userRegistrationModel.Role);
 
             if (result.Succeeded) return Results.Ok(result);
@@ -67,8 +76,8 @@ namespace BookingTicketCinema.Controllers
                 var tokenDescriptor = new SecurityTokenDescriptor
                     {
                         Subject = claims,
-                        Expires = DateTime.UtcNow.AddDays(1),
-                        SigningCredentials = new SigningCredentials(signInKey, SecurityAlgorithms.HmacSha256Signature)
+                        Expires = DateTime.UtcNow.AddDays(1),// Token hợp lệ trong 1 ngày
+                    SigningCredentials = new SigningCredentials(signInKey, SecurityAlgorithms.HmacSha256Signature)
                     };
                     var tokenHandler = new JwtSecurityTokenHandler();
                     var securityToken = tokenHandler.CreateToken(tokenDescriptor);

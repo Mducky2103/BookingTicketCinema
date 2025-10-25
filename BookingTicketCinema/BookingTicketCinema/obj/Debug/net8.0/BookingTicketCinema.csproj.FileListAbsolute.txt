@@ -156,3 +156,5 @@ D:\FPTU\1_PRN232\Code\BookingTicketCinema\BookingTicketCinema\BookingTicketCinem
 D:\FPTU\1_PRN232\Code\BookingTicketCinema\BookingTicketCinema\BookingTicketCinema\obj\Debug\net8.0\BookingTicketCinema.pdb
 D:\FPTU\1_PRN232\Code\BookingTicketCinema\BookingTicketCinema\BookingTicketCinema\obj\Debug\net8.0\BookingTicketCinema.genruntimeconfig.cache
 D:\FPTU\1_PRN232\Code\BookingTicketCinema\BookingTicketCinema\BookingTicketCinema\obj\Debug\net8.0\ref\BookingTicketCinema.dll
+D:\FPTU\1_PRN232\Code\BookingTicketCinema\BookingTicketCinema\BookingTicketCinema\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+D:\FPTU\1_PRN232\Code\BookingTicketCinema\BookingTicketCinema\BookingTicketCinema\bin\Debug\net8.0\userdetails.json
