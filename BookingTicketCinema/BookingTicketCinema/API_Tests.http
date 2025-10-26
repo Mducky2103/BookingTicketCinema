@@ -1,0 +1,211 @@
+### Booking Ticket Cinema API Tests
+### This file contains test requests for all Cinema & Seating Management APIs
+
+@baseUrl = http://localhost:5098/api
+
+### ============================================
+### ROOM APIs
+### ============================================
+
+### Get all rooms
+GET {{baseUrl}}/rooms
+
+### Get room by ID
+GET {{baseUrl}}/rooms/1
+
+### Create new room (2D)
+POST {{baseUrl}}/rooms
+Content-Type: application/json
+
+{
+  "name": "Room 1 - 2D",
+  "capacity": 100,
+  "type": 0
+}
+
+### Create new room (3D)
+POST {{baseUrl}}/rooms
+Content-Type: application/json
+
+{
+  "name": "Room 2 - 3D",
+  "capacity": 120,
+  "type": 1
+}
+
+### Create new room (IMAX)
+POST {{baseUrl}}/rooms
+Content-Type: application/json
+
+{
+  "name": "Room 3 - IMAX",
+  "capacity": 200,
+  "type": 2
+}
+
+### Update room
+PUT {{baseUrl}}/rooms/1
+Content-Type: application/json
+
+{
+  "name": "Room 1 - Updated",
+  "capacity": 150
+}
+
+### Delete room
+DELETE {{baseUrl}}/rooms/1
+
+### ============================================
+### SEAT GROUP APIs
+### ============================================
+
+### Get all seat groups
+GET {{baseUrl}}/seatgroups
+
+### Get seat group by ID
+GET {{baseUrl}}/seatgroups/1
+
+### Get seat groups by room
+GET {{baseUrl}}/seatgroups/room/1
+
+### Create seat group (Standard)
+POST {{baseUrl}}/seatgroups
+Content-Type: application/json
+
+{
+  "groupName": "Standard Seats",
+  "type": 0,
+  "roomId": 1
+}
+
+### Create seat group (VIP)
+POST {{baseUrl}}/seatgroups
+Content-Type: application/json
+
+{
+  "groupName": "VIP Seats",
+  "type": 1,
+  "roomId": 1
+}
+
+### Create seat group (Couple)
+POST {{baseUrl}}/seatgroups
+Content-Type: application/json
+
+{
+  "groupName": "Couple Seats",
+  "type": 2,
+  "roomId": 1
+}
+
+### Update seat group
+PUT {{baseUrl}}/seatgroups/1
+Content-Type: application/json
+
+{
+  "groupName": "Updated Standard Seats"
+}
+
+### Delete seat group
+DELETE {{baseUrl}}/seatgroups/1
+
+### ============================================
+### SEAT APIs
+### ============================================
+
+### Get all seats
+GET {{baseUrl}}/seats
+
+### Get seat by ID
+GET {{baseUrl}}/seats/1
+
+### Get seats by room
+GET {{baseUrl}}/seats/room/1
+
+### Create seat
+POST {{baseUrl}}/seats
+Content-Type: application/json
+
+{
+  "seatNumber": "A1",
+  "status": 0,
+  "roomId": 1,
+  "seatGroupId": 1
+}
+
+### Create multiple seats (example: A1-A10)
+POST {{baseUrl}}/seats
+Content-Type: application/json
+
+{
+  "seatNumber": "A2",
+  "status": 0,
+  "roomId": 1,
+  "seatGroupId": 1
+}
+
+### Update seat status (Mark as Booked)
+PUT {{baseUrl}}/seats/1
+Content-Type: application/json
+
+{
+  "status": 1
+}
+
+### Update seat status (Mark as Broken)
+PUT {{baseUrl}}/seats/2
+Content-Type: application/json
+
+{
+  "status": 2
+}
+
+### Delete seat
+DELETE {{baseUrl}}/seats/1
+
+### ============================================
+### PRICE RULE APIs
+### ============================================
+
+### Get all price rules
+GET {{baseUrl}}/pricerules
+
+### Get price rule by ID
+GET {{baseUrl}}/pricerules/1
+
+### Get price rules by seat group
+GET {{baseUrl}}/pricerules/seatgroup/1
+
+### Create price rule (Standard seat - Morning - Weekday)
+POST {{baseUrl}}/pricerules
+Content-Type: application/json
+
+{
+  "basePrice": 50000,
+  "dayOfWeek": 1,
+  "slot": 0,
+  "seatGroupId": 1
+}
+
+### Create price rule (VIP seat - Evening - Weekend)
+POST {{baseUrl}}/pricerules
+Content-Type: application/json
+
+{
+  "basePrice": 100000,
+  "dayOfWeek": 6,
+  "slot": 2,
+  "seatGroupId": 2
+}
+
+### Update price rule
+PUT {{baseUrl}}/pricerules/1
+Content-Type: application/json
+
+{
+  "basePrice": 55000
+}
+
+### Delete price rule
+DELETE {{baseUrl}}/pricerules/1
+
