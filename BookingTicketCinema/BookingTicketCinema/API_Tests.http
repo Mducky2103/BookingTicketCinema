@@ -66,7 +66,7 @@ GET {{baseUrl}}/seatgroups
 GET {{baseUrl}}/seatgroups/1
 
 ### Get seat groups by room
-GET {{baseUrl}}/seatgroups/room/1
+GET {{baseUrl}}/seatgroups/room/2
 
 ### Create seat group (Standard)
 POST {{baseUrl}}/seatgroups
@@ -75,7 +75,7 @@ Content-Type: application/json
 {
   "groupName": "Standard Seats",
   "type": 0,
-  "roomId": 1
+  "roomId": 2
 }
 
 ### Create seat group (VIP)
@@ -85,7 +85,7 @@ Content-Type: application/json
 {
   "groupName": "VIP Seats",
   "type": 1,
-  "roomId": 1
+  "roomId": 2
 }
 
 ### Create seat group (Couple)
@@ -95,7 +95,7 @@ Content-Type: application/json
 {
   "groupName": "Couple Seats",
   "type": 2,
-  "roomId": 1
+  "roomId": 2
 }
 
 ### Update seat group
@@ -120,7 +120,7 @@ GET {{baseUrl}}/seats
 GET {{baseUrl}}/seats/1
 
 ### Get seats by room
-GET {{baseUrl}}/seats/room/1
+GET {{baseUrl}}/seats/room/2
 
 ### Create seat
 POST {{baseUrl}}/seats
@@ -129,8 +129,8 @@ Content-Type: application/json
 {
   "seatNumber": "A1",
   "status": 0,
-  "roomId": 1,
-  "seatGroupId": 1
+  "roomId": 2,
+  "seatGroupId": 2
 }
 
 ### Create multiple seats (example: A1-A10)
@@ -140,8 +140,8 @@ Content-Type: application/json
 {
   "seatNumber": "A2",
   "status": 0,
-  "roomId": 1,
-  "seatGroupId": 1
+  "roomId": 2,
+  "seatGroupId": 2
 }
 
 ### Update seat status (Mark as Booked)
