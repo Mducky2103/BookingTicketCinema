@@ -1,5 +1,6 @@
 using BookingTicketCinema.DTO;
 using BookingTicketCinema.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookingTicketCinema.Controllers
@@ -17,12 +18,14 @@ namespace BookingTicketCinema.Controllers
             return app;
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> GetAllSeatGroups(ISeatGroupService seatGroupService)
         {
             var seatGroups = await seatGroupService.GetAllAsync();
             return Results.Ok(seatGroups);
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> GetSeatGroupById(int id, ISeatGroupService seatGroupService)
         {
             var seatGroup = await seatGroupService.GetByIdAsync(id);
@@ -30,12 +33,14 @@ namespace BookingTicketCinema.Controllers
             return Results.Ok(seatGroup);
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> GetSeatGroupsByRoom(int roomId, ISeatGroupService seatGroupService)
         {
             var seatGroups = await seatGroupService.GetByRoomIdAsync(roomId);
             return Results.Ok(seatGroups);
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> CreateSeatGroup([FromBody] CreateSeatGroupDto dto, ISeatGroupService seatGroupService)
         {
             try
@@ -49,6 +54,7 @@ namespace BookingTicketCinema.Controllers
             }
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> UpdateSeatGroup(int id, [FromBody] UpdateSeatGroupDto dto, ISeatGroupService seatGroupService)
         {
             try
@@ -63,6 +69,7 @@ namespace BookingTicketCinema.Controllers
             }
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> DeleteSeatGroup(int id, ISeatGroupService seatGroupService)
         {
             var result = await seatGroupService.DeleteAsync(id);

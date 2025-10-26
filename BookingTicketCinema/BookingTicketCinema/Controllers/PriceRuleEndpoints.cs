@@ -1,5 +1,6 @@
 using BookingTicketCinema.DTO;
 using BookingTicketCinema.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookingTicketCinema.Controllers
@@ -17,12 +18,14 @@ namespace BookingTicketCinema.Controllers
             return app;
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> GetAllPriceRules(IPriceRuleService priceRuleService)
         {
             var priceRules = await priceRuleService.GetAllAsync();
             return Results.Ok(priceRules);
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> GetPriceRuleById(int id, IPriceRuleService priceRuleService)
         {
             var priceRule = await priceRuleService.GetByIdAsync(id);
@@ -30,12 +33,14 @@ namespace BookingTicketCinema.Controllers
             return Results.Ok(priceRule);
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> GetPriceRulesBySeatGroup(int seatGroupId, IPriceRuleService priceRuleService)
         {
             var priceRules = await priceRuleService.GetBySeatGroupIdAsync(seatGroupId);
             return Results.Ok(priceRules);
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> CreatePriceRule([FromBody] CreatePriceRuleDto dto, IPriceRuleService priceRuleService)
         {
             try
@@ -49,6 +54,7 @@ namespace BookingTicketCinema.Controllers
             }
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> UpdatePriceRule(int id, [FromBody] UpdatePriceRuleDto dto, IPriceRuleService priceRuleService)
         {
             try
@@ -63,6 +69,7 @@ namespace BookingTicketCinema.Controllers
             }
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> DeletePriceRule(int id, IPriceRuleService priceRuleService)
         {
             var result = await priceRuleService.DeleteAsync(id);

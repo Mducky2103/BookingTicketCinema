@@ -1,5 +1,6 @@
 using BookingTicketCinema.DTO;
 using BookingTicketCinema.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookingTicketCinema.Controllers
@@ -17,12 +18,14 @@ namespace BookingTicketCinema.Controllers
             return app;
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> GetAllSeats(ISeatService seatService)
         {
             var seats = await seatService.GetAllAsync();
             return Results.Ok(seats);
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> GetSeatById(int id, ISeatService seatService)
         {
             var seat = await seatService.GetByIdAsync(id);
@@ -30,12 +33,14 @@ namespace BookingTicketCinema.Controllers
             return Results.Ok(seat);
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> GetSeatsByRoom(int roomId, ISeatService seatService)
         {
             var seats = await seatService.GetByRoomIdAsync(roomId);
             return Results.Ok(seats);
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> CreateSeat([FromBody] CreateSeatDto dto, ISeatService seatService)
         {
             try
@@ -49,6 +54,7 @@ namespace BookingTicketCinema.Controllers
             }
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> UpdateSeat(int id, [FromBody] UpdateSeatDto dto, ISeatService seatService)
         {
             try
@@ -63,6 +69,7 @@ namespace BookingTicketCinema.Controllers
             }
         }
 
+        [AllowAnonymous]
         private static async Task<IResult> DeleteSeat(int id, ISeatService seatService)
         {
             var result = await seatService.DeleteAsync(id);
