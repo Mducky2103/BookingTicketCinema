@@ -9,7 +9,10 @@ namespace BookingTicketCinema.Models
         public int SeatId { get; set; }
 
         [Required, MaxLength(10)]
-        public string SeatNumber { get; set; } = null!; // A1, B2, ...
+        public string SeatNumber { get; set; } = null!;
+
+        [Required]
+        public SeatStatus Status { get; set; } = SeatStatus.Empty;
 
         [ForeignKey("Room")]
         public int RoomId { get; set; }
@@ -19,7 +22,13 @@ namespace BookingTicketCinema.Models
         public int SeatGroupId { get; set; }
         public SeatGroup SeatGroup { get; set; } = null!;
 
-        // Navigation
         public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+
+        public enum SeatStatus
+        {
+            Empty = 0,
+            Booked = 1,
+            Broken = 2
+        }
     }
 }
