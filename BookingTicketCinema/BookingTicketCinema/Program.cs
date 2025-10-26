@@ -22,6 +22,18 @@ builder.Services.AddSingleton<EmailService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<IRoomService, RoomService>();
+
+builder.Services.AddScoped<ISeatGroupRepository, SeatGroupRepository>();
+builder.Services.AddScoped<ISeatGroupService, SeatGroupService>();
+
+builder.Services.AddScoped<ISeatRepository, SeatRepository>();
+builder.Services.AddScoped<ISeatService, SeatService>();
+
+builder.Services.AddScoped<IPriceRuleRepository, PriceRuleRepository>();
+builder.Services.AddScoped<IPriceRuleService, PriceRuleService>();
+
 var app = builder.Build();
 
 app.ConfigureSwaggerExplorer()
@@ -39,5 +51,9 @@ app.MapGroup("/api")
 app.MapGroup("/api")
     .MapIdentityUserEndpoints()
     .MapAccountEndpoints()
-    .MapAuthorizationDemoEndpoints();
+    .MapAuthorizationDemoEndpoints()
+    .MapRoomEndpoints()
+    .MapSeatGroupEndpoints()
+    .MapSeatEndpoints()
+    .MapPriceRuleEndpoints();
 app.Run();
