@@ -4538,23 +4538,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ADMIN\\.nuget\\packages\\": {},
+    "C:\\Users\\Admin\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema.csproj",
+      "projectUniqueName": "C:\\Users\\Admin\\Desktop\\PRN232_Project_Version_1.0.a\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema.csproj",
       "projectName": "BookingTicketCinema",
-      "projectPath": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema.csproj",
-      "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\obj\\",
+      "projectPath": "C:\\Users\\Admin\\Desktop\\PRN232_Project_Version_1.0.a\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema.csproj",
+      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Admin\\Desktop\\PRN232_Project_Version_1.0.a\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -4563,6 +4563,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
