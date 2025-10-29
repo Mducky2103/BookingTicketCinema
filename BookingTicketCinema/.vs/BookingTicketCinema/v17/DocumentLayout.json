@@ -148,7 +148,7 @@
               "RelativeDocumentMoniker": "BookingTicketCinema\\Controllers\\MovieController.cs",
               "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Controllers\\MovieController.cs",
               "RelativeToolTip": "BookingTicketCinema\\Controllers\\MovieController.cs",
-              "ViewState": "AgIAAJ8AAAAAAAAAAAAowMgAAAAqAAAAAAAAAA==",
+              "ViewState": "AgIAAH0AAAAAAAAAAADwv7kAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-28T06:25:10.938Z",
               "EditorCaption": ""
@@ -163,8 +163,7 @@
               "RelativeToolTip": "BookingTicketCinema\\DTO\\MovieCreateRequest.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-28T06:22:10.195Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-28T06:22:10.195Z"
             },
             {
               "$type": "Document",
@@ -176,8 +175,7 @@
               "RelativeToolTip": "BookingTicketCinema\\DTO\\MovieUpdateRequest.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-28T06:20:50.83Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-28T06:20:50.83Z"
             },
             {
               "$type": "Document",

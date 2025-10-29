@@ -47,8 +47,9 @@ namespace BookingTicketCinema.Controllers
         [AllowAnonymous] // chỉ để test, sau này remove
         public async Task<IActionResult> CreateMovie([FromForm] MovieCreateRequest request)
         {
-            if (string.IsNullOrWhiteSpace(request.Title))
-                return BadRequest("Title is required.");
+            // ✅ Validate Title
+            if (string.IsNullOrWhiteSpace(request.Title) || request.Title.Trim().ToLower() == "string")
+                return BadRequest("Title is required and cannot be 'string'.");
 
             var movie = new Movie
             {
@@ -58,32 +59,26 @@ namespace BookingTicketCinema.Controllers
                 TrailerUrl = request.TrailerUrl,
             };
 
-            // ✅ Xử lý Duration an toàn
-            if (string.IsNullOrWhiteSpace(request.Duration))
-            {
-                if (TimeSpan.TryParse(request.Duration, out var ts))
-                    movie.Duration = ts;
-                else
-                    return BadRequest("Invalid Duration format. Please use H:mm:ss (e.g. 1:30:00).");
-            }
+            // ✅ Duration
+            if (string.IsNullOrWhiteSpace(request.Duration) || request.Duration.Trim().ToLower() == "string")
+                return BadRequest("Duration is required.");
+            if (!TimeSpan.TryParse(request.Duration, out var ts))
+                return BadRequest("Invalid Duration format. Please use H:mm:ss (e.g. 1:30:00).");
+            movie.Duration = ts;
 
-            // ✅ Xử lý ReleaseDate an toàn
-            if (string.IsNullOrWhiteSpace(request.ReleaseDate))
-            {
-                if (DateOnly.TryParse(request.ReleaseDate, out var d))
-                    movie.ReleaseDate = d;
-                else
-                    return BadRequest("Invalid ReleaseDate format. Please use yyyy-MM-dd (e.g. 2025-10-24).");
-            }
+            // ✅ ReleaseDate
+            if (string.IsNullOrWhiteSpace(request.ReleaseDate) || request.ReleaseDate.Trim().ToLower() == "string")
+                return BadRequest("ReleaseDate is required.");
+            if (!DateOnly.TryParse(request.ReleaseDate, out var d))
+                return BadRequest("Invalid ReleaseDate format. Please use yyyy-MM-dd (e.g. 2025-10-24).");
+            movie.ReleaseDate = d;
 
-            // ✅ Validate Status (chỉ cho phép 0, 1, 2)
-            if (request.Status.HasValue)
-            {
-                if (request.Status.Value < 0 || request.Status.Value > 2)
-                    return BadRequest("Invalid Status. Allowed values: 0=ComingSoon, 1=NowShowing, 2=Ended.");
-
-                movie.Status = (MovieStatus)request.Status.Value;
-            }
+            // ✅ Validate Status
+            if (!request.Status.HasValue)
+                return BadRequest("Status is required.");
+            if (request.Status.Value < 0 || request.Status.Value > 2)
+                return BadRequest("Invalid Status. Allowed values: 0=ComingSoon, 1=NowShowing, 2=Ended.");
+            movie.Status = (MovieStatus)request.Status.Value;
 
             // ✅ Upload poster (nếu có)
             if (request.PosterFile != null && request.PosterFile.Length > 0)
@@ -110,55 +105,60 @@ namespace BookingTicketCinema.Controllers
         }
 
         [HttpPut("{id}")]
-        [AllowAnonymous] // chỉ để test, sau này bỏ đi
+        [AllowAnonymous] // chỉ để test
         public async Task<IActionResult> UpdateMovie(int id, [FromForm] MovieUpdateRequest request)
         {
             var movie = await _context.Movies.FindAsync(id);
             if (movie == null)
-            {
                 return NotFound("Movie not found.");
+
+            // ✅ Title
+            if (!string.IsNullOrWhiteSpace(request.Title))
+            {
+                if (request.Title.Trim().ToLower() == "string")
+                    return BadRequest("Invalid title value.");
+                movie.Title = request.Title;
             }
 
-            if (!string.IsNullOrWhiteSpace(request.Title))
-                movie.Title = request.Title;
-
-            if (!string.IsNullOrWhiteSpace(request.Description))
+            // ✅ Description, Genre, Trailer
+            if (!string.IsNullOrWhiteSpace(request.Description) && request.Description.Trim().ToLower() != "string")
                 movie.Description = request.Description;
 
-            if (!string.IsNullOrWhiteSpace(request.Genre))
+            if (!string.IsNullOrWhiteSpace(request.Genre) && request.Genre.Trim().ToLower() != "string")
                 movie.Genre = request.Genre;
 
-            if (!string.IsNullOrWhiteSpace(request.TrailerUrl))
+            if (!string.IsNullOrWhiteSpace(request.TrailerUrl) && request.TrailerUrl.Trim().ToLower() != "string")
                 movie.TrailerUrl = request.TrailerUrl;
 
-            // ✅ Xử lý Duration an toàn
-            if (string.IsNullOrWhiteSpace(request.Duration))
+            // ✅ Duration
+            if (!string.IsNullOrWhiteSpace(request.Duration))
             {
-                if (TimeSpan.TryParse(request.Duration, out var ts))
-                    movie.Duration = ts;
-                else
+                if (request.Duration.Trim().ToLower() == "string")
+                    return BadRequest("Invalid Duration value.");
+                if (!TimeSpan.TryParse(request.Duration, out var ts))
                     return BadRequest("Invalid Duration format. Please use H:mm:ss (e.g. 2:15:00).");
+                movie.Duration = ts;
             }
 
-            // ✅ Xử lý ReleaseDate an toàn
-            if (string.IsNullOrWhiteSpace(request.ReleaseDate))
+            // ✅ ReleaseDate
+            if (!string.IsNullOrWhiteSpace(request.ReleaseDate))
             {
-                if (DateOnly.TryParse(request.ReleaseDate, out var d))
-                    movie.ReleaseDate = d;
-                else
+                if (request.ReleaseDate.Trim().ToLower() == "string")
+                    return BadRequest("Invalid ReleaseDate value.");
+                if (!DateOnly.TryParse(request.ReleaseDate, out var d))
                     return BadRequest("Invalid ReleaseDate format. Please use yyyy-MM-dd (e.g. 2025-10-24).");
+                movie.ReleaseDate = d;
             }
 
-            // ✅ Validate Status (chỉ cho phép 0, 1, 2)
+            // ✅ Status
             if (request.Status.HasValue)
             {
                 if (request.Status.Value < 0 || request.Status.Value > 2)
                     return BadRequest("Invalid Status. Allowed values: 0=ComingSoon, 1=NowShowing, 2=Ended.");
-
                 movie.Status = (Movie.MovieStatus)request.Status.Value;
             }
 
-            // ✅ Upload file mới (nếu có)
+            // ✅ Poster upload
             if (request.PosterFile != null && request.PosterFile.Length > 0)
             {
                 var uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "posters");
