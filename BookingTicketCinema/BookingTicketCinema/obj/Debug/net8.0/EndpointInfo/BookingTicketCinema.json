@@ -537,6 +537,759 @@
         }
       }
     },
+    "/api/Movie": {
+      "get": {
+        "tags": [
+          "Movie"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Movie"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Movie"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Movie"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Movie"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "type": "string"
+                  },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "Genre": {
+                    "type": "string"
+                  },
+                  "Duration": {
+                    "type": "string"
+                  },
+                  "ReleaseDate": {
+                    "type": "string"
+                  },
+                  "Status": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "TrailerUrl": {
+                    "type": "string"
+                  },
+                  "PosterFile": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "Title": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "Genre": {
+                  "style": "form"
+                },
+                "Duration": {
+                  "style": "form"
+                },
+                "ReleaseDate": {
+                  "style": "form"
+                },
+                "Status": {
+                  "style": "form"
+                },
+                "TrailerUrl": {
+                  "style": "form"
+                },
+                "PosterFile": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Movie/{id}": {
+      "get": {
+        "tags": [
+          "Movie"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Movie"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Movie"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Movie"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Movie"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "type": "string"
+                  },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "Genre": {
+                    "type": "string"
+                  },
+                  "Duration": {
+                    "type": "string"
+                  },
+                  "ReleaseDate": {
+                    "type": "string"
+                  },
+                  "Status": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "TrailerUrl": {
+                    "type": "string"
+                  },
+                  "PosterFile": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "Title": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "Genre": {
+                  "style": "form"
+                },
+                "Duration": {
+                  "style": "form"
+                },
+                "ReleaseDate": {
+                  "style": "form"
+                },
+                "Status": {
+                  "style": "form"
+                },
+                "TrailerUrl": {
+                  "style": "form"
+                },
+                "PosterFile": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Movie"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/pricerules": {
+      "get": {
+        "tags": [
+          "PriceRuleEndpoints"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "PriceRuleEndpoints"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePriceRuleDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/pricerules/{id}": {
+      "get": {
+        "tags": [
+          "PriceRuleEndpoints"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "PriceRuleEndpoints"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePriceRuleDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "PriceRuleEndpoints"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/pricerules/seatgroup/{seatGroupId}": {
+      "get": {
+        "tags": [
+          "PriceRuleEndpoints"
+        ],
+        "parameters": [
+          {
+            "name": "seatGroupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/rooms": {
+      "get": {
+        "tags": [
+          "RoomEndpoints"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "RoomEndpoints"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoomDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/rooms/{id}": {
+      "get": {
+        "tags": [
+          "RoomEndpoints"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "RoomEndpoints"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRoomDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "RoomEndpoints"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/seats": {
+      "get": {
+        "tags": [
+          "SeatEndpoints"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "SeatEndpoints"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSeatDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/seats/{id}": {
+      "get": {
+        "tags": [
+          "SeatEndpoints"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "SeatEndpoints"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSeatDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "SeatEndpoints"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/seats/room/{roomId}": {
+      "get": {
+        "tags": [
+          "SeatEndpoints"
+        ],
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/seatgroups": {
+      "get": {
+        "tags": [
+          "SeatGroupEndpoints"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "SeatGroupEndpoints"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSeatGroupDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/seatgroups/{id}": {
+      "get": {
+        "tags": [
+          "SeatGroupEndpoints"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "SeatGroupEndpoints"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSeatGroupDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "SeatGroupEndpoints"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/seatgroups/room/{roomId}": {
+      "get": {
+        "tags": [
+          "SeatGroupEndpoints"
+        ],
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/User": {
       "get": {
         "tags": [
@@ -790,6 +1543,86 @@
         },
         "additionalProperties": false
       },
+      "CreatePriceRuleDto": {
+        "type": "object",
+        "properties": {
+          "basePrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "dayOfWeek": {
+            "$ref": "#/components/schemas/DayOfWeek"
+          },
+          "slot": {
+            "$ref": "#/components/schemas/TimeSlot"
+          },
+          "seatGroupId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "showtimeId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateRoomDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "capacity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "$ref": "#/components/schemas/RoomType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateSeatDto": {
+        "type": "object",
+        "properties": {
+          "seatNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/SeatStatus"
+          },
+          "roomId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seatGroupId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateSeatGroupDto": {
+        "type": "object",
+        "properties": {
+          "groupName": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/SeatType"
+          },
+          "roomId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "CreateUserDto": {
         "type": "object",
         "properties": {
@@ -811,6 +1644,19 @@
           }
         },
         "additionalProperties": false
+      },
+      "DayOfWeek": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "type": "integer",
+        "format": "int32"
       },
       "EditProfileVm": {
         "type": "object",
@@ -966,6 +1812,269 @@
         },
         "additionalProperties": false
       },
+      "Movie": {
+        "required": [
+          "createdAt",
+          "duration",
+          "status",
+          "title",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rowVersion": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "movieId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "maxLength": 150,
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 2000,
+            "type": "string",
+            "nullable": true
+          },
+          "posterUrl": {
+            "maxLength": 255,
+            "type": "string",
+            "nullable": true
+          },
+          "trailerUrl": {
+            "maxLength": 255,
+            "type": "string",
+            "nullable": true
+          },
+          "genre": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "duration": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "releaseDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "$ref": "#/components/schemas/MovieStatus"
+          },
+          "showtimes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Showtime"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MovieStatus": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Payment": {
+        "required": [
+          "amount",
+          "createdAt",
+          "method",
+          "status",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rowVersion": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "paymentId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "method": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PaymentStatus"
+          },
+          "ticketId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ticket": {
+            "$ref": "#/components/schemas/Ticket"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PaymentMethod": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "PaymentStatus": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "PriceRule": {
+        "required": [
+          "basePrice",
+          "createdAt",
+          "dayOfWeek",
+          "slot",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rowVersion": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "priceRuleId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "basePrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "dayOfWeek": {
+            "$ref": "#/components/schemas/DayOfWeek"
+          },
+          "slot": {
+            "$ref": "#/components/schemas/TimeSlot"
+          },
+          "seatGroupId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seatGroup": {
+            "$ref": "#/components/schemas/SeatGroup"
+          },
+          "showtimeId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "showtime": {
+            "$ref": "#/components/schemas/Showtime"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Promotion": {
+        "required": [
+          "code",
+          "createdAt",
+          "discountPercent",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rowVersion": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "promotionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "code": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "discountPercent": {
+            "type": "number",
+            "format": "double"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "description": {
+            "maxLength": 255,
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "voucherRedemptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VoucherRedemption"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "RefreshRequest": {
         "required": [
           "refreshToken"
@@ -1051,6 +2160,351 @@
         },
         "additionalProperties": false
       },
+      "Room": {
+        "required": [
+          "createdAt",
+          "name",
+          "type",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rowVersion": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "roomId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "capacity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "$ref": "#/components/schemas/RoomType"
+          },
+          "seatGroups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SeatGroup"
+            },
+            "nullable": true
+          },
+          "seats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Seat"
+            },
+            "nullable": true
+          },
+          "showtimes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Showtime"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RoomType": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Seat": {
+        "required": [
+          "createdAt",
+          "seatNumber",
+          "status",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rowVersion": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "seatId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seatNumber": {
+            "maxLength": 10,
+            "minLength": 1,
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/SeatStatus"
+          },
+          "roomId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "room": {
+            "$ref": "#/components/schemas/Room"
+          },
+          "seatGroupId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seatGroup": {
+            "$ref": "#/components/schemas/SeatGroup"
+          },
+          "tickets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Ticket"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SeatGroup": {
+        "required": [
+          "createdAt",
+          "groupName",
+          "type",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rowVersion": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "seatGroupId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "groupName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/SeatType"
+          },
+          "roomId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "room": {
+            "$ref": "#/components/schemas/Room"
+          },
+          "seats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Seat"
+            },
+            "nullable": true
+          },
+          "priceRules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PriceRule"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SeatStatus": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "SeatType": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Showtime": {
+        "required": [
+          "createdAt",
+          "endTime",
+          "startTime",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rowVersion": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "showtimeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "movieId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "movie": {
+            "$ref": "#/components/schemas/Movie"
+          },
+          "roomId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "room": {
+            "$ref": "#/components/schemas/Room"
+          },
+          "tickets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Ticket"
+            },
+            "nullable": true
+          },
+          "priceRules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PriceRule"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Ticket": {
+        "required": [
+          "createdAt",
+          "status",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rowVersion": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "ticketId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TicketStatus"
+          },
+          "showtimeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "showtime": {
+            "$ref": "#/components/schemas/Showtime"
+          },
+          "seatId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seat": {
+            "$ref": "#/components/schemas/Seat"
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "payment": {
+            "$ref": "#/components/schemas/Payment"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TicketStatus": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "TimeSlot": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
       "TwoFactorRequest": {
         "type": "object",
         "properties": {
@@ -1107,6 +2561,82 @@
         },
         "additionalProperties": false
       },
+      "UpdatePriceRuleDto": {
+        "type": "object",
+        "properties": {
+          "basePrice": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "dayOfWeek": {
+            "$ref": "#/components/schemas/DayOfWeek"
+          },
+          "slot": {
+            "$ref": "#/components/schemas/TimeSlot"
+          },
+          "seatGroupId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "showtimeId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateRoomDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "capacity": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/RoomType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateSeatDto": {
+        "type": "object",
+        "properties": {
+          "seatNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/SeatStatus"
+          },
+          "seatGroupId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateSeatGroupDto": {
+        "type": "object",
+        "properties": {
+          "groupName": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/SeatType"
+          }
+        },
+        "additionalProperties": false
+      },
       "UpdateUserDto": {
         "type": "object",
         "properties": {
@@ -1120,6 +2650,95 @@
           },
           "phoneNumber": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalizedUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalizedEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "emailConfirmed": {
+            "type": "boolean"
+          },
+          "passwordHash": {
+            "type": "string",
+            "nullable": true
+          },
+          "securityStamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumberConfirmed": {
+            "type": "boolean"
+          },
+          "twoFactorEnabled": {
+            "type": "boolean"
+          },
+          "lockoutEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lockoutEnabled": {
+            "type": "boolean"
+          },
+          "accessFailedCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "gender": {
+            "type": "string",
+            "nullable": true
+          },
+          "dob": {
+            "type": "string",
+            "format": "date"
+          },
+          "tickets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Ticket"
+            },
+            "nullable": true
+          },
+          "voucherRedemptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VoucherRedemption"
+            },
             "nullable": true
           }
         },
@@ -1151,6 +2770,52 @@
           "age": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "VoucherRedemption": {
+        "required": [
+          "createdAt",
+          "updatedAt",
+          "usedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rowVersion": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "redemptionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "usedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "promotionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "promotion": {
+            "$ref": "#/components/schemas/Promotion"
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
           }
         },
         "additionalProperties": false

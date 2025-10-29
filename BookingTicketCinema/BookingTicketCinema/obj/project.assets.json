@@ -4538,23 +4538,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ADMIN\\.nuget\\packages\\": {},
+    "C:\\Users\\Admin\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema.csproj",
+      "projectUniqueName": "C:\\Users\\Admin\\Documents\\GitHub\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema.csproj",
       "projectName": "BookingTicketCinema",
-      "projectPath": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema.csproj",
-      "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "D:\\FPTU\\1_PRN232\\Code\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\obj\\",
+      "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema.csproj",
+      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Admin\\Documents\\GitHub\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -4637,7 +4637,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
