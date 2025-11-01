@@ -1,0 +1,285 @@
+@page
+@model BookingTicketCinema.ManagementApp.Pages.SeatLayout.IndexModel
+@{
+    ViewData["Title"] = "Quản lý Bố Cục Ghế";
+}
+
+@* Alerts *@
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+  <div class="alert alert-success alert-dismissible mb-4" role="alert">
+    <i class="icon-base bx bx-check-circle me-2"></i>
+    @Model.SuccessMessage
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+  <div class="alert alert-danger alert-dismissible mb-4" role="alert">
+    <i class="icon-base bx bx-error-circle me-2"></i>
+    @Model.ErrorMessage
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+}
+
+<div class="row">
+  <!-- Seats Table -->
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title m-0 me-2">Ghế</h5>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSeatModal">
+          <i class="icon-base bx bx-plus me-1"></i>
+          <span class="d-none d-sm-inline-block">Thêm Ghế Mới</span>
+        </button>
+      </div>
+      <div class="table-responsive text-nowrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Số Ghế</th>
+              <th>Trạng Thái</th>
+              <th>Phòng</th>
+              <th>Nhóm Ghế</th>
+              <th>Ngày Tạo</th>
+              <th>Thao Tác</th>
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0">
+            @if (Model.Seats != null && Model.Seats.Any())
+            {
+              @foreach (var seat in Model.Seats)
+              {
+                <tr>
+                  <td><strong>#@seat.SeatId</strong></td>
+                  <td>
+                    <i class="icon-base bx bx-chair icon-md text-primary me-3"></i>
+                    <span class="fw-medium">@seat.SeatNumber</span>
+                  </td>
+                  <td>
+                    <span class="badge bg-label-@(seat.Status == 0 ? "success" : seat.Status == 1 ? "warning" : "danger") me-1">
+                      @(seat.Status == 0 ? "Trống" : seat.Status == 1 ? "Đã Đặt" : "Hỏng")
+                    </span>
+                  </td>
+                  <td>
+                    @if (!string.IsNullOrEmpty(seat.RoomName))
+                    {
+                      <span class="text-body">@seat.RoomName</span>
+                    }
+                    else
+                    {
+                      <span class="text-muted">Phòng #@seat.RoomId</span>
+                    }
+                  </td>
+                  <td>
+                    @if (!string.IsNullOrEmpty(seat.SeatGroupName))
+                    {
+                      <span class="text-body">@seat.SeatGroupName</span>
+                    }
+                    else
+                    {
+                      <span class="text-muted">Nhóm #@seat.SeatGroupId</span>
+                    }
+                  </td>
+                  <td>@seat.CreatedAt.ToString("dd/MM/yyyy")</td>
+                  <td>
+                    <div class="dropdown">
+                      <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                        <i class="icon-base bx bx-dots-vertical-rounded"></i>
+                      </button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" href="javascript:void(0);" 
+                           data-bs-toggle="modal" 
+                           data-bs-target="#editSeatModal"
+                           data-seat-id="@seat.SeatId"
+                           data-seat-number="@seat.SeatNumber"
+                           data-seat-status="@seat.Status"
+                           data-seat-roomid="@seat.RoomId"
+                           data-seat-seatgroupid="@seat.SeatGroupId">
+                          <i class="icon-base bx bx-edit-alt me-1"></i> Sửa
+                        </a>
+                        <a class="dropdown-item" href="javascript:void(0);" 
+                           onclick="confirmDelete(@seat.SeatId, '@seat.SeatNumber')">
+                          <i class="icon-base bx bx-trash me-1"></i> Xóa
+                        </a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              }
+            }
+            else
+            {
+              <tr>
+                <td colspan="7" class="text-center py-6">
+                  <p class="text-body-secondary mb-0">Không tìm thấy ghế nào. Tạo ghế đầu tiên của bạn!</p>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Seat Modal -->
+<div class="modal fade" id="createSeatModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Tạo Ghế Mới</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post" asp-page-handler="Create">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="createSeatNumber" class="form-label">Số Ghế</label>
+            <input type="text" class="form-control" id="createSeatNumber" name="seatNumber" placeholder="Vd: A1, B5, C12" required maxlength="10" />
+          </div>
+          <div class="mb-3">
+            <label for="createSeatStatus" class="form-label">Trạng Thái</label>
+            <select class="form-select" id="createSeatStatus" name="status" required>
+              <option value="0">Trống</option>
+              <option value="1">Đã Đặt</option>
+              <option value="2">Hỏng</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="createSeatRoomId" class="form-label">Phòng</label>
+            <select class="form-select" id="createSeatRoomId" name="roomId" required onchange="loadSeatGroupsForRoom(this.value, 'createSeatSeatGroupId')">
+              <option value="">Chọn phòng</option>
+              @foreach (var room in Model.Rooms)
+              {
+                <option value="@room.RoomId">@room.Name (@(room.Type == 0 ? "2D" : room.Type == 1 ? "3D" : "IMAX"))</option>
+              }
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="createSeatSeatGroupId" class="form-label">Nhóm Ghế</label>
+            <select class="form-select" id="createSeatSeatGroupId" name="seatGroupId" required>
+              <option value="">Chọn phòng trước</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="submit" class="btn btn-primary">Tạo Ghế</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Seat Modal -->
+<div class="modal fade" id="editSeatModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalCenterTitle">Sửa Ghế</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="editSeatForm" method="post" asp-page-handler="Update">
+        <div class="modal-body">
+          <input type="hidden" id="editSeatId" name="id" />
+          <input type="hidden" id="editSeatRoomId" name="roomId" />
+          <div class="mb-3">
+            <label for="editSeatNumber" class="form-label">Số Ghế</label>
+            <input type="text" class="form-control" id="editSeatNumber" name="seatNumber" placeholder="Vd: A1, B5, C12" maxlength="10" />
+          </div>
+          <div class="mb-3">
+            <label for="editSeatStatus" class="form-label">Trạng Thái</label>
+            <select class="form-select" id="editSeatStatus" name="status">
+              <option value="0">Trống</option>
+              <option value="1">Đã Đặt</option>
+              <option value="2">Hỏng</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="editSeatSeatGroupId" class="form-label">Nhóm Ghế</label>
+            <select class="form-select" id="editSeatSeatGroupId" name="seatGroupId">
+              <option value="">Chọn nhóm ghế</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="submit" class="btn btn-primary">Cập Nhật Ghế</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Form -->
+<form id="deleteSeatForm" method="post" asp-page-handler="Delete" style="display: none;">
+  <input type="hidden" id="deleteSeatId" name="id" />
+</form>
+
+@section PageScripts {
+<script>
+  // Load seat groups when room is selected (for create modal)
+  async function loadSeatGroupsForRoom(roomId, targetSelectId) {
+    const targetSelect = document.getElementById(targetSelectId);
+    if (!roomId || roomId === '') {
+      targetSelect.innerHTML = '<option value="">Chọn phòng trước</option>';
+      return;
+    }
+
+    try {
+      const response = await fetch(`?handler=GetSeatGroupsByRoom&roomId=${roomId}`);
+      const seatGroups = await response.json();
+      
+      targetSelect.innerHTML = '<option value="">Chọn nhóm ghế</option>';
+      seatGroups.forEach(sg => {
+        const option = document.createElement('option');
+        option.value = sg.seatGroupId;
+        option.textContent = sg.groupName;
+        targetSelect.appendChild(option);
+      });
+    } catch (error) {
+      console.error('Error loading seat groups:', error);
+      targetSelect.innerHTML = '<option value="">Lỗi tải nhóm ghế</option>';
+    }
+  }
+
+  // Handle edit modal
+  document.addEventListener('DOMContentLoaded', function() {
+    const editModal = document.getElementById('editSeatModal');
+    if (editModal) {
+      editModal.addEventListener('show.bs.modal', async function(event) {
+        const button = event.relatedTarget;
+        const seatId = button.getAttribute('data-seat-id');
+        const seatNumber = button.getAttribute('data-seat-number');
+        const seatStatus = button.getAttribute('data-seat-status');
+        const seatRoomId = button.getAttribute('data-seat-roomid');
+        const seatSeatGroupId = button.getAttribute('data-seat-seatgroupid');
+
+        document.getElementById('editSeatId').value = seatId;
+        document.getElementById('editSeatNumber').value = seatNumber || '';
+        document.getElementById('editSeatStatus').value = seatStatus || '0';
+        document.getElementById('editSeatRoomId').value = seatRoomId || '';
+
+        // Load seat groups for the room
+        await loadSeatGroupsForRoom(seatRoomId, 'editSeatSeatGroupId');
+        
+        // Set the selected seat group after loading
+        setTimeout(() => {
+          document.getElementById('editSeatSeatGroupId').value = seatSeatGroupId || '';
+        }, 300);
+      });
+    }
+  });
+
+  // Handle delete confirmation
+  function confirmDelete(seatId, seatNumber) {
+    if (confirm(`Bạn có chắc chắn muốn xóa ghế "${seatNumber}"? Hành động này không thể hoàn tác.`)) {
+      document.getElementById('deleteSeatId').value = seatId;
+      document.getElementById('deleteSeatForm').submit();
+    }
+  }
+</script>
+}
+

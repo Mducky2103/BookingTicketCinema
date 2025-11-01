@@ -7,13 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\PriceRules\**" />
+    <Content Remove="Pages\PriceRules\**" />
+    <EmbeddedResource Remove="Pages\PriceRules\**" />
+    <None Remove="Pages\PriceRules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Pages\CheckIn\" />
     <Folder Include="Pages\Movies\" />
     <Folder Include="Pages\Reports\" />
     <Folder Include="Pages\Users\" />
     <Folder Include="Pages\Showtimes\" />
     <Folder Include="Pages\Rooms\" />
-    <Folder Include="Pages\PriceRules\" />
   </ItemGroup>
 
   <ItemGroup>

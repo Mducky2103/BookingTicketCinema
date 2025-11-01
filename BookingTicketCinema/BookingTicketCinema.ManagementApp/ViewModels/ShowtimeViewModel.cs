@@ -2,7 +2,7 @@
 {
     public class ShowtimeViewModel
     {
-        public int Id { get; set; }
+        public int ShowtimeId { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string? MovieName { get; set; }

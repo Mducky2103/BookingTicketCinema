@@ -1,0 +1,135 @@
+@{
+  // Keep only specific TempData keys (not messages)
+  TempData.Keep("appName");
+  TempData.Keep("productPage");
+  TempData.Keep("support");
+  TempData.Keep("documentation");
+  string? currentPage = ViewContext.HttpContext.Request.Path;
+}
+
+<!-- Menu -->
+@* ! Do this simple *@
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+
+  @* ! Hide app brand if navbar-full *@
+  <div class='app-brand demo @((@ViewData["navbarFull"] != null && Convert.ToBoolean(@ViewData["navbarFull"])) ? "d-xl-none" : "")'>
+    <a asp-page="/Index" class="app-brand-link">
+      <span class="app-brand-logo demo">
+        @await Html.PartialAsync("_Partials/_Macros")
+      </span>
+      <span class="app-brand-text demo menu-text fw-bold ms-2">@TempData.Peek("appName")</span>
+    </a>
+
+    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto" title="Toggle Sidebar">
+      <i class="icon-base bx bx-menu align-middle"></i>
+    </a>
+  </div>
+
+  <div class="menu-divider mt-0"></div>
+
+  <div class="menu-inner-shadow"></div>
+
+  @* ! Full version menu-items *@
+  <ul class="menu-inner py-1">
+    <!-- Dashboard -->
+    <li class='menu-item@(currentPage == "/" || currentPage == "/Index" ? " active" : "")'>
+      <a asp-page="/Index" class="menu-link">
+        <i class="menu-icon icon-base bx bx-home-smile"></i>
+        <div class="text-truncate">Tổng quan</div>
+      </a>
+    </li>
+
+    <li class="menu-header small text-uppercase"><span class="menu-header-text">Vận hành</span></li>
+
+    <!-- Check In -->
+    <li class='menu-item@(currentPage.StartsWith("/CheckIn") ? " active" : "")'>
+      <a asp-page="/CheckIn/Index" class="menu-link">
+        <i class="menu-icon icon-base bx bx-check"></i>
+        <div class="text-truncate">Kiểm tra vé</div>
+      </a>
+    </li>
+
+    <!-- POS -->
+    <li class='menu-item@(currentPage.StartsWith("/POS") ? " active" : "")'>
+      <a asp-page="/POS/Index" class="menu-link">
+        <i class="menu-icon icon-base bx bx-laptop"></i>
+        <div class="text-truncate">Bán vé tại quầy (POS)</div>
+      </a>
+    </li>
+
+    @if (User.IsInRole("Admin"))
+    {
+      <li class="menu-header small text-uppercase"><span class="menu-header-text">Quản trị (Admin)</span></li>
+
+      <!-- Showtimes -->
+      <li class='menu-item@(currentPage.StartsWith("/Showtimes") ? " active" : "")'>
+        <a asp-page="/Showtimes/Index" class="menu-link">
+          <i class="menu-icon icon-base bx bx-calendar"></i>
+          <div class="text-truncate">Suất chiếu</div>
+        </a>
+      </li>
+
+      <!-- Movies -->
+      <li class='menu-item@(currentPage.StartsWith("/Movies") ? " active" : "")'>
+        <a asp-page="/Movies/Index" class="menu-link">
+          <i class="menu-icon icon-base bx bx-movie"></i>
+          <div class="text-truncate">Phim</div>
+        </a>
+      </li>
+
+      <!-- Rooms & Seats -->
+      <li class='menu-item@(currentPage.StartsWith("/Rooms") || currentPage.StartsWith("/SeatGroup") || currentPage.StartsWith("/SeatLayout") ? " active open" : "")'>
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+          <i class="menu-icon icon-base bx bx-desktop"></i>
+          <div class="text-truncate">Phòng & Ghế</div>
+        </a>
+        <ul class="menu-sub">
+          <li class='menu-item@(currentPage == "/Rooms/Index" || currentPage.StartsWith("/Rooms") ? " active" : "")'>
+            <a asp-page="/Rooms/Index" class="menu-link">
+              <div class="text-truncate">Danh sách phòng</div>
+            </a>
+          </li>
+          <li class='menu-item@(currentPage == "/SeatGroup/Index" || currentPage.StartsWith("/SeatGroup") ? " active" : "")'>
+            <a asp-page="/SeatGroup/Index" class="menu-link">
+              <div class="text-truncate">Nhóm ghế</div>
+            </a>
+          </li>
+          <li class='menu-item@(currentPage == "/SeatLayout/Index" || currentPage.StartsWith("/SeatLayout") ? " active" : "")'>
+            <a asp-page="/SeatLayout/Index" class="menu-link">
+              <div class="text-truncate">Bố cục ghế</div>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Price Rules -->
+      <li class='menu-item@(currentPage.StartsWith("/PriceRule") ? " active" : "")'>
+        <a asp-page="/PriceRule/Index" class="menu-link">
+          <i class="menu-icon icon-base bx bx-tag"></i>
+          <div class="text-truncate">Giá vé</div>
+        </a>
+      </li>
+
+      <li class="menu-header small text-uppercase"><span class="menu-header-text">Hệ thống (Admin)</span></li>
+
+      <!-- Users -->
+      <li class='menu-item@(currentPage.StartsWith("/Users") ? " active" : "")'>
+        <a asp-page="/Users/Index" class="menu-link">
+          <i class="menu-icon icon-base bx bx-group"></i>
+          <div class="text-truncate">Người dùng</div>
+        </a>
+      </li>
+
+      <!-- Reports -->
+      <li class='menu-item@(currentPage.StartsWith("/Reports") ? " active" : "")'>
+        <a asp-page="/Reports/Sales" class="menu-link">
+          <i class="menu-icon icon-base bx bx-bar-chart-alt"></i>
+          <div class="text-truncate">Báo cáo</div>
+        </a>
+      </li>
+    }
+  </ul>
+
+</aside>
+<!-- / Menu -->
+

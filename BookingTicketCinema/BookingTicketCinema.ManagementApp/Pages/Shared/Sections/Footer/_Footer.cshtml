@@ -1,0 +1,22 @@
+@{
+  // Keep only specific TempData keys (not messages)
+  TempData.Keep("appName");
+  TempData.Keep("productPage");
+  TempData.Keep("support");
+  TempData.Keep("documentation");
+  ViewData["containerNav"] = (ViewData["containerNav"] ??= "container-fluid");
+}
+
+<!-- Footer -->
+<footer class="content-footer footer bg-footer-theme">
+  <div class="@ViewData["containerNav"]">
+    <div class="footer-container d-flex align-items-center justify-content-between py-4 flex-md-row flex-column">
+      <div class="mb-2 mb-md-0">
+      </div>
+      <div class="d-none d-lg-inline-block">
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- / Footer -->
+
