@@ -10,3 +10,6 @@
 /BookingTicketCinema/BookingTicketCinemaClient/.vscode
 /BookingTicketCinema/BookingTicketCinemaClient/bin/Debug/net8.0
 /BookingTicketCinema/BookingTicketCinemaClient/obj
+/BookingTicketCinema/BookingTicketCinema.Client/obj/Debug/net8.0
+/BookingTicketCinema/BookingTicketCinema.ManagementApp/obj/Debug/net8.0
+/BookingTicketCinema/BookingTicketCinema/obj
