@@ -17,14 +17,12 @@ namespace BookingTicketCinema.Controllers
             app.MapDelete("/pricerules/{id}", DeletePriceRule);
             return app;
         }
-
         [AllowAnonymous]
         private static async Task<IResult> GetAllPriceRules(IPriceRuleService priceRuleService)
         {
             var priceRules = await priceRuleService.GetAllAsync();
             return Results.Ok(priceRules);
         }
-
         [AllowAnonymous]
         private static async Task<IResult> GetPriceRuleById(int id, IPriceRuleService priceRuleService)
         {
@@ -32,14 +30,12 @@ namespace BookingTicketCinema.Controllers
             if (priceRule == null) return Results.NotFound(new { message = "PriceRule not found" });
             return Results.Ok(priceRule);
         }
-
         [AllowAnonymous]
         private static async Task<IResult> GetPriceRulesBySeatGroup(int seatGroupId, IPriceRuleService priceRuleService)
         {
             var priceRules = await priceRuleService.GetBySeatGroupIdAsync(seatGroupId);
             return Results.Ok(priceRules);
         }
-
         [AllowAnonymous]
         private static async Task<IResult> CreatePriceRule([FromBody] CreatePriceRuleDto dto, IPriceRuleService priceRuleService)
         {
@@ -53,7 +49,6 @@ namespace BookingTicketCinema.Controllers
                 return Results.BadRequest(new { message = ex.Message });
             }
         }
-
         [AllowAnonymous]
         private static async Task<IResult> UpdatePriceRule(int id, [FromBody] UpdatePriceRuleDto dto, IPriceRuleService priceRuleService)
         {
@@ -68,7 +63,6 @@ namespace BookingTicketCinema.Controllers
                 return Results.BadRequest(new { message = ex.Message });
             }
         }
-
         [AllowAnonymous]
         private static async Task<IResult> DeletePriceRule(int id, IPriceRuleService priceRuleService)
         {

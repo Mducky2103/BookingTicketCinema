@@ -9,7 +9,7 @@ namespace BookingTicketCinema.Extensions
             IConfiguration config)
         {
             app.UseCors(options =>
-                options.WithOrigins("http://localhost:4200")
+                options.WithOrigins("http://localhost:5287")
                    .AllowAnyMethod()
                    .AllowAnyHeader());
             return app;

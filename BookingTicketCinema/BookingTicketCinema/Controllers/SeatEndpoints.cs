@@ -17,14 +17,12 @@ namespace BookingTicketCinema.Controllers
             app.MapDelete("/seats/{id}", DeleteSeat);
             return app;
         }
-
         [AllowAnonymous]
         private static async Task<IResult> GetAllSeats(ISeatService seatService)
         {
             var seats = await seatService.GetAllAsync();
             return Results.Ok(seats);
         }
-
         [AllowAnonymous]
         private static async Task<IResult> GetSeatById(int id, ISeatService seatService)
         {
@@ -32,14 +30,12 @@ namespace BookingTicketCinema.Controllers
             if (seat == null) return Results.NotFound(new { message = "Seat not found" });
             return Results.Ok(seat);
         }
-
         [AllowAnonymous]
         private static async Task<IResult> GetSeatsByRoom(int roomId, ISeatService seatService)
         {
             var seats = await seatService.GetByRoomIdAsync(roomId);
             return Results.Ok(seats);
         }
-
         [AllowAnonymous]
         private static async Task<IResult> CreateSeat([FromBody] CreateSeatDto dto, ISeatService seatService)
         {
@@ -53,7 +49,6 @@ namespace BookingTicketCinema.Controllers
                 return Results.BadRequest(new { message = ex.Message });
             }
         }
-
         [AllowAnonymous]
         private static async Task<IResult> UpdateSeat(int id, [FromBody] UpdateSeatDto dto, ISeatService seatService)
         {
@@ -68,7 +63,6 @@ namespace BookingTicketCinema.Controllers
                 return Results.BadRequest(new { message = ex.Message });
             }
         }
-
         [AllowAnonymous]
         private static async Task<IResult> DeleteSeat(int id, ISeatService seatService)
         {
