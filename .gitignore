@@ -2,4 +2,6 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
+/.vs/BookingTicketCinema/v17
+/BookingTicketCinema/.vs/BookingTicketCinema/FileContentIndex
 /.vs

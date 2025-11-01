@@ -12,9 +12,18 @@ namespace BookingTicketCinema.Models
 
         public int Capacity { get; set; }
 
-        // Navigation
+        [Required]
+        public RoomType Type { get; set; }
+
         public ICollection<SeatGroup> SeatGroups { get; set; } = new List<SeatGroup>();
         public ICollection<Seat> Seats { get; set; } = new List<Seat>();
         public ICollection<Showtime> Showtimes { get; set; } = new List<Showtime>();
+
+        public enum RoomType
+        {
+            Type2D = 0,
+            Type3D = 1,
+            IMAX = 2
+        }
     }
 }
