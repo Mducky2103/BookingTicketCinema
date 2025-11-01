@@ -13,6 +13,7 @@ namespace BookingTicketCinema.DTO
     {
         public string? GroupName { get; set; }
         public SeatGroup.SeatType? Type { get; set; }
+        public int? RoomId { get; set; }
     }
 
     public class SeatGroupResponseDto

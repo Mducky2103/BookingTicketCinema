@@ -1,0 +1,237 @@
+@page
+@model BookingTicketCinema.ManagementApp.Pages.SeatGroup.IndexModel
+@{
+    ViewData["Title"] = "Quản lý Nhóm Ghế";
+}
+
+@* Alerts *@
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+  <div class="alert alert-success alert-dismissible mb-4" role="alert">
+    <i class="icon-base bx bx-check-circle me-2"></i>
+    @Model.SuccessMessage
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+  <div class="alert alert-danger alert-dismissible mb-4" role="alert">
+    <i class="icon-base bx bx-error-circle me-2"></i>
+    @Model.ErrorMessage
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+}
+
+<div class="row">
+  <!-- Seat Groups Table -->
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title m-0 me-2">Nhóm Ghế</h5>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSeatGroupModal">
+          <i class="icon-base bx bx-plus me-1"></i>
+          <span class="d-none d-sm-inline-block">Thêm Nhóm Ghế Mới</span>
+        </button>
+      </div>
+      <div class="table-responsive text-nowrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Tên Nhóm</th>
+              <th>Loại</th>
+              <th>Phòng</th>
+              <th>Ngày Tạo</th>
+              <th>Thao Tác</th>
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0">
+            @if (Model.SeatGroups != null && Model.SeatGroups.Any())
+            {
+              @foreach (var seatGroup in Model.SeatGroups)
+              {
+                <tr>
+                  <td><strong>#@seatGroup.SeatGroupId</strong></td>
+                  <td>
+                    <i class="icon-base bx bx-group icon-md text-primary me-3"></i>
+                    <span class="fw-medium">@seatGroup.GroupName</span>
+                  </td>
+                  <td>
+                    <span class="badge bg-label-@(seatGroup.Type == 0 ? "primary" : seatGroup.Type == 1 ? "warning" : "success") me-1">
+                      @(seatGroup.Type == 0 ? "Thường" : seatGroup.Type == 1 ? "VIP" : "Đôi")
+                    </span>
+                  </td>
+                  <td>
+                    @if (!string.IsNullOrEmpty(seatGroup.RoomName))
+                    {
+                      <span class="text-body">@seatGroup.RoomName</span>
+                    }
+                    else
+                    {
+                      <span class="text-muted">Phòng #@seatGroup.RoomId</span>
+                    }
+                  </td>
+                  <td>@seatGroup.CreatedAt.ToString("dd/MM/yyyy")</td>
+                  <td>
+                    <div class="dropdown">
+                      <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                        <i class="icon-base bx bx-dots-vertical-rounded"></i>
+                      </button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" href="javascript:void(0);" 
+                           data-bs-toggle="modal" 
+                           data-bs-target="#editSeatGroupModal"
+                           data-seatgroup-id="@seatGroup.SeatGroupId"
+                           data-seatgroup-name="@seatGroup.GroupName"
+                           data-seatgroup-type="@seatGroup.Type"
+                           data-seatgroup-roomid="@seatGroup.RoomId">
+                          <i class="icon-base bx bx-edit-alt me-1"></i> Sửa
+                        </a>
+                        <a class="dropdown-item" href="javascript:void(0);" 
+                           onclick="confirmDelete(@seatGroup.SeatGroupId, '@seatGroup.GroupName')">
+                          <i class="icon-base bx bx-trash me-1"></i> Xóa
+                        </a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              }
+            }
+            else
+            {
+              <tr>
+                <td colspan="6" class="text-center py-6">
+                  <p class="text-body-secondary mb-0">Không tìm thấy nhóm ghế nào. Tạo nhóm ghế đầu tiên của bạn!</p>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Seat Group Modal -->
+<div class="modal fade" id="createSeatGroupModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Tạo Nhóm Ghế Mới</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post" asp-page-handler="Create">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="createSeatGroupName" class="form-label">Tên Nhóm</label>
+            <input type="text" class="form-control" id="createSeatGroupName" name="groupName" placeholder="Nhập tên nhóm" required />
+          </div>
+          <div class="mb-3">
+            <label for="createSeatGroupType" class="form-label">Loại</label>
+            <select class="form-select" id="createSeatGroupType" name="type" required>
+              <option value="0">Thường</option>
+              <option value="1">VIP</option>
+              <option value="2">Đôi</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="createSeatGroupRoomId" class="form-label">Phòng</label>
+            <select class="form-select" id="createSeatGroupRoomId" name="roomId" required>
+              <option value="">Chọn phòng</option>
+              @foreach (var room in Model.Rooms)
+              {
+                <option value="@room.RoomId">@room.Name (@(room.Type == 0 ? "2D" : room.Type == 1 ? "3D" : "IMAX"))</option>
+              }
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="submit" class="btn btn-primary">Tạo Nhóm Ghế</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Seat Group Modal -->
+<div class="modal fade" id="editSeatGroupModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalCenterTitle">Sửa Nhóm Ghế</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="editSeatGroupForm" method="post" asp-page-handler="Update">
+        <div class="modal-body">
+          <input type="hidden" id="editSeatGroupId" name="id" />
+          <div class="mb-3">
+            <label for="editSeatGroupName" class="form-label">Tên Nhóm</label>
+            <input type="text" class="form-control" id="editSeatGroupName" name="groupName" placeholder="Nhập tên nhóm" />
+          </div>
+          <div class="mb-3">
+            <label for="editSeatGroupType" class="form-label">Loại</label>
+            <select class="form-select" id="editSeatGroupType" name="type">
+              <option value="">-- Không thay đổi --</option>
+              <option value="0">Thường</option>
+              <option value="1">VIP</option>
+              <option value="2">Đôi</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="editSeatGroupRoomId" class="form-label">Phòng</label>
+            <select class="form-select" id="editSeatGroupRoomId" name="roomId">
+              <option value="">-- Không thay đổi --</option>
+              @foreach (var room in Model.Rooms)
+              {
+                <option value="@room.RoomId">@room.Name (@(room.Type == 0 ? "2D" : room.Type == 1 ? "3D" : "IMAX"))</option>
+              }
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="submit" class="btn btn-primary">Cập Nhật Nhóm Ghế</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Form -->
+<form id="deleteSeatGroupForm" method="post" asp-page-handler="Delete" style="display: none;">
+  <input type="hidden" id="deleteSeatGroupId" name="id" />
+</form>
+
+@section PageScripts {
+<script>
+  // Handle edit modal
+  document.addEventListener('DOMContentLoaded', function() {
+    const editModal = document.getElementById('editSeatGroupModal');
+    if (editModal) {
+      editModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const seatGroupId = button.getAttribute('data-seatgroup-id');
+        const seatGroupName = button.getAttribute('data-seatgroup-name');
+        const seatGroupType = button.getAttribute('data-seatgroup-type');
+        const seatGroupRoomId = button.getAttribute('data-seatgroup-roomid');
+
+        document.getElementById('editSeatGroupId').value = seatGroupId;
+        document.getElementById('editSeatGroupName').value = seatGroupName || '';
+        document.getElementById('editSeatGroupType').value = seatGroupType || '0';
+        document.getElementById('editSeatGroupRoomId').value = seatGroupRoomId || '';
+      });
+    }
+  });
+
+  // Handle delete confirmation
+  function confirmDelete(seatGroupId, seatGroupName) {
+    if (confirm(`Bạn có chắc chắn muốn xóa "${seatGroupName}"? Hành động này không thể hoàn tác.`)) {
+      document.getElementById('deleteSeatGroupId').value = seatGroupId;
+      document.getElementById('deleteSeatGroupForm').submit();
+    }
+  }
+</script>
+}
+

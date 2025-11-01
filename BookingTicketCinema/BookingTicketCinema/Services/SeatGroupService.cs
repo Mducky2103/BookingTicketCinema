@@ -93,6 +93,13 @@ namespace BookingTicketCinema.Services
 
             if (dto.GroupName != null) seatGroup.GroupName = dto.GroupName;
             if (dto.Type.HasValue) seatGroup.Type = dto.Type.Value;
+            
+            if (dto.RoomId.HasValue)
+            {
+                var room = await _roomRepository.GetByIdAsync(dto.RoomId.Value);
+                if (room == null) throw new Exception("Room not found");
+                seatGroup.RoomId = dto.RoomId.Value;
+            }
 
             await _seatGroupRepository.UpdateAsync(seatGroup);
             await _seatGroupRepository.SaveChangesAsync();

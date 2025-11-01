@@ -31,6 +31,9 @@ builder.Services.AddScoped<ISeatGroupService, SeatGroupService>();
 builder.Services.AddScoped<ISeatRepository, SeatRepository>();
 builder.Services.AddScoped<ISeatService, SeatService>();
 
+builder.Services.AddScoped<IShowtimeRepository, ShowtimeRepository>();
+builder.Services.AddScoped<IShowtimeService, ShowtimeService>();
+
 builder.Services.AddScoped<IPriceRuleRepository, PriceRuleRepository>();
 builder.Services.AddScoped<IPriceRuleService, PriceRuleService>();
 
@@ -55,5 +58,10 @@ app.MapGroup("/api")
     .MapRoomEndpoints()
     .MapSeatGroupEndpoints()
     .MapSeatEndpoints()
+    .MapShowtimeEndpoints()
     .MapPriceRuleEndpoints();
-app.Run();
+
+// Seed database with demo admin account
+await app.SeedDatabaseAsync();
+
+await app.RunAsync();
