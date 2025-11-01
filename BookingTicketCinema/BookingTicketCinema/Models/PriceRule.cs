@@ -7,18 +7,18 @@ namespace BookingTicketCinema.Models
     {
         [Key]
         public int PriceRuleId { get; set; }
-
+        
         [Required]
         public decimal BasePrice { get; set; }
 
         [Required]
         public DayOfWeek DayOfWeek { get; set; } 
-
+        
         [Required]
         public TimeSlot Slot { get; set; } 
-
+        
         [ForeignKey("SeatGroup")]
-        public int SeatGroupId { get; set; }
+        public int SeatGroupId { get; set; } 
         public SeatGroup SeatGroup { get; set; } = null!;
         public int? ShowtimeId { get; set; }
         public Showtime? Showtime { get; set; }

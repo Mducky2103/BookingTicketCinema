@@ -1,9 +1,11 @@
 using BookingTicketCinema.DTO;
 using BookingTicketCinema.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookingTicketCinema.Controllers
 {
+
     public static class RoomEndpoints
     {
         public static IEndpointRouteBuilder MapRoomEndpoints(this IEndpointRouteBuilder app)
@@ -15,20 +17,20 @@ namespace BookingTicketCinema.Controllers
             app.MapDelete("/rooms/{id}", DeleteRoom);
             return app;
         }
-
+        [AllowAnonymous]
         private static async Task<IResult> GetAllRooms(IRoomService roomService)
         {
             var rooms = await roomService.GetAllAsync();
             return Results.Ok(rooms);
         }
-
+        [AllowAnonymous]
         private static async Task<IResult> GetRoomById(int id, IRoomService roomService)
         {
             var room = await roomService.GetByIdAsync(id);
             if (room == null) return Results.NotFound(new { message = "Room not found" });
             return Results.Ok(room);
         }
-
+        [AllowAnonymous]
         private static async Task<IResult> CreateRoom([FromBody] CreateRoomDto dto, IRoomService roomService)
         {
             try
@@ -41,7 +43,7 @@ namespace BookingTicketCinema.Controllers
                 return Results.BadRequest(new { message = ex.Message });
             }
         }
-
+        [AllowAnonymous]
         private static async Task<IResult> UpdateRoom(int id, [FromBody] UpdateRoomDto dto, IRoomService roomService)
         {
             try
@@ -55,7 +57,7 @@ namespace BookingTicketCinema.Controllers
                 return Results.BadRequest(new { message = ex.Message });
             }
         }
-
+        [AllowAnonymous]
         private static async Task<IResult> DeleteRoom(int id, IRoomService roomService)
         {
             var result = await roomService.DeleteAsync(id);
