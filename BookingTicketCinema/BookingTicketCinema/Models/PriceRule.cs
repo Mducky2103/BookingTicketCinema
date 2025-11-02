@@ -20,6 +20,7 @@ namespace BookingTicketCinema.Models
         [ForeignKey("SeatGroup")]
         public int SeatGroupId { get; set; } 
         public SeatGroup SeatGroup { get; set; } = null!;
+        [ForeignKey(nameof(Showtime))]
         public int? ShowtimeId { get; set; }
         public Showtime? Showtime { get; set; }
 

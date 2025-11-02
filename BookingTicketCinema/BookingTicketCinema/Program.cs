@@ -5,12 +5,23 @@ using BookingTicketCinema.Extensions;
 using BookingTicketCinema.Services.Interface;
 using BookingTicketCinema.Repositories.Interface;
 using BookingTicketCinema.Repositories;
+using Microsoft.OData.Edm;
+using Microsoft.OData.ModelBuilder;
+using Microsoft.AspNetCore.OData;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+// Add OData support and register EDM model under the "odata" route prefix.
+builder.Services.AddControllers()
+    .AddOData(opt => opt.AddRouteComponents("odata", GetEdmModel())
+        .Select()
+        .Filter()
+        .OrderBy()
+        .Expand()
+        .SetMaxTop(100)
+        .Count());
 builder.Services.AddSwaggerExplorer()
                             .InjectDbContext(builder.Configuration)
                             .AddAppConfig(builder.Configuration)
@@ -38,6 +49,16 @@ builder.Services.AddScoped<IPriceRuleRepository, PriceRuleRepository>();
 builder.Services.AddScoped<IPriceRuleService, PriceRuleService>();
 
 var app = builder.Build();
+
+// Build EDM model for OData
+static IEdmModel GetEdmModel()
+{
+    var odataBuilder = new ODataConventionModelBuilder();
+    // register entity sets exposed via OData
+    odataBuilder.EntitySet<Movie>("Movies");
+    odataBuilder.EntitySet<Showtime>("Showtimes");
+    return odataBuilder.GetEdmModel();
+}
 
 app.ConfigureSwaggerExplorer()
                .ConfigureCORS(builder.Configuration)

@@ -2,6 +2,20 @@ using BookingTicketCinema.Models;
 
 namespace BookingTicketCinema.DTO
 {
+    public class ShowTimeCreateDto
+    {
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public int MovieId { get; set; }
+        public int RoomId { get; set; }
+    }
+    public class ShowTimeUpdateDto
+    {
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+        public int? MovieId { get; set; }
+        public int? RoomId { get; set; }
+    }
     public class ShowtimeResponseDto
     {
         public int ShowtimeId { get; set; }
@@ -11,6 +25,7 @@ namespace BookingTicketCinema.DTO
         public string? MovieName { get; set; }
         public int RoomId { get; set; }
         public string? RoomName { get; set; }
+        public List<PriceRuleResponseDto>? PriceRules { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
