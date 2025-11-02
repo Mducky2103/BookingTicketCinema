@@ -54,8 +54,7 @@ namespace BookingTicketCinema.ManagementApp.Pages.Auth
 
                 // 1. GỌI API LOGIN
                 var jsonContent = new StringContent(JsonSerializer.Serialize(Input), Encoding.UTF8, "application/json");
-                var response = await httpClient.PostAsync($"{apiBaseUrl}/api/signin", jsonContent); // Dùng endpoint /api/signin của bạn
-
+                var response = await httpClient.PostAsync($"{apiBaseUrl}/api/signin", jsonContent); 
                 if (!response.IsSuccessStatusCode)
                 {
                     ModelState.AddModelError(string.Empty, "Email hoặc mật khẩu không chính xác.");
@@ -76,7 +75,7 @@ namespace BookingTicketCinema.ManagementApp.Pages.Auth
                 var handler = new JwtSecurityTokenHandler();
                 var jwtToken = handler.ReadJwtToken(tokenString);
 
-                string roleClaimType = "role"; // HOẶC "Role", hoặc bất cứ thứ gì bạn thấy
+                string roleClaimType = "role"; 
 
                 // 3. LẤY CLAIMS VÀ KIỂM TRA ROLE
                 var claims = jwtToken.Claims.ToList();
@@ -104,7 +103,6 @@ namespace BookingTicketCinema.ManagementApp.Pages.Auth
                     }
                 }
 
-                // 4. LƯU THÔNG TIN VÀO COOKIE
                 claims.Add(new Claim(ClaimTypes.Name, fullName));
 
                 // LƯU TOKEN VÀO COOKIE: Để các API call sau có thể dùng
@@ -128,7 +126,7 @@ namespace BookingTicketCinema.ManagementApp.Pages.Auth
                         ExpiresUtc = jwtToken.ValidTo // Cookie hết hạn cùng JWT
                     });
 
-                // 5. Chuyển hướng về trang chủ (Index)
+                // Chuyển hướng về trang chủ (Index)
                 return LocalRedirect(ReturnUrl);
             }
             catch (Exception ex)
