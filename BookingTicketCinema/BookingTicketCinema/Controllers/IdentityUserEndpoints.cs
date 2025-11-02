@@ -34,7 +34,7 @@ namespace BookingTicketCinema.Controllers
                 Email = userRegistrationModel.Email,
                 FullName = userRegistrationModel.FullName,
                 Gender = userRegistrationModel.Gender,
-                DOB = DateOnly.FromDateTime(DateTime.Now.AddYears(-userRegistrationModel.Age))
+                DOB = DateOnly.FromDateTime(userRegistrationModel.DOB)
             };
             var result = await userManager.CreateAsync(
                 user,
@@ -70,7 +70,7 @@ namespace BookingTicketCinema.Controllers
                 {
                     new Claim("userID",user.Id.ToString()),
                     new Claim("gender", user.Gender.ToString()),
-                    new Claim("age", (DateTime.Now.Year - user.DOB.Year).ToString()),
+                    new Claim("dob", user.DOB.ToString("o")),
                     new Claim(ClaimTypes.Role, roles.First())
                 });  
                 var tokenDescriptor = new SecurityTokenDescriptor
@@ -85,7 +85,7 @@ namespace BookingTicketCinema.Controllers
                     return Results.Ok(new { token });
                 }
                 else
-                    return Results.BadRequest(new { message = "Username or password is incorrect." });
+                    return Results.BadRequest(new { message = "Email or password is incorrect." });
             }
 
         [AllowAnonymous]

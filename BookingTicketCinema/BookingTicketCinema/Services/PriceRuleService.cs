@@ -110,7 +110,14 @@ namespace BookingTicketCinema.Services
                 if (seatGroup == null) throw new Exception("SeatGroup not found");
                 priceRule.SeatGroupId = dto.SeatGroupId.Value;
             }
-            if (dto.ShowtimeId.HasValue) priceRule.ShowtimeId = dto.ShowtimeId.Value;
+            if (dto.ShowtimeId.HasValue && dto.ShowtimeId.Value == -1)
+            {
+                priceRule.ShowtimeId = null;
+            }
+            else if (dto.ShowtimeId.HasValue)
+            {
+                priceRule.ShowtimeId = dto.ShowtimeId.Value;
+            }
 
             await _priceRuleRepository.UpdateAsync(priceRule);
             await _priceRuleRepository.SaveChangesAsync();

@@ -1,0 +1,141 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = BookingTicketCinema.ManagementApp
+build_property.RootNamespace = BookingTicketCinema.ManagementApp
+build_property.ProjectDir = C:\Users\Admin\Documents\GitHub\BookingTicketCinema\BookingTicketCinema\BookingTicketCinema.ManagementApp\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\Admin\Documents\GitHub\BookingTicketCinema\BookingTicketCinema\BookingTicketCinema.ManagementApp
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 8.0
+build_property.EnableCodeStyleSeverity = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Auth/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Auth/Logout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aFxMb2dvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/PriceRule/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpY2VSdWxlXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Rooms/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUm9vbXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/SeatGroup/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhdEdyb3VwXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/SeatLayout/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhdExheW91dFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Shared/Sections/Footer/_Footer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXFNlY3Rpb25zXEZvb3RlclxfRm9vdGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Shared/Sections/Menu/_VerticalMenu.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXFNlY3Rpb25zXE1lbnVcX1ZlcnRpY2FsTWVudS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Shared/Sections/Navbar/_Navbar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXFNlY3Rpb25zXE5hdmJhclxfTmF2YmFyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Shared/Sections/Navbar/_NavbarPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXFNlY3Rpb25zXE5hdmJhclxfTmF2YmFyUGFydGlhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Shared/Sections/_Scripts.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXFNlY3Rpb25zXF9TY3JpcHRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Shared/Sections/_ScriptsIncludes.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXFNlY3Rpb25zXF9TY3JpcHRzSW5jbHVkZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Shared/Sections/_Styles.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXFNlY3Rpb25zXF9TdHlsZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Shared/Sections/_Variables.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXFNlY3Rpb25zXF9WYXJpYWJsZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Shared/_BlankLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9CbGFua0xheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Shared/_CommonMasterLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9Db21tb25NYXN0ZXJMYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Shared/_ContentNavbarLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9Db250ZW50TmF2YmFyTGF5b3V0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Shared/_LayoutSimple.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXRTaW1wbGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Shared/_Partials/_Macros.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9QYXJ0aWFsc1xfTWFjcm9zLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Users/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Users/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Users/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Users/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Documents/GitHub/BookingTicketCinema/BookingTicketCinema/BookingTicketCinema.ManagementApp/Pages/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-e6rj8u8jfb

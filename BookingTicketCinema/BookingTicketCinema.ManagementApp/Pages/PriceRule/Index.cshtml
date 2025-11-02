@@ -1,0 +1,375 @@
+@page
+@model BookingTicketCinema.ManagementApp.Pages.PriceRule.IndexModel
+@{
+    ViewData["Title"] = "Quản lý Quy Tắc Giá";
+}
+
+@* Alerts *@
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+  <div class="alert alert-success alert-dismissible mb-4" role="alert">
+    <i class="icon-base bx bx-check-circle me-2"></i>
+    @Model.SuccessMessage
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+  <div class="alert alert-danger alert-dismissible mb-4" role="alert">
+    <i class="icon-base bx bx-error-circle me-2"></i>
+    @Model.ErrorMessage
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+}
+
+<div class="row">
+  <!-- Price Rules Table -->
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title m-0 me-2">Quy Tắc Giá</h5>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPriceRuleModal">
+          <i class="icon-base bx bx-plus me-1"></i>
+          <span class="d-none d-sm-inline-block">Thêm Quy Tắc Giá Mới</span>
+        </button>
+      </div>
+      <div class="table-responsive text-nowrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Giá Gốc</th>
+              <th>Thứ Trong Tuần</th>
+              <th>Khung Giờ</th>
+              <th>Nhóm Ghế</th>
+              <th>Suất Chiếu</th>
+              <th>Ngày Tạo</th>
+              <th>Thao Tác</th>
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0">
+            @if (Model.PriceRules != null && Model.PriceRules.Any())
+            {
+              @foreach (var priceRule in Model.PriceRules)
+              {
+                <tr>
+                  <td><strong>#@priceRule.PriceRuleId</strong></td>
+                  <td>
+                    <span class="fw-semibold text-primary">@priceRule.BasePrice.ToString("N0") ₫</span>
+                  </td>
+                  <td>
+                    <span class="badge bg-label-info me-1">@priceRule.DayOfWeekName</span>
+                  </td>
+                  <td>
+                    <span class="badge bg-label-@(priceRule.Slot == 0 ? "warning" : priceRule.Slot == 1 ? "primary" : priceRule.Slot == 2 ? "success" : "secondary") me-1">
+                      @(priceRule.Slot == 0 ? "Sáng" : priceRule.Slot == 1 ? "Chiều" : priceRule.Slot == 2 ? "Tối" : "Khuya")
+                    </span>
+                  </td>
+                  <td>
+                    @if (!string.IsNullOrEmpty(priceRule.SeatGroupName))
+                    {
+                      <span class="text-body">@priceRule.SeatGroupName</span>
+                    }
+                    else
+                    {
+                      <span class="text-muted">Nhóm #@priceRule.SeatGroupId</span>
+                    }
+                  </td>
+                  <td>
+                    @if (!string.IsNullOrEmpty(priceRule.ShowtimeName))
+                    {
+                      <span class="text-body">@priceRule.ShowtimeName</span>
+                    }
+                    else if (priceRule.ShowtimeId.HasValue)
+                    {
+                      <span class="text-muted">#@priceRule.ShowtimeId</span>
+                    }
+                    else
+                    {
+                      <span class="text-muted">-</span>
+                    }
+                  </td>
+                  <td>@priceRule.CreatedAt.ToString("dd/MM/yyyy")</td>
+                  <td>
+                    <div class="dropdown">
+                      <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                        <i class="icon-base bx bx-dots-vertical-rounded"></i>
+                      </button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" href="javascript:void(0);" 
+                           data-bs-toggle="modal" 
+                           data-bs-target="#editPriceRuleModal"
+                           data-pricerule-id="@priceRule.PriceRuleId"
+                           data-pricerule-baseprice="@priceRule.BasePrice"
+                           data-pricerule-dayofweek="@priceRule.DayOfWeek"
+                           data-pricerule-slot="@priceRule.Slot"
+                           data-pricerule-seatgroupid="@priceRule.SeatGroupId"
+                           data-pricerule-showtimeid="@(priceRule.ShowtimeId?.ToString() ?? "")">
+                          <i class="icon-base bx bx-edit-alt me-1"></i> Sửa
+                        </a>
+                        <a class="dropdown-item" href="javascript:void(0);" 
+                           onclick="confirmDelete(@priceRule.PriceRuleId, '@priceRule.PriceRuleId')">
+                          <i class="icon-base bx bx-trash me-1"></i> Xóa
+                        </a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              }
+            }
+            else
+            {
+              <tr>
+                <td colspan="8" class="text-center py-6">
+                  <p class="text-body-secondary mb-0">Không tìm thấy quy tắc giá nào. Tạo quy tắc giá đầu tiên của bạn!</p>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Price Rule Modal -->
+<div class="modal fade" id="createPriceRuleModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Tạo Quy Tắc Giá Mới</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post" asp-page-handler="Create">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="createPriceRuleBasePrice" class="form-label">Giá Gốc (₫)</label>
+            <input type="number" class="form-control" id="createPriceRuleBasePrice" name="basePrice" step="1000" min="0" placeholder="0" required />
+          </div>
+          <div class="mb-3">
+            <label for="createPriceRuleDayOfWeek" class="form-label">Thứ Trong Tuần</label>
+            <select class="form-select" id="createPriceRuleDayOfWeek" name="dayOfWeek" required>
+              <option value="0">Chủ nhật</option>
+              <option value="1">Thứ hai</option>
+              <option value="2">Thứ ba</option>
+              <option value="3">Thứ tư</option>
+              <option value="4">Thứ năm</option>
+              <option value="5">Thứ sáu</option>
+              <option value="6">Thứ bảy</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="createPriceRuleSlot" class="form-label">Khung Giờ</label>
+            <select class="form-select" id="createPriceRuleSlot" name="slot" required>
+              <option value="0">Sáng</option>
+              <option value="1">Chiều</option>
+              <option value="2">Tối</option>
+              <option value="3">Khuya</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="createPriceRuleSeatGroupId" class="form-label">Nhóm Ghế</label>
+            <select class="form-select" id="createPriceRuleSeatGroupId" name="seatGroupId" required>
+              <option value="">Chọn nhóm ghế</option>
+              @foreach (var seatGroup in Model.SeatGroups)
+              {
+                <option value="@seatGroup.SeatGroupId" data-roomid="@seatGroup.RoomId">@seatGroup.GroupName (@(seatGroup.Type == 0 ? "Thường" : seatGroup.Type == 1 ? "VIP" : "Đôi"))</option>
+              }
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="createPriceRuleShowtimeId" class="form-label">Suất Chiếu (Tùy chọn)</label>
+            <select class="form-select" id="createPriceRuleShowtimeId" name="showtimeId">
+              <option value="">Không áp dụng</option>
+              @foreach (var showtime in Model.Showtimes)
+              {
+                <option value="@showtime.ShowtimeId">
+                  #@showtime.ShowtimeId - @showtime.MovieName (@showtime.RoomName) - @showtime.StartTime.ToString("dd/MM/yyyy HH:mm")
+                </option>
+              }
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="submit" class="btn btn-primary">Tạo Quy Tắc Giá</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Price Rule Modal -->
+<div class="modal fade" id="editPriceRuleModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalCenterTitle">Sửa Quy Tắc Giá</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="editPriceRuleForm" method="post" asp-page-handler="Update">
+        <div class="modal-body">
+          <input type="hidden" id="editPriceRuleId" name="id" />
+          <div class="mb-3">
+            <label for="editPriceRuleBasePrice" class="form-label">Giá Gốc (₫)</label>
+            <input type="number" class="form-control" id="editPriceRuleBasePrice" name="basePrice" step="1000" min="0" placeholder="0" />
+          </div>
+          <div class="mb-3">
+            <label for="editPriceRuleDayOfWeek" class="form-label">Thứ Trong Tuần</label>
+            <select class="form-select" id="editPriceRuleDayOfWeek" name="dayOfWeek">
+              <option value="">-- Không thay đổi --</option>
+              <option value="0">Chủ nhật</option>
+              <option value="1">Thứ hai</option>
+              <option value="2">Thứ ba</option>
+              <option value="3">Thứ tư</option>
+              <option value="4">Thứ năm</option>
+              <option value="5">Thứ sáu</option>
+              <option value="6">Thứ bảy</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="editPriceRuleSlot" class="form-label">Khung Giờ</label>
+            <select class="form-select" id="editPriceRuleSlot" name="slot">
+              <option value="">-- Không thay đổi --</option>
+              <option value="0">Sáng</option>
+              <option value="1">Chiều</option>
+              <option value="2">Tối</option>
+              <option value="3">Khuya</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="editPriceRuleSeatGroupId" class="form-label">Nhóm Ghế</label>
+            <select class="form-select" id="editPriceRuleSeatGroupId" name="seatGroupId">
+              <option value="">-- Không thay đổi --</option>
+              @foreach (var seatGroup in Model.SeatGroups)
+              {
+                <option value="@seatGroup.SeatGroupId" data-roomid="@seatGroup.RoomId">@seatGroup.GroupName (@(seatGroup.Type == 0 ? "Thường" : seatGroup.Type == 1 ? "VIP" : "Đôi"))</option>
+              }
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="editPriceRuleShowtimeId" class="form-label">Suất Chiếu (Tùy chọn)</label>
+            <select class="form-select" id="editPriceRuleShowtimeId" name="showtimeId">
+              <option value=""></option>
+              <option value="-1">-- Xóa suất chiếu --</option>
+              @foreach (var showtime in Model.Showtimes)
+              {
+                <option value="@showtime.ShowtimeId">
+                  #@showtime.ShowtimeId - @showtime.MovieName (@showtime.RoomName) - @showtime.StartTime.ToString("dd/MM/yyyy HH:mm")
+                </option>
+              }
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="submit" class="btn btn-primary">Cập Nhật Quy Tắc Giá</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Form -->
+<form id="deletePriceRuleForm" method="post" asp-page-handler="Delete" style="display: none;">
+  <input type="hidden" id="deletePriceRuleId" name="id" />
+</form>
+
+@section PageScripts {
+<script>
+  // Load showtimes when seat group is selected
+  async function loadShowtimesForRoom(roomId, targetSelectId) {
+    const targetSelect = document.getElementById(targetSelectId);
+    if (!roomId || roomId === '') {
+      targetSelect.innerHTML = '<option value="">Không áp dụng</option>';
+      return;
+    }
+
+    try {
+      const response = await fetch(`?handler=ShowtimesByRoom&roomId=${roomId}`);
+      const showtimes = await response.json();
+      
+      targetSelect.innerHTML = '<option value="">Không áp dụng</option>';
+      
+      // Only add "-1" option if this is the edit modal
+      if (targetSelectId === 'editPriceRuleShowtimeId') {
+        const removeOption = document.createElement('option');
+        removeOption.value = '-1';
+        removeOption.textContent = '-- Xóa suất chiếu --';
+        targetSelect.appendChild(removeOption);
+      }
+      
+      showtimes.forEach(st => {
+        const option = document.createElement('option');
+        option.value = st.showtimeId;
+        const date = new Date(st.startTime);
+        const dateStr = date.toLocaleDateString('vi-VN');
+        const timeStr = date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+        option.textContent = `#${st.showtimeId} - ${st.movieName || ''} (${st.roomName || ''}) - ${dateStr} ${timeStr}`;
+        targetSelect.appendChild(option);
+      });
+    } catch (error) {
+      console.error('Error loading showtimes:', error);
+      targetSelect.innerHTML = '<option value="">Lỗi tải suất chiếu</option>';
+    }
+  }
+
+  // Handle edit modal
+  document.addEventListener('DOMContentLoaded', function() {
+    // Load showtimes when seat group changes in create modal
+    document.getElementById('createPriceRuleSeatGroupId')?.addEventListener('change', function() {
+      const selectedOption = this.options[this.selectedIndex];
+      const roomId = selectedOption.getAttribute('data-roomid');
+      loadShowtimesForRoom(roomId, 'createPriceRuleShowtimeId');
+    });
+
+    // Load showtimes when seat group changes in edit modal
+    document.getElementById('editPriceRuleSeatGroupId')?.addEventListener('change', function() {
+      const selectedOption = this.options[this.selectedIndex];
+      const roomId = selectedOption.getAttribute('data-roomid');
+      loadShowtimesForRoom(roomId, 'editPriceRuleShowtimeId');
+    });
+
+    const editModal = document.getElementById('editPriceRuleModal');
+    if (editModal) {
+      editModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const priceRuleId = button.getAttribute('data-pricerule-id');
+        const basePrice = button.getAttribute('data-pricerule-baseprice');
+        const dayOfWeek = button.getAttribute('data-pricerule-dayofweek');
+        const slot = button.getAttribute('data-pricerule-slot');
+        const seatGroupId = button.getAttribute('data-pricerule-seatgroupid');
+        const showtimeId = button.getAttribute('data-pricerule-showtimeid');
+
+        document.getElementById('editPriceRuleId').value = priceRuleId;
+        document.getElementById('editPriceRuleBasePrice').value = basePrice || '';
+        document.getElementById('editPriceRuleDayOfWeek').value = dayOfWeek || '';
+        document.getElementById('editPriceRuleSlot').value = slot || '';
+        document.getElementById('editPriceRuleSeatGroupId').value = seatGroupId || '';
+        
+        // Load and set showtimes for the selected seat group
+        const selectedSeatGroup = document.getElementById('editPriceRuleSeatGroupId');
+        if (selectedSeatGroup && seatGroupId) {
+          const option = selectedSeatGroup.querySelector(`option[value="${seatGroupId}"]`);
+          if (option) {
+            const roomId = option.getAttribute('data-roomid');
+            loadShowtimesForRoom(roomId, 'editPriceRuleShowtimeId').then(() => {
+              document.getElementById('editPriceRuleShowtimeId').value = showtimeId || '';
+            });
+          }
+        }
+      });
+    }
+  });
+
+  // Handle delete confirmation
+  function confirmDelete(priceRuleId, displayId) {
+    if (confirm(`Bạn có chắc chắn muốn xóa Quy Tắc Giá #${displayId}? Hành động này không thể hoàn tác.`)) {
+      document.getElementById('deletePriceRuleId').value = priceRuleId;
+      document.getElementById('deletePriceRuleForm').submit();
+    }
+  }
+</script>
+}
+

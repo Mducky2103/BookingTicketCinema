@@ -1,0 +1,20 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    @if (User.Identity?.IsAuthenticated ?? false)
+    {
+        <h1 class="display-4">Chào mừng trở lại, @User.Identity?.Name!</h1>
+    }
+    else
+    {
+        <h1 class="display-4">Chào mừng đến với Cinema</h1>
+    }
+
+    <p class="lead">Nơi xem những bộ phim hay nhất.</p>
+
+    <a class="btn btn-lg btn-primary" asp-page="/Movie/Index">Xem phim đang chiếu</a>
+</div>

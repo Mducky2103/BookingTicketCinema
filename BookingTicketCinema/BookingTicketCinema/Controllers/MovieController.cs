@@ -21,7 +21,7 @@ namespace BookingTicketCinema.Controllers
 
         // GET: api/movie
         [HttpGet]
-        [AllowAnonymous]
+        
         public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
         {
             return await _context.Movies.ToListAsync();
@@ -29,7 +29,7 @@ namespace BookingTicketCinema.Controllers
 
         // GET: api/movie/5
         [HttpGet("{id}")]
-        [AllowAnonymous]
+        
         public async Task<ActionResult<Movie>> GetMovie(int id)
         {
             var movie = await _context.Movies.FindAsync(id);
@@ -44,7 +44,7 @@ namespace BookingTicketCinema.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        [AllowAnonymous] // chỉ để test, sau này remove
+        
         public async Task<IActionResult> CreateMovie([FromForm] MovieCreateRequest request)
         {
             // ✅ Validate Title
@@ -105,7 +105,7 @@ namespace BookingTicketCinema.Controllers
         }
 
         [HttpPut("{id}")]
-        [AllowAnonymous] // chỉ để test
+        
         public async Task<IActionResult> UpdateMovie(int id, [FromForm] MovieUpdateRequest request)
         {
             var movie = await _context.Movies.FindAsync(id);
@@ -188,7 +188,7 @@ namespace BookingTicketCinema.Controllers
 
         // DELETE: api/movie/5
         [HttpDelete("{id}")]
-        [AllowAnonymous] // cho phép test
+        
         public async Task<IActionResult> DeleteMovie(int id)
         {
             var movie = await _context.Movies.FindAsync(id);
