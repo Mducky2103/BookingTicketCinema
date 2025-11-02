@@ -7,12 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
+    <Compile Remove="Pages\Booking\**" />
+    <Compile Remove="Pages\Movie\**" />
+    <Content Remove="Pages\Booking\**" />
+    <Content Remove="Pages\Movie\**" />
+    <EmbeddedResource Remove="Pages\Booking\**" />
+    <EmbeddedResource Remove="Pages\Movie\**" />
+    <None Remove="Pages\Booking\**" />
+    <None Remove="Pages\Movie\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Booking\" />
-    <Folder Include="Pages\Movie\" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
   </ItemGroup>
 
 </Project>

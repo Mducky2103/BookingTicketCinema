@@ -1,0 +1,31 @@
+﻿@page
+@model BookingTicketCinema.ManagementApp.Pages.Users.DeleteModel
+@{
+    ViewData["Title"] = "Xác nhận Xóa";
+}
+
+<h3 class_="text-danger">@ViewData["Title"]</h3>
+<hr />
+
+@if (Model.User != null)
+{
+    <div class="alert alert-danger">
+        <h4 class="alert-heading">Bạn có chắc chắn muốn xóa?</h4>
+        <p>Hành động này sẽ xóa vĩnh viễn người dùng <strong>@Model.User.FullName</strong> (@Model.User.Email).</p>
+        <p>Bạn không thể hoàn tác hành động này.</p>
+    </div>
+
+    <form method="post">
+        <input type="hidden" asp-for="User.Id" />
+
+        <button type="submit" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Vâng, Xóa Ngay
+        </button>
+        <a asp-page="./Index" class="btn btn-secondary">Hủy</a>
+    </form>
+}
+else
+{
+    <div class="alert alert-danger">@Model.ErrorMessage</div>
+    <a asp-page="./Index" class="btn btn-secondary">Quay lại Danh sách</a>
+}

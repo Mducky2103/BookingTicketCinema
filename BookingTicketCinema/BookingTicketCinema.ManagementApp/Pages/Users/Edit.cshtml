@@ -1,0 +1,56 @@
+﻿@page
+@model BookingTicketCinema.ManagementApp.Pages.Users.EditModel
+@{
+    ViewData["Title"] = "Sửa Người dùng";
+}
+
+@if (Model.User != null)
+{
+    <h3>@ViewData["Title"]: @Model.User.FullName</h3>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <form method="post">
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        
+                        <input type="hidden" asp-for="User.Id" />
+
+                        <div class="mb-3">
+                            <label asp-for="User.FullName" class="form-label"></label>
+                            <input asp-for="User.FullName" class="form-control" />
+                            <span asp-validation-for="User.FullName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="User.Email" class="form-label"></label>
+                            <input asp-for="User.Email" class="form-control" />
+                            <span asp-validation-for="User.Email" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="User.PhoneNumber" class="form-label">Số điện thoại</label>
+                            <input asp-for="User.PhoneNumber" class="form-control" />
+                            <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="User.Role" class="form-label">Vai trò</label>
+                            <select asp-for="User.Role" class="form-select" asp-items="Model.RoleList">
+                            </select>
+                            <span asp-validation-for="User.Role" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Lưu thay đổi
+                        </button>
+                        <a asp-page="./Index" class="btn btn-secondary">Hủy</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">@Model.ErrorMessage</div>
+}
