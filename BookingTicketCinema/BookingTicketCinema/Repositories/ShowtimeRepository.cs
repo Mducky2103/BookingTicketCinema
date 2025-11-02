@@ -1,4 +1,4 @@
-using BookingTicketCinema.Data;
+﻿using BookingTicketCinema.Data;
 using BookingTicketCinema.Models;
 using BookingTicketCinema.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -22,9 +22,12 @@ namespace BookingTicketCinema.Repositories
 
         public async Task<Showtime?> GetByIdAsync(int id) =>
             await _context.Showtimes
+                .AsSplitQuery() // include nhiều quá thì thêm vào để query nhanh
+                .Where(m=> m.ShowtimeId == id)
                 .Include(s => s.Movie)
                 .Include(s => s.Room)
-                .FirstOrDefaultAsync(s => s.ShowtimeId == id);
+                .Include(s => s.PriceRules)
+                .FirstOrDefaultAsync();
 
         public async Task<IEnumerable<Showtime>> GetByRoomIdAsync(int roomId) =>
             await _context.Showtimes
