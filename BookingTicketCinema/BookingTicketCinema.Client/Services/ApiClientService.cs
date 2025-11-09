@@ -35,5 +35,31 @@ namespace BookingTicketCinema.WebApp.Services
             // Gọi endpoint mới
             return await client.GetFromJsonAsync<List<MovieCardViewModel>>("api/MovieForClient/coming-soon") ?? new();
         }
+
+        // === Thêm phần Booking ===
+        public Task<HttpResponseMessage> GetAsync(string url)
+        {
+            var client = CreateClient();
+            return client.GetAsync(url);
+        }
+
+        public Task<HttpResponseMessage> PostAsync(string url, HttpContent content)
+        {
+            var client = CreateClient();
+            return client.PostAsync(url, content);
+        }
+
+        public Task<HttpResponseMessage> PutAsync(string url, HttpContent content)
+        {
+            var client = CreateClient();
+            return client.PutAsync(url, content);
+        }
+
+        public Task<HttpResponseMessage> DeleteAsync(string url)
+        {
+            var client = CreateClient();
+            return client.DeleteAsync(url);
+        }
+
     }
 }

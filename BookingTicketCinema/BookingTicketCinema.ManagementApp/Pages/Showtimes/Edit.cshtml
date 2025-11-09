@@ -1,0 +1,29 @@
+﻿@page
+@model BookingTicketCinema.ManagementApp.Pages.Showtimes.EditModel
+@{
+    ViewData["Title"] = "Cập nhật suất chiếu";
+}
+<div class="container py-4">
+    <h3>🎬 Cập nhật suất chiếu</h3>
+    <hr />
+    <form method="post">
+        <div class="mb-3">
+            <label>ID Phim</label>
+            <input asp-for="Input.MovieId" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label>ID Phòng</label>
+            <input asp-for="Input.RoomId" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label>Thời gian bắt đầu</label>
+            <input asp-for="Input.StartTime" type="datetime-local" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label>Thời gian kết thúc</label>
+            <input asp-for="Input.EndTime" type="datetime-local" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-warning">Cập nhật</button>
+        <a href="/Showtimes" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>

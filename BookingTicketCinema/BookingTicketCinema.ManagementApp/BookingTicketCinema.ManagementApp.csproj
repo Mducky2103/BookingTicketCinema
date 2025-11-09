@@ -11,22 +11,18 @@
     <Compile Remove="Pages\Movies\**" />
     <Compile Remove="Pages\PriceRules\**" />
     <Compile Remove="Pages\Reports\**" />
-    <Compile Remove="Pages\Showtimes\**" />
     <Content Remove="Pages\CheckIn\**" />
     <Content Remove="Pages\Movies\**" />
     <Content Remove="Pages\PriceRules\**" />
     <Content Remove="Pages\Reports\**" />
-    <Content Remove="Pages\Showtimes\**" />
     <EmbeddedResource Remove="Pages\CheckIn\**" />
     <EmbeddedResource Remove="Pages\Movies\**" />
     <EmbeddedResource Remove="Pages\PriceRules\**" />
     <EmbeddedResource Remove="Pages\Reports\**" />
-    <EmbeddedResource Remove="Pages\Showtimes\**" />
     <None Remove="Pages\CheckIn\**" />
     <None Remove="Pages\Movies\**" />
     <None Remove="Pages\PriceRules\**" />
     <None Remove="Pages\Reports\**" />
-    <None Remove="Pages\Showtimes\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +31,10 @@
 
   <ItemGroup>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BookingTicketCinema.Client\BookingTicketCinema.WebApp.csproj" />
   </ItemGroup>
 
 </Project>

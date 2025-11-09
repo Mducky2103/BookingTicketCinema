@@ -7,5 +7,10 @@ namespace BookingTicketCinema.WebApp.Services
         Task<List<MovieFeaturedViewModel>> GetFeaturedMoviesAsync();
         Task<List<MovieCardViewModel>> GetNowShowingMoviesAsync();
         Task<List<MovieCardViewModel>> GetComingSoonMoviesAsync();
+        Task<HttpResponseMessage> GetAsync(string url);
+        Task<HttpResponseMessage> PostAsync(string url, HttpContent content);
+        Task<HttpResponseMessage> PutAsync(string url, HttpContent content);
+        Task<HttpResponseMessage> DeleteAsync(string url);
+
     }
 }
