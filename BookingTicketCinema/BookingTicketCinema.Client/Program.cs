@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Headers;
+using BookingTicketCinema.WebApp.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -43,6 +44,8 @@ builder.Services.Configure<RazorPagesOptions>(options =>
     options.Conventions.AuthorizeFolder("/Profile");
     options.Conventions.AuthorizeFolder("/Booking");
 });
+
+builder.Services.AddScoped<IApiClientService, ApiClientService>();
 
 builder.Services.AddAuthorization();
 

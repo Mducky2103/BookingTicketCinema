@@ -1,4 +1,5 @@
 ﻿using BookingTicketCinema.Data;
+using BookingTicketCinema.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ namespace BookingTicketCinema.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class BookingController : ControllerBase
     {
         private readonly CinemaDbContext _context;
@@ -49,15 +51,26 @@ namespace BookingTicketCinema.Controllers
             _context.Tickets.AddRange(tickets);
             await _context.SaveChangesAsync();
 
+            var ticketResponses = tickets.Select(t => new TicketResponseDTO
+            {
+                TicketId = t.TicketId,
+                SeatId = t.SeatId,
+                ShowtimeId = t.ShowtimeId,
+                UserId = t.UserId,
+                Status = t.Status.ToString(),
+                CreatedAt = t.CreatedAt
+            }).ToList();
+
             return Ok(new
             {
                 message = "Đặt vé thành công.",
-                count = tickets.Count,
-                tickets
+                count = ticketResponses.Count,
+                tickets = ticketResponses
             });
         }
     }
 }
+    
 public class BookingRequestDTO
 {
     public int ShowtimeId { get; set; }

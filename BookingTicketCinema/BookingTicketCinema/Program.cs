@@ -48,6 +48,9 @@ builder.Services.AddScoped<IShowtimeService, ShowtimeService>();
 builder.Services.AddScoped<IPriceRuleRepository, PriceRuleRepository>();
 builder.Services.AddScoped<IPriceRuleService, PriceRuleService>();
 
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<IMovieService, MovieService>();
+
 var app = builder.Build();
 
 // Build EDM model for OData
