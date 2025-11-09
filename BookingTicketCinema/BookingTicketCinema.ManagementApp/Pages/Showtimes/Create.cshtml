@@ -1,0 +1,29 @@
+﻿@page
+@model BookingTicketCinema.ManagementApp.Pages.Showtimes.CreateModel
+@{
+    ViewData["Title"] = "Tạo suất chiếu mới";
+}
+<div class="container py-4">
+    <h3>🎬 Tạo suất chiếu mới</h3>
+    <hr />
+    <form method="post">
+        <div class="mb-3">
+            <label class="form-label">ID Phim</label>
+            <input asp-for="Input.MovieId" class="form-control" placeholder="Nhập ID phim..." />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">ID Phòng</label>
+            <input asp-for="Input.RoomId" class="form-control" placeholder="Nhập ID phòng..." />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Thời gian bắt đầu</label>
+            <input asp-for="Input.StartTime" type="datetime-local" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Thời gian kết thúc</label>
+            <input asp-for="Input.EndTime" type="datetime-local" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-success">Lưu</button>
+        <a href="/Showtimes" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>

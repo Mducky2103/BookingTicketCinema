@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "BookingTicketCinema\\BookingTicketCinema.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "BookingTicketCinema.Client\\BookingTicketCinema.WebApp.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

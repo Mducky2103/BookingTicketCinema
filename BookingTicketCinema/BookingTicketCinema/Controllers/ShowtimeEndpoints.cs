@@ -10,12 +10,12 @@ namespace BookingTicketCinema.Controllers
     {
         public static IEndpointRouteBuilder MapShowtimeEndpoints(this IEndpointRouteBuilder app)
         {
-            app.MapGet("/showtimes", GetAllShowtimes);
-            app.MapPost("/showtimes", CreateShowtime);
-            app.MapPut("/showtimes/{id}", UpdateShowtime);
-            app.MapDelete("/showtimes/{id}", DeleteShowtime);
-            app.MapGet("/showtimes/{id}", GetShowtimeById);
-            app.MapGet("/showtimes/room/{roomId}", GetShowtimesByRoom);
+            app.MapGet("/api/showtimes/GetAllShowtime", GetAllShowtimes);
+            app.MapPost("/api/showtimes/CreateShowtime", CreateShowtime);
+            app.MapPut("/api/showtimes/UpdateShowtime/{id}", UpdateShowtime);
+            app.MapDelete("/api/showtimes/DeleteShowtime/{id}", DeleteShowtime);
+            app.MapGet("/api/showtimes/GetShowtimeById/{id}", GetShowtimeById);
+            app.MapGet("/api/showtimes/GetShowtimesByRoom/{roomId}", GetShowtimesByRoom);
             return app;
         }
         [Authorize(Roles = "Admin, Staff")]

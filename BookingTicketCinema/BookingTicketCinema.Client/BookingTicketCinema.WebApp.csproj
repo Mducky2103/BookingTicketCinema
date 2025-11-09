@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Pages\Booking\**" />
-    <Content Remove="Pages\Booking\**" />
-    <EmbeddedResource Remove="Pages\Booking\**" />
-    <None Remove="Pages\Booking\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
   </ItemGroup>
 

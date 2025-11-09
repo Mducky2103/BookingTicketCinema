@@ -2,11 +2,19 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BookingTicketCinema.ManagementApp.Services;
+using BookingTicketCinema.WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddHttpClient("ApiClient", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]);
+});
+builder.Services.AddScoped<IApiClientService, ApiClientService>();
+
 
 // Add MVC support alongside Razor Pages
 builder.Services.AddControllersWithViews();

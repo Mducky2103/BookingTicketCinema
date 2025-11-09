@@ -1,0 +1,70 @@
+﻿@page
+@model BookingTicketCinema.Client.Pages.Booking.BookModel
+@{
+    ViewData["Title"] = "Đặt vé";
+}
+
+<div class="container py-4">
+    <h2 class="fw-bold text-center mb-3">@Model.MovieTitle</h2>
+    <p class="text-center text-muted">@Model.ShowtimeInfo</p>
+
+    <div id="seat-map" class="my-4">
+        @foreach (var row in Model.Seats.GroupBy(s => s.SeatLabel[0]))
+        {
+            <div class="d-flex justify-content-center mb-2">
+                @foreach (var seat in row)
+                {
+                    <button class="btn btn-sm mx-1 seat @(seat.IsReserved ? "btn-danger" : "btn-outline-secondary")"
+                            data-seat-id="@seat.SeatId"
+                    @(seat.IsReserved ? "disabled" : "")>
+                        @seat.SeatLabel
+                    </button>
+                }
+            </div>
+        }
+    </div>
+
+    <div class="text-center mt-4">
+        <h5>Ghế đã chọn: <span id="selected-seats" class="fw-bold text-success"></span></h5>
+        <button id="confirmBtn" class="btn btn-primary mt-3 px-4">Xác nhận đặt vé</button>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const selected = new Set();
+
+        document.querySelectorAll('.seat').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.dataset.seatId;
+            if (selected.has(id)) {
+              selected.delete(id);
+              btn.classList.remove('btn-success');
+              btn.classList.add('btn-outline-secondary');
+            } else {
+              selected.add(id);
+              btn.classList.remove('btn-outline-secondary');
+              btn.classList.add('btn-success');
+            }
+            document.getElementById('selected-seats').textContent = Array.from(selected).join(', ');
+          });
+        });
+
+        document.getElementById('confirmBtn').addEventListener('click', async () => {
+          const body = {
+            showtimeId: @Model.ShowtimeId,
+            seatIds: Array.from(selected).map(Number),
+            userId: '@Model.UserId'
+          };
+
+          const res = await fetch('@Url.Page("Book", "Book")', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+          });
+
+          const data = await res.json();
+          alert(data.message ?? 'Đặt vé thành công!');
+        });
+    </script>
+}
