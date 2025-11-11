@@ -1,89 +1,75 @@
-using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
+﻿using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Http;
 
-namespace BookingTicketCinema.ManagementApp.Services;
-
-public class ApiClient
+namespace BookingTicketCinema.ManagementApp.Services
 {
-    private readonly HttpClient _httpClient;
-    private readonly ILogger<ApiClient> _logger;
-    private readonly string _baseUrl;
-
-    public ApiClient(HttpClient httpClient, IConfiguration configuration, ILogger<ApiClient> logger)
+    public class ApiClient
     {
-        _httpClient = httpClient;
-        _logger = logger;
-        _baseUrl = configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5098/api";
-        
-        // Set default headers
-        _httpClient.DefaultRequestHeaders.Clear();
-        _httpClient.Timeout = TimeSpan.FromSeconds(30);
-    }
+        private readonly HttpClient _httpClient;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILogger<ApiClient> _logger;
 
-    public async Task<T?> GetAsync<T>(string endpoint)
-    {
-        try
+        public ApiClient(HttpClient httpClient, IHttpContextAccessor httpContextAccessor, ILogger<ApiClient> logger)
         {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/{endpoint}");
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<T>();
+            _httpClient = httpClient;
+            _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
         }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError(ex, "Error calling GET {Endpoint}", endpoint);
-            throw;
-        }
-    }
 
-    public async Task<T?> PostAsync<T>(string endpoint, object? data = null)
-    {
-        try
+        // 🧠 Gắn JWT token từ cookie claims hoặc session vào header Authorization
+        private void AttachToken()
         {
-            var json = data != null ? JsonSerializer.Serialize(data) : null;
-            var content = json != null ? new StringContent(json, Encoding.UTF8, "application/json") : null;
-            
-            var response = await _httpClient.PostAsync($"{_baseUrl}/{endpoint}", content);
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<T>();
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError(ex, "Error calling POST {Endpoint}", endpoint);
-            throw;
-        }
-    }
+            var context = _httpContextAccessor.HttpContext;
+            if (context == null) return;
 
-    public async Task<T?> PutAsync<T>(string endpoint, object? data = null)
-    {
-        try
-        {
-            var json = data != null ? JsonSerializer.Serialize(data) : null;
-            var content = json != null ? new StringContent(json, Encoding.UTF8, "application/json") : null;
-            
-            var response = await _httpClient.PutAsync($"{_baseUrl}/{endpoint}", content);
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<T>();
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError(ex, "Error calling PUT {Endpoint}", endpoint);
-            throw;
-        }
-    }
+            // 🔹 Lấy token từ Claims (cookie đăng nhập)
+            var token = context.User?.Claims.FirstOrDefault(c => c.Type == "access_token")?.Value;
 
-    public async Task<bool> DeleteAsync(string endpoint)
-    {
-        try
-        {
-            var response = await _httpClient.DeleteAsync($"{_baseUrl}/{endpoint}");
-            return response.IsSuccessStatusCode;
+            // 🔹 Nếu không có trong claim, thử lấy từ Session
+            if (string.IsNullOrEmpty(token))
+                token = context.Session.GetString("AccessToken");
+
+            // 🔹 Gắn token vào header
+            if (!string.IsNullOrEmpty(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            }
+            else
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = null;
+                _logger.LogWarning("⚠️ Không tìm thấy token đăng nhập để gắn vào request.");
+            }
         }
-        catch (HttpRequestException ex)
+
+
+        // -------------------------
+        // GỌI API CHUẨN HÓA
+        // -------------------------
+        public async Task<HttpResponseMessage> GetAsync(string endpoint)
         {
-            _logger.LogError(ex, "Error calling DELETE {Endpoint}", endpoint);
-            throw;
+            AttachToken();
+            return await _httpClient.GetAsync(endpoint);
+        }
+
+        public async Task<HttpResponseMessage> PostAsync(string endpoint, HttpContent? content = null)
+        {
+            AttachToken();
+            return await _httpClient.PostAsync(endpoint, content);
+        }
+
+        public async Task<HttpResponseMessage> PutAsync(string endpoint, HttpContent? content = null)
+        {
+            AttachToken();
+            return await _httpClient.PutAsync(endpoint, content);
+        }
+
+        public async Task<HttpResponseMessage> DeleteAsync(string endpoint)
+        {
+            AttachToken();
+            var res = await _httpClient.DeleteAsync(endpoint);
+            _logger.LogInformation($"DELETE {endpoint} => {res.StatusCode}");
+            return res;
         }
     }
 }
-
