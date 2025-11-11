@@ -1,4 +1,4 @@
-using BookingTicketCinema.Models;
+﻿using BookingTicketCinema.Models;
 using BookingTicketCinema.Services;
 using BookingTicketCinema.Controllers;
 using BookingTicketCinema.Extensions;
