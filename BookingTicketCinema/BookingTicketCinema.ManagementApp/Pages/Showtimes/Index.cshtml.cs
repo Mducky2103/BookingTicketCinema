@@ -3,6 +3,7 @@ using System.Text.Json;
 using BookingTicketCinema.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
 {
@@ -14,7 +15,12 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
             _api = api;
         }
 
+        // =========================
+        // PROPERTIES
+        // =========================
         public List<ShowtimeViewModel> Showtimes { get; set; } = new();
+        public List<SelectListItem> MovieOptions { get; set; } = new();
+        public List<SelectListItem> RoomOptions { get; set; } = new();
 
         [BindProperty(SupportsGet = false)]
         public string? SuccessMessage { get; set; }
@@ -22,6 +28,9 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
         [BindProperty(SupportsGet = false)]
         public string? ErrorMessage { get; set; }
 
+        // =========================
+        // DTO INPUT
+        // =========================
         public class ShowtimeInput
         {
             public int ShowtimeId { get; set; }
@@ -36,6 +45,8 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
         // =========================
         public async Task OnGetAsync()
         {
+            await LoadDropdownDataAsync();
+
             var res = await _api.GetAsync("/api/showtimes/GetAllShowtime");
             if (res.IsSuccessStatusCode)
             {
@@ -48,6 +59,48 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
                 var err = await res.Content.ReadAsStringAsync();
                 TempData["Error"] = $"Không tải được danh sách suất chiếu: {err}";
             }
+        }
+
+        // =========================
+        // TẢI DANH SÁCH PHIM & PHÒNG
+        // =========================
+        private async Task LoadDropdownDataAsync()
+        {
+            // --- Movies ---
+            var resMovie = await _api.GetAsync("/api/Movie");            
+            if (resMovie.IsSuccessStatusCode)
+            {
+                var json = await resMovie.Content.ReadAsStringAsync();
+                var movies = JsonSerializer.Deserialize<List<MovieDto>>(json,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
+
+                MovieOptions = movies.Select(m => new SelectListItem
+                {
+                    Value = m.MovieId.ToString(),
+                    Text = m.Title
+                }).ToList();
+            }
+
+            // --- Rooms ---
+            var resRoom = await _api.GetAsync("/api/rooms"); 
+            if (resRoom.IsSuccessStatusCode)
+            {
+                var json = await resRoom.Content.ReadAsStringAsync();
+                var rooms = JsonSerializer.Deserialize<List<RoomDto>>(json,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
+
+                RoomOptions = rooms.Select(r => new SelectListItem
+                {
+                    Value = r.RoomId.ToString(),
+                    Text = $"{r.Name} ({(r.Type == 0 ? "2D" : r.Type == 1 ? "3D" : "IMAX")})"
+                }).ToList();
+            }
+
+            // fallback nếu API rỗng
+            if (MovieOptions.Count == 0)
+                MovieOptions.Add(new SelectListItem { Value = "", Text = "Không có phim khả dụng" });
+            if (RoomOptions.Count == 0)
+                RoomOptions.Add(new SelectListItem { Value = "", Text = "Không có phòng khả dụng" });
         }
 
         // =========================
@@ -126,6 +179,22 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
             public string RoomName { get; set; } = string.Empty;
             public DateTime StartTime { get; set; }
             public DateTime EndTime { get; set; }
+        }
+
+        // =========================
+        // PHỤ TRỢ CHO DROPDOWN
+        // =========================
+        private class MovieDto
+        {
+            public int MovieId { get; set; }
+            public string Title { get; set; } = string.Empty;
+        }
+
+        private class RoomDto
+        {
+            public int RoomId { get; set; }
+            public string Name { get; set; } = string.Empty;
+            public byte Type { get; set; }
         }
     }
 }
