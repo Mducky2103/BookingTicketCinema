@@ -1,4 +1,4 @@
-using BookingTicketCinema.DTO;
+﻿using BookingTicketCinema.DTO;
 using BookingTicketCinema.Models;
 using BookingTicketCinema.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
@@ -10,15 +10,17 @@ namespace BookingTicketCinema.Controllers
     {
         public static IEndpointRouteBuilder MapShowtimeEndpoints(this IEndpointRouteBuilder app)
         {
-            app.MapGet("/api/showtimes/GetAllShowtime", GetAllShowtimes);
-            app.MapPost("/api/showtimes/CreateShowtime", CreateShowtime);
-            app.MapPut("/api/showtimes/UpdateShowtime/{id}", UpdateShowtime);
-            app.MapDelete("/api/showtimes/DeleteShowtime/{id}", DeleteShowtime);
-            app.MapGet("/api/showtimes/GetShowtimeById/{id}", GetShowtimeById);
-            app.MapGet("/api/showtimes/GetShowtimesByRoom/{roomId}", GetShowtimesByRoom);
+            app.MapGet("/showtimes/GetAllShowtime", GetAllShowtimes);
+            app.MapPost("/showtimes/CreateShowtime", CreateShowtime);
+            app.MapPut("/showtimes/UpdateShowtime/{id}", UpdateShowtime);
+            app.MapDelete("/showtimes/DeleteShowtime/{id}", DeleteShowtime);
+            app.MapGet("/showtimes/GetShowtimeById/{id}", GetShowtimeById);
+            app.MapGet("/showtimes/GetShowtimesByRoom/{roomId}", GetShowtimesByRoom);
             return app;
         }
-        [Authorize(Roles = "Admin, Staff")]
+
+        //[Authorize(Roles = "Admin, Staff")]
+        [AllowAnonymous]
         private static async Task<IResult> CreateShowtime(
             [FromBody] ShowTimeCreateDto showtimeCreateDto,
             IShowtimeService showtimeService)
@@ -26,17 +28,31 @@ namespace BookingTicketCinema.Controllers
             var createdShowtime = await showtimeService.CreateAsync(showtimeCreateDto);
             return Results.Ok(createdShowtime);
         }
-        [Authorize(Roles = "Admin, Staff")]
+
+        //[Authorize(Roles = "Admin, Staff")]
+        [AllowAnonymous]
         private static async Task<IResult> UpdateShowtime(
-            int id,
-            [FromBody] ShowTimeUpdateDto showtimeUpdateDto,
+        int id,
+        [FromBody] ShowTimeUpdateDto dto,
             IShowtimeService showtimeService)
         {
-            var updatedShowtime = await showtimeService.UpdateAsync(id, showtimeUpdateDto);
-            if (updatedShowtime == null) return Results.NotFound(new { message = "Showtime not found" });
-            return Results.Ok(updatedShowtime);
+            if (dto == null)
+                return Results.BadRequest(new { message = "Invalid request body." });
+
+            var result = await showtimeService.UpdateAsync(id, dto);
+
+            if (result == null)
+                return Results.NotFound(new { message = $"Showtime with ID {id} not found." });
+
+            return Results.Ok(new
+            {
+                message = "Showtime updated successfully.",
+                data = result
+            });
         }
-        [Authorize(Roles = "Admin, Staff")]
+
+        //[Authorize(Roles = "Admin, Staff")]
+        [AllowAnonymous]
         private static async Task<IResult> DeleteShowtime(
             int id,
             IShowtimeService showtimeService)
@@ -45,6 +61,7 @@ namespace BookingTicketCinema.Controllers
             if (!isDeleted) return Results.NotFound(new { message = "Showtime not found" });
             return Results.Ok(new { message = "Showtime deleted successfully" });
         }
+
         [AllowAnonymous]
         private static async Task<IResult> GetAllShowtimes(IShowtimeService showtimeService)
         {

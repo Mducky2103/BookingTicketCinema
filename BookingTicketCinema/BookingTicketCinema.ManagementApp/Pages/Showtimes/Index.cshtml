@@ -1,47 +1,257 @@
 ﻿@page
 @model BookingTicketCinema.ManagementApp.Pages.Showtimes.IndexModel
 @{
-    ViewData["Title"] = "Quản lý Suất Chiếu";
+    ViewData["Title"] = "Quản lý Suất chiếu";
 }
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3>🎬 Quản lý Suất Chiếu</h3>
-        <a class="btn btn-primary" href="/Showtimes/Create">+ Thêm Suất Chiếu</a>
-    </div>
 
-    <table class="table table-striped table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Phim</th>
-                <th>Phòng</th>
-                <th>Bắt đầu</th>
-                <th>Kết thúc</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.Showtimes.Count == 0)
-            {
-                <tr><td colspan="6" class="text-center text-muted">Chưa có suất chiếu nào</td></tr>
-            }
-            else
-            {
-                @foreach (var item in Model.Showtimes)
-                {
-                    <tr>
-                        <td>@item.ShowtimeId</td>
-                        <td>@item.MovieTitle</td>
-                        <td>@item.RoomName</td>
-                        <td>@item.StartTime.ToString("HH:mm dd/MM/yyyy")</td>
-                        <td>@item.EndTime.ToString("HH:mm dd/MM/yyyy")</td>
-                        <td>
-                            <a href="/Showtimes/Edit?id=@item.ShowtimeId" class="btn btn-sm btn-warning">Sửa</a>
-                            <a href="/Showtimes/Delete?id=@item.ShowtimeId" class="btn btn-sm btn-danger">Xóa</a>
-                        </td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
+@* ====================== ALERT THÔNG BÁO ====================== *@
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show shadow-sm mb-4" role="alert">
+        <i class="bx bx-check-circle me-2"></i>
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show shadow-sm mb-4" role="alert">
+        <i class="bx bx-error-circle me-2"></i>
+        <strong>Lỗi:</strong> @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title m-0 me-2">Suất chiếu</h5>
+                <button type="button" class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#createShowtimeModal">
+                    <i class="bx bx-plus me-1"></i>
+                    <span>Thêm Suất Chiếu Mới</span>
+                </button>
+            </div>
+            <div class="table-responsive text-nowrap">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Phim</th>
+                            <th>Phòng chiếu</th>
+                            <th>Giờ bắt đầu</th>
+                            <th>Giờ kết thúc</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        @if (Model.Showtimes != null && Model.Showtimes.Any())
+                        {
+                            @foreach (var s in Model.Showtimes)
+                            {
+                                <tr>
+                                    <td><strong>#@s.ShowtimeId</strong></td>
+                                    <td>
+                                        <i class="bx bx-movie-play text-primary me-1"></i>
+                                        <span class="fw-medium">@s.MovieName</span>
+                                    </td>
+                                    <td>@s.RoomName</td>
+                                    <td>@s.StartTime.ToString("HH:mm dd/MM/yyyy")</td>
+                                    <td>@s.EndTime.ToString("HH:mm dd/MM/yyyy")</td>
+                                    <td class="text-center">
+                                        <button type="button"
+                                                class="btn btn-sm btn-warning me-1"
+                                                title="Sửa suất chiếu"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editShowtimeModal"
+                                                data-showtime-id="@s.ShowtimeId"
+                                                data-movie-id="@s.MovieId"
+                                                data-room-id="@s.RoomId"
+                                                data-start="@s.StartTime.ToString("yyyy-MM-ddTHH:mm")"
+                                                data-end="@s.EndTime.ToString("yyyy-MM-ddTHH:mm")">
+                                            <i class="bx bx-pencil"></i>
+                                        </button>
+                                        <button type="button"
+                                                class="btn btn-sm btn-danger"
+                                                title="Xóa suất chiếu"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteShowtimeModal"
+                                                data-showtime-id="@s.ShowtimeId"
+                                                data-movie-name="@s.MovieName"
+                                                data-room-name="@s.RoomName">
+                                            <i class="bx bx-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-5">
+                                    <p class="text-body-secondary mb-0">Chưa có suất chiếu nào. Tạo suất chiếu đầu tiên của bạn!</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+
+@* ====================== MODAL: CREATE ====================== *@
+<div class="modal fade" id="createShowtimeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tạo Suất Chiếu Mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <form method="post" asp-page-handler="Create">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Phim</label>
+                        <select class="form-select" name="MovieId" required>
+                            <option value="">Chọn phim</option>
+                            @foreach (var m in Model.MovieOptions)
+                            {
+                                <option value="@m.Value">@m.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Phòng chiếu</label>
+                        <select class="form-select" name="RoomId" required>
+                            <option value="">Chọn phòng</option>
+                            @foreach (var r in Model.RoomOptions)
+                            {
+                                <option value="@r.Value">@r.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Thời gian bắt đầu</label>
+                        <input type="datetime-local" class="form-control" name="StartTime" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Thời gian kết thúc</label>
+                        <input type="datetime-local" class="form-control" name="EndTime" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Tạo Suất Chiếu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* ====================== MODAL: EDIT ====================== *@
+<div class="modal fade" id="editShowtimeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sửa Suất Chiếu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <form method="post" asp-page-handler="Update">
+                <div class="modal-body">
+                    <input type="hidden" id="editShowtimeId" name="ShowtimeId" />
+                    <div class="mb-3">
+                        <label class="form-label">Phim</label>
+                        <select class="form-select" id="editMovieId" name="MovieId" required>
+                            <option value="">Chọn phim</option>
+                            @foreach (var m in Model.MovieOptions)
+                            {
+                                <option value="@m.Value">@m.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Phòng chiếu</label>
+                        <select class="form-select" id="editRoomId" name="RoomId" required>
+                            <option value="">Chọn phòng</option>
+                            @foreach (var r in Model.RoomOptions)
+                            {
+                                <option value="@r.Value">@r.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Thời gian bắt đầu</label>
+                        <input type="datetime-local" id="editStartTime" class="form-control" name="StartTime" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Thời gian kết thúc</label>
+                        <input type="datetime-local" id="editEndTime" class="form-control" name="EndTime" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu Thay Đổi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* ====================== MODAL: DELETE ====================== *@
+<div class="modal fade" id="deleteShowtimeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger">Xác nhận xóa suất chiếu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <form method="post" asp-page-handler="Delete">
+                <div class="modal-body">
+                    <input type="hidden" id="deleteShowtimeId" name="id" />
+                    <p class="mb-2">Bạn có chắc muốn xóa suất chiếu sau không?</p>
+                    <ul class="list-unstyled mb-0">
+                        <li><strong>Phim:</strong> <span id="deleteMovieName" class="text-dark"></span></li>
+                        <li><strong>Phòng chiếu:</strong> <span id="deleteRoomName" class="text-dark"></span></li>
+                    </ul>
+                    <div class="alert alert-warning mt-3 mb-0">
+                        <i class="bx bx-error-circle me-1"></i> Hành động này không thể hoàn tác.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-danger">Xóa Suất Chiếu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section PageScripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Modal Sửa
+            const editModal = document.getElementById('editShowtimeModal');
+            if (editModal) {
+                editModal.addEventListener('show.bs.modal', function (event) {
+                    const btn = event.relatedTarget;
+                    document.getElementById('editShowtimeId').value = btn.getAttribute('data-showtime-id');
+                    document.getElementById('editMovieId').value = btn.getAttribute('data-movie-id');
+                    document.getElementById('editRoomId').value = btn.getAttribute('data-room-id');
+                    document.getElementById('editStartTime').value = btn.getAttribute('data-start');
+                    document.getElementById('editEndTime').value = btn.getAttribute('data-end');
+                });
+            }
+
+            // Modal Xóa
+            const deleteModal = document.getElementById('deleteShowtimeModal');
+            if (deleteModal) {
+                deleteModal.addEventListener('show.bs.modal', function (event) {
+                    const btn = event.relatedTarget;
+                    document.getElementById('deleteShowtimeId').value = btn.getAttribute('data-showtime-id');
+                    document.getElementById('deleteMovieName').textContent = btn.getAttribute('data-movie-name');
+                    document.getElementById('deleteRoomName').textContent = btn.getAttribute('data-room-name');
+                });
+            }
+        });
+    </script>
+}

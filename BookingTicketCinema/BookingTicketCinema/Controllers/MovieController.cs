@@ -21,7 +21,7 @@ namespace BookingTicketCinema.Controllers
 
         // GET: api/movie
         [HttpGet]
-        
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
         {
             return await _context.Movies.ToListAsync();
