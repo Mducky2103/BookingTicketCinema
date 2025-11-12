@@ -22,11 +22,8 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
         public List<SelectListItem> MovieOptions { get; set; } = new();
         public List<SelectListItem> RoomOptions { get; set; } = new();
 
-        [BindProperty(SupportsGet = false)]
-        public string? SuccessMessage { get; set; }
-
-        [BindProperty(SupportsGet = false)]
-        public string? ErrorMessage { get; set; }
+        [TempData] public string? Success { get; set; }
+        [TempData] public string? Error { get; set; }
 
         // =========================
         // DTO INPUT
@@ -47,17 +44,24 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
         {
             await LoadDropdownDataAsync();
 
-            var res = await _api.GetAsync("/api/showtimes/GetAllShowtime");
-            if (res.IsSuccessStatusCode)
+            try
             {
-                var json = await res.Content.ReadAsStringAsync();
-                Showtimes = JsonSerializer.Deserialize<List<ShowtimeViewModel>>(json,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
+                var res = await _api.GetAsync("/api/showtimes/GetAllShowtime");
+                if (res.IsSuccessStatusCode)
+                {
+                    var json = await res.Content.ReadAsStringAsync();
+                    Showtimes = JsonSerializer.Deserialize<List<ShowtimeViewModel>>(json,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
+                }
+                else
+                {
+                    var err = await res.Content.ReadAsStringAsync();
+                    Error = $"Không tải được danh sách suất chiếu: {ExtractApiError(err)}";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var err = await res.Content.ReadAsStringAsync();
-                TempData["Error"] = $"Không tải được danh sách suất chiếu: {err}";
+                Error = $"Lỗi khi tải danh sách: {ex.Message}";
             }
         }
 
@@ -66,41 +70,47 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
         // =========================
         private async Task LoadDropdownDataAsync()
         {
-            // --- Movies ---
-            var resMovie = await _api.GetAsync("/api/Movie");            
-            if (resMovie.IsSuccessStatusCode)
+            try
             {
-                var json = await resMovie.Content.ReadAsStringAsync();
-                var movies = JsonSerializer.Deserialize<List<MovieDto>>(json,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
-
-                MovieOptions = movies.Select(m => new SelectListItem
+                // --- Movies ---
+                var resMovie = await _api.GetAsync("/api/Movie");
+                if (resMovie.IsSuccessStatusCode)
                 {
-                    Value = m.MovieId.ToString(),
-                    Text = m.Title
-                }).ToList();
-            }
+                    var json = await resMovie.Content.ReadAsStringAsync();
+                    var movies = JsonSerializer.Deserialize<List<MovieDto>>(json,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
 
-            // --- Rooms ---
-            var resRoom = await _api.GetAsync("/api/rooms"); 
-            if (resRoom.IsSuccessStatusCode)
+                    MovieOptions = movies.Select(m => new SelectListItem
+                    {
+                        Value = m.MovieId.ToString(),
+                        Text = m.Title
+                    }).ToList();
+                }
+
+                // --- Rooms ---
+                var resRoom = await _api.GetAsync("/api/rooms");
+                if (resRoom.IsSuccessStatusCode)
+                {
+                    var json = await resRoom.Content.ReadAsStringAsync();
+                    var rooms = JsonSerializer.Deserialize<List<RoomDto>>(json,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
+
+                    RoomOptions = rooms.Select(r => new SelectListItem
+                    {
+                        Value = r.RoomId.ToString(),
+                        Text = $"{r.Name} ({(r.Type == 0 ? "2D" : r.Type == 1 ? "3D" : "IMAX")})"
+                    }).ToList();
+                }
+
+                if (MovieOptions.Count == 0)
+                    MovieOptions.Add(new SelectListItem { Value = "", Text = "Không có phim khả dụng" });
+                if (RoomOptions.Count == 0)
+                    RoomOptions.Add(new SelectListItem { Value = "", Text = "Không có phòng khả dụng" });
+            }
+            catch (Exception ex)
             {
-                var json = await resRoom.Content.ReadAsStringAsync();
-                var rooms = JsonSerializer.Deserialize<List<RoomDto>>(json,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
-
-                RoomOptions = rooms.Select(r => new SelectListItem
-                {
-                    Value = r.RoomId.ToString(),
-                    Text = $"{r.Name} ({(r.Type == 0 ? "2D" : r.Type == 1 ? "3D" : "IMAX")})"
-                }).ToList();
+                Error = $"Không tải được dữ liệu dropdown: {ex.Message}";
             }
-
-            // fallback nếu API rỗng
-            if (MovieOptions.Count == 0)
-                MovieOptions.Add(new SelectListItem { Value = "", Text = "Không có phim khả dụng" });
-            if (RoomOptions.Count == 0)
-                RoomOptions.Add(new SelectListItem { Value = "", Text = "Không có phòng khả dụng" });
         }
 
         // =========================
@@ -108,18 +118,25 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
         // =========================
         public async Task<IActionResult> OnPostCreateAsync(ShowtimeInput input)
         {
-            var json = JsonSerializer.Serialize(input);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var res = await _api.PostAsync("/api/showtimes/CreateShowtime", content);
+            try
+            {
+                var json = JsonSerializer.Serialize(input);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var res = await _api.PostAsync("/api/showtimes/CreateShowtime", content);
 
-            if (res.IsSuccessStatusCode)
-            {
-                TempData["Success"] = "Đã thêm suất chiếu mới!";
+                if (res.IsSuccessStatusCode)
+                {
+                    Success = "Đã thêm suất chiếu mới thành công.";
+                }
+                else
+                {
+                    var err = await res.Content.ReadAsStringAsync();
+                    Error = $"Thêm thất bại: {ExtractApiError(err)}";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var err = await res.Content.ReadAsStringAsync();
-                TempData["Error"] = $"Thêm thất bại: {err}";
+                Error = $"Lỗi hệ thống khi thêm: {ex.Message}";
             }
 
             return RedirectToPage();
@@ -130,18 +147,25 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
         // =========================
         public async Task<IActionResult> OnPostUpdateAsync(ShowtimeInput input)
         {
-            var json = JsonSerializer.Serialize(input);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var res = await _api.PutAsync($"/api/showtimes/UpdateShowtime/{input.ShowtimeId}", content);
+            try
+            {
+                var json = JsonSerializer.Serialize(input);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var res = await _api.PutAsync($"/api/showtimes/UpdateShowtime/{input.ShowtimeId}", content);
 
-            if (res.IsSuccessStatusCode)
-            {
-                TempData["Success"] = "Cập nhật thành công!";
+                if (res.IsSuccessStatusCode)
+                {
+                    Success = "Cập nhật suất chiếu thành công.";
+                }
+                else
+                {
+                    var err = await res.Content.ReadAsStringAsync();
+                    Error = $"Cập nhật thất bại: {ExtractApiError(err)}";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var err = await res.Content.ReadAsStringAsync();
-                TempData["Error"] = $"Cập nhật thất bại: {err}";
+                Error = $"Lỗi hệ thống khi cập nhật: {ex.Message}";
             }
 
             return RedirectToPage();
@@ -152,19 +176,50 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
         // =========================
         public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
-            var res = await _api.DeleteAsync($"/api/showtimes/DeleteShowtime/{id}");
+            try
+            {
+                var res = await _api.DeleteAsync($"/api/showtimes/DeleteShowtime/{id}");
 
-            if (res.IsSuccessStatusCode)
-            {
-                TempData["Success"] = "Xóa thành công!";
+                if (res.IsSuccessStatusCode)
+                {
+                    Success = "Đã xóa suất chiếu thành công.";
+                }
+                else
+                {
+                    var err = await res.Content.ReadAsStringAsync();
+                    Error = $"Xóa thất bại: {ExtractApiError(err)}";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var err = await res.Content.ReadAsStringAsync();
-                TempData["Error"] = $"Xóa thất bại: {err}";
+                Error = $"Lỗi hệ thống khi xóa: {ex.Message}";
             }
 
             return RedirectToPage();
+        }
+
+        // =========================
+        // HÀM TIỆN ÍCH: LỌC LỖI API
+        // =========================
+        private static string ExtractApiError(string rawError)
+        {
+            if (string.IsNullOrWhiteSpace(rawError))
+                return "Không rõ nguyên nhân.";
+
+            string msg = rawError;
+
+            // Cắt phần stack trace
+            if (msg.Contains(" at "))
+                msg = msg.Split(" at ")[0];
+
+            // Lấy phần sau dấu ":" cuối cùng (thường là thông điệp lỗi chính)
+            if (msg.Contains(":"))
+                msg = msg.Split(':').LastOrDefault()?.Trim() ?? msg;
+
+            // Làm sạch ký tự đặc biệt và dòng thừa
+            msg = msg.Replace("\r", "").Replace("\n", "").Trim();
+
+            return msg;
         }
 
         // =========================
@@ -182,7 +237,7 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
         }
 
         // =========================
-        // PHỤ TRỢ CHO DROPDOWN
+        // DTO CHO DROPDOWN
         // =========================
         private class MovieDto
         {

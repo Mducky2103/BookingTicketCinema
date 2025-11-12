@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\DN_Turbo\\Desktop\\FPT\\Ass\\BookingTicketCinema\\BookingTicketCinema\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{660FF272-1B22-46E8-B366-05432A65B38B}|BookingTicketCinema.ManagementApp\\BookingTicketCinema.ManagementApp.csproj|c:\\users\\dn_turbo\\desktop\\fpt\\ass\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema.managementapp\\pages\\showtimes\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{660FF272-1B22-46E8-B366-05432A65B38B}|BookingTicketCinema.ManagementApp\\BookingTicketCinema.ManagementApp.csproj|solutionrelative:bookingticketcinema.managementapp\\pages\\showtimes\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{660FF272-1B22-46E8-B366-05432A65B38B}|BookingTicketCinema.ManagementApp\\BookingTicketCinema.ManagementApp.csproj|c:\\users\\dn_turbo\\desktop\\fpt\\ass\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema.managementapp\\pages\\showtimes\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{660FF272-1B22-46E8-B366-05432A65B38B}|BookingTicketCinema.ManagementApp\\BookingTicketCinema.ManagementApp.csproj|solutionrelative:bookingticketcinema.managementapp\\pages\\showtimes\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{660FF272-1B22-46E8-B366-05432A65B38B}|BookingTicketCinema.ManagementApp\\BookingTicketCinema.ManagementApp.csproj|c:\\users\\dn_turbo\\desktop\\fpt\\ass\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema.managementapp\\pages\\showtimes\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{660FF272-1B22-46E8-B366-05432A65B38B}|BookingTicketCinema.ManagementApp\\BookingTicketCinema.ManagementApp.csproj|solutionrelative:bookingticketcinema.managementapp\\pages\\showtimes\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{660FF272-1B22-46E8-B366-05432A65B38B}|BookingTicketCinema.ManagementApp\\BookingTicketCinema.ManagementApp.csproj|c:\\users\\dn_turbo\\desktop\\fpt\\ass\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema.managementapp\\pages\\rooms\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{660FF272-1B22-46E8-B366-05432A65B38B}|BookingTicketCinema.ManagementApp\\BookingTicketCinema.ManagementApp.csproj|solutionrelative:bookingticketcinema.managementapp\\pages\\rooms\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|c:\\users\\dn_turbo\\desktop\\fpt\\ass\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema\\controllers\\moviecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -37,10 +41,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|c:\\users\\dn_turbo\\desktop\\fpt\\ass\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema\\controllers\\seatendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4152D6F0-882D-4CA6-9375-131804167934}|BookingTicketCinema\\BookingTicketCinema.csproj|solutionrelative:bookingticketcinema\\controllers\\seatendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{660FF272-1B22-46E8-B366-05432A65B38B}|BookingTicketCinema.ManagementApp\\BookingTicketCinema.ManagementApp.csproj|c:\\users\\dn_turbo\\desktop\\fpt\\ass\\bookingticketcinema\\bookingticketcinema\\bookingticketcinema.managementapp\\pages\\rooms\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{660FF272-1B22-46E8-B366-05432A65B38B}|BookingTicketCinema.ManagementApp\\BookingTicketCinema.ManagementApp.csproj|solutionrelative:bookingticketcinema.managementapp\\pages\\rooms\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -50,11 +50,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "MoviesODataController.cs",
               "DocumentMoniker": "C:\\Users\\DN_Turbo\\Desktop\\FPT\\Ass\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Controllers\\MoviesODataController.cs",
               "RelativeDocumentMoniker": "BookingTicketCinema\\Controllers\\MoviesODataController.cs",
@@ -62,12 +62,11 @@
               "RelativeToolTip": "BookingTicketCinema\\Controllers\\MoviesODataController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-12T07:31:55.251Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-12T07:31:55.251Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "MovieService.cs",
               "DocumentMoniker": "C:\\Users\\DN_Turbo\\Desktop\\FPT\\Ass\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Services\\MovieService.cs",
               "RelativeDocumentMoniker": "BookingTicketCinema\\Services\\MovieService.cs",
@@ -75,12 +74,11 @@
               "RelativeToolTip": "BookingTicketCinema\\Services\\MovieService.cs",
               "ViewState": "AgIAAB4AAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-12T07:31:40.521Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-12T07:31:40.521Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "ShowtimeService.cs",
               "DocumentMoniker": "C:\\Users\\DN_Turbo\\Desktop\\FPT\\Ass\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Services\\ShowtimeService.cs",
               "RelativeDocumentMoniker": "BookingTicketCinema\\Services\\ShowtimeService.cs",
@@ -88,12 +86,11 @@
               "RelativeToolTip": "BookingTicketCinema\\Services\\ShowtimeService.cs",
               "ViewState": "AgIAADsAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-12T07:27:30.057Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-12T07:27:30.057Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "MovieController.cs",
               "DocumentMoniker": "C:\\Users\\DN_Turbo\\Desktop\\FPT\\Ass\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Controllers\\MovieController.cs",
               "RelativeDocumentMoniker": "BookingTicketCinema\\Controllers\\MovieController.cs",
@@ -101,38 +98,37 @@
               "RelativeToolTip": "BookingTicketCinema\\Controllers\\MovieController.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAwBcAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-12T07:18:32.628Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-12T07:18:32.628Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Index.cshtml.cs",
               "DocumentMoniker": "C:\\Users\\DN_Turbo\\Desktop\\FPT\\Ass\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema.ManagementApp\\Pages\\Showtimes\\Index.cshtml.cs",
               "RelativeDocumentMoniker": "BookingTicketCinema.ManagementApp\\Pages\\Showtimes\\Index.cshtml.cs",
               "ToolTip": "C:\\Users\\DN_Turbo\\Desktop\\FPT\\Ass\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema.ManagementApp\\Pages\\Showtimes\\Index.cshtml.cs",
               "RelativeToolTip": "BookingTicketCinema.ManagementApp\\Pages\\Showtimes\\Index.cshtml.cs",
-              "ViewState": "AgIAADsAAAAAAAAAAAAswEUAAAA0AAAAAAAAAA==",
+              "ViewState": "AgIAAN4AAAAAAAAAAAAqwP8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-10T11:21:02.065Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\DN_Turbo\\Desktop\\FPT\\Ass\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema.ManagementApp\\Pages\\Showtimes\\Index.cshtml",
               "RelativeDocumentMoniker": "BookingTicketCinema.ManagementApp\\Pages\\Showtimes\\Index.cshtml",
               "ToolTip": "C:\\Users\\DN_Turbo\\Desktop\\FPT\\Ass\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema.ManagementApp\\Pages\\Showtimes\\Index.cshtml",
               "RelativeToolTip": "BookingTicketCinema.ManagementApp\\Pages\\Showtimes\\Index.cshtml",
-              "ViewState": "AgIAAOIAAAAAAAAAAAAmwPkAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAOAAAAAAAAAAAAAmwAEBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-11-10T11:20:53.126Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "SeatEndpoints.cs",
               "DocumentMoniker": "C:\\Users\\DN_Turbo\\Desktop\\FPT\\Ass\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Controllers\\SeatEndpoints.cs",
               "RelativeDocumentMoniker": "BookingTicketCinema\\Controllers\\SeatEndpoints.cs",
@@ -140,12 +136,11 @@
               "RelativeToolTip": "BookingTicketCinema\\Controllers\\SeatEndpoints.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-12T07:27:04.894Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-12T07:27:04.894Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 2,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\DN_Turbo\\Desktop\\FPT\\Ass\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema.ManagementApp\\Pages\\Rooms\\Index.cshtml",
               "RelativeDocumentMoniker": "BookingTicketCinema.ManagementApp\\Pages\\Rooms\\Index.cshtml",
@@ -158,7 +153,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "RoomEndpoints.cs",
               "DocumentMoniker": "C:\\Users\\DN_Turbo\\Desktop\\FPT\\Ass\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Controllers\\RoomEndpoints.cs",
               "RelativeDocumentMoniker": "BookingTicketCinema\\Controllers\\RoomEndpoints.cs",
@@ -166,12 +161,11 @@
               "RelativeToolTip": "BookingTicketCinema\\Controllers\\RoomEndpoints.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-12T07:00:32.662Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-12T07:00:32.662Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "ShowtimeEndpoints.cs",
               "DocumentMoniker": "C:\\Users\\DN_Turbo\\Desktop\\FPT\\Ass\\BookingTicketCinema\\BookingTicketCinema\\BookingTicketCinema\\Controllers\\ShowtimeEndpoints.cs",
               "RelativeDocumentMoniker": "BookingTicketCinema\\Controllers\\ShowtimeEndpoints.cs",
@@ -179,8 +173,7 @@
               "RelativeToolTip": "BookingTicketCinema\\Controllers\\ShowtimeEndpoints.cs",
               "ViewState": "AgIAAC8AAAAAAAAAAAAmwDMAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-11T17:36:11.713Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-11T17:36:11.713Z"
             }
           ]
         }
