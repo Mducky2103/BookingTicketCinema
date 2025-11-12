@@ -1,0 +1,66 @@
+﻿@page
+@model BookingTicketCinema.ManagementApp.Pages.Movies.IndexModel
+@{
+	ViewData["Title"] = "Quản lý Phim";
+}
+<h3>@ViewData["Title"]</h3>
+<a asp-page="./Create" class="btn btn-primary mb-3">
+    <i class="bi bi-plus-circle"></i> Thêm phim mới
+</a>
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div class="alert alert-success">@Model.SuccessMessage</div>
+}
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger">@Model.ErrorMessage</div>
+}
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Poster</th>
+                    <th>Tiêu đề</th>
+                    <th>Trạng thái</th>
+                    <th>Thời lượng</th>
+                    <th>Ngày phát hành</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var movie in Model.Movies)
+                {
+                    <tr>
+                        <td>
+                            <img src="@(Model.ApiBaseUrl + movie.PosterUrl)"
+                                 alt="@movie.Title"
+                                 style="width: 60px; height: 90px; object-fit: cover;" />
+                        </td>
+                        <td>@movie.Title</td>
+                        <td>
+                            <span class_="@(movie.Status == 1 ? "badge bg-success" : (movie.Status == 0 ? "badge bg-warning" : "badge bg-secondary"))">
+                                @movie.StatusText
+                            </span>
+                        </td>
+                        <td>@movie.Duration.ToString(@"hh\h\ mm\p")</td>
+                        <td>@movie.ReleaseDate.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <a asp-page="./Details" asp-route-id="@movie.MovieId" class="btn btn-sm btn-info" title="Chi tiết">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a asp-page="./Edit" asp-route-id="@movie.MovieId" class="btn btn-sm btn-primary" title="Sửa">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a asp-page="./Delete" asp-route-id="@movie.MovieId" class="btn btn-sm btn-danger" title="Xóa">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+﻿@page
+@model BookingTicketCinema.ManagementApp.Pages.Movies.DetailsModel
+@{
+	ViewData["Title"] = "Chi tiết Phim";	
+}
+@if (Model.Movie != null)
+{
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card shadow-sm mb-3">
+                <img src="@(Model.ApiBaseUrl + Model.Movie.PosterUrl)"
+                     class="card-img-top"
+                     alt="@Model.Movie.Title"
+                     style="max-height: 600px; object-fit: contain;" />
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Movie.TrailerUrl))
+            {
+                <div class="card shadow-sm">
+                    <div class="card-header">Trailer</div>
+                    <div class="card-body">
+                        <div class="ratio ratio-16x9">
+                            <iframe src="@Model.Movie.TrailerUrl"
+                                    title="Trailer"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-7">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h3 class="mb-0">@Model.Movie.Title</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">Trạng thái</dt>
+                        <dd class="col-sm-8">
+                            <span class_="@(Model.Movie.Status == 1 ? "badge bg-success" : (Model.Movie.Status == 0 ? "badge bg-warning" : "badge bg-secondary"))">
+                                @Model.Movie.StatusText
+                            </span>
+                        </dd>
+
+                        <dt class="col-sm-4">Thể loại</dt>
+                        <dd class="col-sm-8">@Model.Movie.Genre</dd>
+
+                        <dt class="col-sm-4">Thời lượng</dt>
+                        <dd class="col-sm-8">@Model.Movie.Duration.ToString(@"hh\h\ mm\p")</dd>
+
+                        <dt class="col-sm-4">Ngày phát hành</dt>
+                        <dd class="col-sm-8">@Model.Movie.ReleaseDate.ToString("dd/MM/yyyy")</dd>
+                    </dl>
+
+                    <h5>Mô tả</h5>
+                    <p>@Model.Movie.Description</p>
+                </div>
+                <div class="card-footer">
+                    <a asp-page="./Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Quay lại
+                    </a>
+                    <a asp-page="./Edit" asp-route-id="@Model.Movie.MovieId" class="btn btn-primary">
+                        <i class="bi bi-pencil-square"></i> Sửa
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">@Model.ErrorMessage</div>
+    <a asp-page="./Index" class="btn btn-secondary">Quay lại</a>
+}

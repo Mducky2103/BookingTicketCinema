@@ -15,6 +15,7 @@ builder.Services.AddHttpClient("ApiClient", client =>
 });
 builder.Services.AddScoped<IApiClientService, ApiClientService>();
 
+builder.Services.AddScoped<IManagementApiService, ManagementApiService>();
 
 // Add MVC support alongside Razor Pages
 builder.Services.AddControllersWithViews();
