@@ -17,6 +17,9 @@ namespace BookingTicketCinema.Models
         public string? PosterUrl { get; set; }
 
         [MaxLength(255)]
+        public string? BackdropUrl { get; set; }
+
+        [MaxLength(255)]
         public string? TrailerUrl { get; set; }
 
         [MaxLength(100)]

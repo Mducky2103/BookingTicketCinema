@@ -29,7 +29,8 @@ namespace BookingTicketCinema.Controllers
 
         // GET: api/movie/5
         [HttpGet("{id}")]
-        
+        [AllowAnonymous]
+
         public async Task<ActionResult<Movie>> GetMovie(int id)
         {
             var movie = await _context.Movies.FindAsync(id);
@@ -96,6 +97,20 @@ namespace BookingTicketCinema.Controllers
                 }
 
                 movie.PosterUrl = $"/posters/{fileName}";
+            }
+
+            if(request.BackdropFile != null && request.BackdropFile.Length > 0)
+            {
+                var uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "backdrops");
+                if (!Directory.Exists(uploads)) Directory.CreateDirectory(uploads);
+                var fileExt = Path.GetExtension(request.BackdropFile.FileName);
+                var fileName = $"{Guid.NewGuid()}{fileExt}";
+                var filePath = Path.Combine(uploads, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await request.BackdropFile.CopyToAsync(stream);
+                }
+                movie.BackdropUrl = $"/backdrops/{fileName}";
             }
 
             _context.Movies.Add(movie);
@@ -174,6 +189,23 @@ namespace BookingTicketCinema.Controllers
                 }
 
                 movie.PosterUrl = $"/posters/{fileName}";
+            }
+            // ✅ Backdrop upload
+            if (request.BackdropFile != null && request.BackdropFile.Length > 0)
+            {
+                var uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "backdrops");
+                if (!Directory.Exists(uploads)) Directory.CreateDirectory(uploads);
+
+                var fileExt = Path.GetExtension(request.BackdropFile.FileName);
+                var fileName = $"{Guid.NewGuid()}{fileExt}";
+                var filePath = Path.Combine(uploads, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await request.BackdropFile.CopyToAsync(stream);
+                }
+
+                movie.BackdropUrl = $"/backdrops/{fileName}";
             }
 
             await _context.SaveChangesAsync();

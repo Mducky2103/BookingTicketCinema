@@ -16,11 +16,11 @@ namespace BookingTicketCinema.Controllers
             app.MapDelete("/showtimes/DeleteShowtime/{id}", DeleteShowtime);
             app.MapGet("/showtimes/GetShowtimeById/{id}", GetShowtimeById);
             app.MapGet("/showtimes/GetShowtimesByRoom/{roomId}", GetShowtimesByRoom);
+            app.MapGet("/showtimes/GetShowtimesByMovie/{movieId}", GetShowtimesByMovieId);
             return app;
         }
 
-        //[Authorize(Roles = "Admin, Staff")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin, Staff")]
         private static async Task<IResult> CreateShowtime(
             [FromBody] ShowTimeCreateDto showtimeCreateDto,
             IShowtimeService showtimeService)
@@ -29,8 +29,7 @@ namespace BookingTicketCinema.Controllers
             return Results.Ok(createdShowtime);
         }
 
-        //[Authorize(Roles = "Admin, Staff")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin, Staff")]
         private static async Task<IResult> UpdateShowtime(
         int id,
         [FromBody] ShowTimeUpdateDto dto,
@@ -51,8 +50,7 @@ namespace BookingTicketCinema.Controllers
             });
         }
 
-        //[Authorize(Roles = "Admin, Staff")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin, Staff")]
         private static async Task<IResult> DeleteShowtime(
             int id,
             IShowtimeService showtimeService)
@@ -81,6 +79,13 @@ namespace BookingTicketCinema.Controllers
         private static async Task<IResult> GetShowtimesByRoom(int roomId, IShowtimeService showtimeService)
         {
             var showtimes = await showtimeService.GetByRoomIdAsync(roomId);
+            return Results.Ok(showtimes);
+        }
+
+        [AllowAnonymous]
+        private static async Task<IResult> GetShowtimesByMovieId(int movieId, IShowtimeService showtimeService)
+        {
+            var showtimes = await showtimeService.GetByMovieIdAsync(movieId);
             return Results.Ok(showtimes);
         }
     }

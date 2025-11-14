@@ -38,7 +38,8 @@ namespace BookingTicketCinema.ManagementApp.Pages.Movies
                     Duration = movie.Duration.ToString(@"hh\:mm\:ss"), // Chuyển TimeSpan -> string
                     ReleaseDate = movie.ReleaseDate.ToString("yyyy-MM-dd"), // Chuyển DateOnly -> string
                     Status = movie.Status,
-                    CurrentPosterUrl = movie.PosterUrl // Lưu poster cũ
+                    CurrentPosterUrl = movie.PosterUrl,
+                    CurrentBackdropUrl = movie.BackdropUrl
                 };
 
                 LoadStatusList();

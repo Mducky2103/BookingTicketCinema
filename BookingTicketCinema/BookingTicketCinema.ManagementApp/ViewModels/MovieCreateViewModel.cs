@@ -21,5 +21,8 @@ namespace BookingTicketCinema.ManagementApp.ViewModels
 
         [Display(Name = "Ảnh Poster")]
         public IFormFile? PosterFile { get; set; }
+
+        [Display(Name = "Ảnh Backdrop")]
+        public IFormFile? BackdropFile { get; set; }
     }
 }

@@ -26,5 +26,10 @@ namespace BookingTicketCinema.ManagementApp.ViewModels
 
         [Display(Name = "Tải lên Poster Mới (Tùy chọn)")]
         public IFormFile? PosterFile { get; set; }
+
+        [Display(Name = "Backdrop Hiện Tại")]
+        public string? CurrentBackdropUrl { get; set; }
+        [Display(Name = "Tải lên Backdrop Mới (Tùy chọn)")]
+        public IFormFile? BackdropFile { get; set; }
     }
 }

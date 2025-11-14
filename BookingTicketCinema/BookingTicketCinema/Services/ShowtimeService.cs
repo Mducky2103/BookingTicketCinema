@@ -187,5 +187,19 @@ namespace BookingTicketCinema.Services
                 UpdatedAt = s.UpdatedAt
             };
         }
+
+        public async Task<IEnumerable<ShowtimeDetailDto>> GetByMovieIdAsync(int movieId)
+        {
+            var showtimes = await _showtimeRepository.GetByMovieIdAsync(movieId);
+
+            // Chuyển từ Model (Showtime) sang DTO
+            return showtimes.Select(s => new ShowtimeDetailDto
+            {
+                ShowtimeId = s.ShowtimeId,
+                StartTime = s.StartTime,
+                RoomName = s.Room.Name,
+                RoomType = (int)s.Room.Type
+            });
+        }
     }
 }

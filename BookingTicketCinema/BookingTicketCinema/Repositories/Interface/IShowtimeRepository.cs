@@ -7,6 +7,7 @@ namespace BookingTicketCinema.Repositories.Interface
         Task<IEnumerable<Showtime>> GetAllAsync();
         Task<Showtime?> GetByIdAsync(int id);
         Task<IEnumerable<Showtime>> GetByRoomIdAsync(int roomId);
+        Task<IEnumerable<Showtime>> GetByMovieIdAsync(int movieId);
         Task AddAsync(Showtime showtime);
         Task UpdateAsync(Showtime showtime);
         Task DeleteAsync(Showtime showtime);

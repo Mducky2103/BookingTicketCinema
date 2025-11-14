@@ -11,6 +11,7 @@ namespace BookingTicketCinema.WebApp.Services
         Task<HttpResponseMessage> PostAsync(string url, HttpContent content);
         Task<HttpResponseMessage> PutAsync(string url, HttpContent content);
         Task<HttpResponseMessage> DeleteAsync(string url);
-
+        Task<MovieDetailViewModel> GetMovieByIdAsync(int id);
+        Task<List<ShowtimeDetailViewModel>> GetShowtimesByMovieAsync(int movieId);
     }
 }

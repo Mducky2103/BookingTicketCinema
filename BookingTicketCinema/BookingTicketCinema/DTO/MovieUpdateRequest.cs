@@ -9,6 +9,7 @@
         public string? ReleaseDate { get; set; } // yyyy-MM-dd
         public int? Status { get; set; } // enum int
         public string? TrailerUrl { get; set; }
-        public IFormFile? PosterFile { get; set; } // upload ảnh mới (tùy chọn)
+        public IFormFile? PosterFile { get; set; } 
+        public IFormFile? BackdropFile { get; set; } 
     }
 }

@@ -61,5 +61,18 @@ namespace BookingTicketCinema.WebApp.Services
             return client.DeleteAsync(url);
         }
 
+        // === Thêm phần Showtime ===
+        public async Task<MovieDetailViewModel> GetMovieByIdAsync(int id)
+        {
+            var client = CreateClient();
+            return await client.GetFromJsonAsync<MovieDetailViewModel>($"api/Movie/{id}")
+                ?? throw new Exception("Không tìm thấy phim.");
+        }
+
+        public async Task<List<ShowtimeDetailViewModel>> GetShowtimesByMovieAsync(int movieId)
+        {
+            var client = CreateClient();
+            return await client.GetFromJsonAsync<List<ShowtimeDetailViewModel>>($"api/showtimes/GetShowtimesByMovie/{movieId}") ?? new();
+        }
     }
 }

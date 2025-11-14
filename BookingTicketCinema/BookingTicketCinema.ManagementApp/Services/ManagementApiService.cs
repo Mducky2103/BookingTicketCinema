@@ -76,6 +76,12 @@ namespace BookingTicketCinema.ManagementApp.Services
                 fileStream.Headers.ContentType = new MediaTypeHeaderValue(model.PosterFile.ContentType);
                 formData.Add(fileStream, nameof(model.PosterFile), model.PosterFile.FileName);
             }
+            if (model.BackdropFile != null)
+            {
+                var fileStream = new StreamContent(model.BackdropFile.OpenReadStream());
+                fileStream.Headers.ContentType = new MediaTypeHeaderValue(model.BackdropFile.ContentType);
+                formData.Add(fileStream, nameof(model.BackdropFile), model.BackdropFile.FileName);
+            }
 
             var response = await client.PostAsync($"{_apiBaseUrl}/api/movie", formData);
             response.EnsureSuccessStatusCode();
@@ -104,6 +110,12 @@ namespace BookingTicketCinema.ManagementApp.Services
                 var fileStream = new StreamContent(model.PosterFile.OpenReadStream());
                 fileStream.Headers.ContentType = new MediaTypeHeaderValue(model.PosterFile.ContentType);
                 formData.Add(fileStream, nameof(model.PosterFile), model.PosterFile.FileName);
+            }
+            if (model.BackdropFile != null)
+            {
+                var fileStream = new StreamContent(model.BackdropFile.OpenReadStream());
+                fileStream.Headers.ContentType = new MediaTypeHeaderValue(model.BackdropFile.ContentType);
+                formData.Add(fileStream, nameof(model.BackdropFile), model.BackdropFile.FileName);
             }
 
             var response = await client.PutAsync($"{_apiBaseUrl}/api/movie/{id}", formData);

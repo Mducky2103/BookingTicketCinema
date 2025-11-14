@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace BookingTicketCinema.ManagementApp.ViewModels
+namespace BookingTicketCinema.WebApp.ViewModel
 {
-    public class MovieViewModel
+    public class MovieDetailViewModel
     {
         [JsonPropertyName("movieId")]
         public int MovieId { get; set; }
@@ -12,8 +12,6 @@ namespace BookingTicketCinema.ManagementApp.ViewModels
         public string? Description { get; set; }
         [JsonPropertyName("posterUrl")]
         public string? PosterUrl { get; set; }
-        [JsonPropertyName("backdropUrl")]
-        public string? BackdropUrl { get; set; }
         [JsonPropertyName("trailerUrl")]
         public string? TrailerUrl { get; set; }
         [JsonPropertyName("genre")]
@@ -22,15 +20,5 @@ namespace BookingTicketCinema.ManagementApp.ViewModels
         public TimeSpan Duration { get; set; }
         [JsonPropertyName("releaseDate")]
         public DateOnly ReleaseDate { get; set; }
-        [JsonPropertyName("status")]
-        public int Status { get; set; } // 0, 1, 2
-
-        public string StatusText => Status switch
-        {
-            0 => "Sắp chiếu",
-            1 => "Đang chiếu",
-            2 => "Đã kết thúc",
-            _ => "Không rõ"
-        };
     }
 }

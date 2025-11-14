@@ -24,6 +24,7 @@ namespace BookingTicketCinema.Services
                 Id = m.MovieId,
                 Title = m.Title,
                 PosterUrl = m.PosterUrl,
+                BackdropUrl = m.BackdropUrl,
                 Duration = (int)m.Duration.TotalMinutes,
                 Genre = m.Genre 
             });
@@ -37,6 +38,7 @@ namespace BookingTicketCinema.Services
                 Id = m.MovieId,
                 Title = m.Title,
                 PosterUrl = m.PosterUrl,
+                BackdropUrl = m.BackdropUrl,
                 Duration = (int)m.Duration.TotalMinutes,
                 Genre = m.Genre
             });
@@ -48,7 +50,8 @@ namespace BookingTicketCinema.Services
             {
                 Id = m.MovieId,
                 Title = m.Title,
-                BackdropUrl = m.PosterUrl,
+                PosterUrl = m.PosterUrl,
+                BackdropUrl = m.BackdropUrl,
                 TrailerUrl = m.TrailerUrl
             });
         }

@@ -10,6 +10,7 @@
         public int? Status { get; set; }
         public string? TrailerUrl { get; set; }
         public IFormFile? PosterFile { get; set; }
+        public IFormFile? BackdropFile { get; set; }
     }
 
 }

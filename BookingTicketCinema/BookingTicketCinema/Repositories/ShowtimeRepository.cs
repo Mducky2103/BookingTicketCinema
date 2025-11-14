@@ -47,6 +47,16 @@ namespace BookingTicketCinema.Repositories
 
         public async Task SaveChangesAsync() =>
             await _context.SaveChangesAsync();
+
+        public async Task<IEnumerable<Showtime>> GetByMovieIdAsync(int movieId)
+        {
+            var now = DateTime.Now;
+            return await _context.Showtimes
+                .Include(s => s.Room) 
+                .Where(s => s.MovieId == movieId && s.StartTime > now)
+                .OrderBy(s => s.StartTime)
+                .ToListAsync();
+        }
     }
 }
 

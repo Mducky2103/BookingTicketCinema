@@ -69,6 +69,19 @@
                         <span asp-validation-for="Input.PosterFile" class="text-danger"></span>
                     </div>
 
+                    <div class="mb-3">
+                        <label asp-for="Input.CurrentBackdropUrl" class="form-label"></label>
+                        @if (!string.IsNullOrEmpty(Model.Input.CurrentBackdropUrl))
+                        {
+                            <img src="@(Model.ApiBaseUrl + Model.Input.CurrentBackdropUrl)" class="d-block img-thumbnail mb-2" style="max-width: 150px;" />
+                        }
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.BackdropFile" class="form-label"></label>
+                        <input asp-for="Input.BackdropFile" type="file" class="form-control" />
+                        <span asp-validation-for="Input.BackdropFile" class="text-danger"></span>
+                    </div>
                 </div>
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary">

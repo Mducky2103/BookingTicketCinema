@@ -10,6 +10,7 @@ namespace BookingTicketCinema.Services.Interface
         Task<IEnumerable<ShowtimeResponseDto>> GetAllAsync();
         Task<ShowtimeResponseDto?> GetByIdAsync(int id);
         Task<IEnumerable<ShowtimeResponseDto>> GetByRoomIdAsync(int roomId);
+        Task<IEnumerable<ShowtimeDetailDto>> GetByMovieIdAsync(int movieId);
     }
 }
 
