@@ -26,6 +26,11 @@ namespace BookingTicketCinema.Client.Pages.Auth
 
         public void OnGet(string? returnUrl = null)
         {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                Response.Redirect("/");
+                return;
+            }
             ReturnUrl = returnUrl;
         }
 
@@ -68,14 +73,19 @@ namespace BookingTicketCinema.Client.Pages.Auth
                 var jwtToken = tokenHandler.ReadJwtToken(loginResponse.Token);
                 var claims = jwtToken.Claims.ToList();
 
+                var fullName = claims.FirstOrDefault(c => c.Type == "unique_name")?.Value;
+                if (!string.IsNullOrEmpty(fullName))
+                {
+                    claims.Add(new Claim(ClaimTypes.Name, fullName));
+                }
                 // Thêm chính token vào Claims để sử dụng sau này
                 claims.Add(new Claim("access_token", loginResponse.Token));
-
+            
                 // 5. Tạo phiên đăng nhập (Cookie) cho Client Razor Pages
                 var identity = new ClaimsIdentity(
                     claims,
                     CookieAuthenticationDefaults.AuthenticationScheme,
-                    "name", // Sử dụng claim "name" (nếu có) làm User.Identity.Name
+                    ClaimTypes.Name,
                     ClaimTypes.Role // Sử dụng claim "role" làm User.IsInRole()
                 );
 

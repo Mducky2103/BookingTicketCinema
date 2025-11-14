@@ -61,8 +61,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseSession(); // Kích hoạt session
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorPages();
 

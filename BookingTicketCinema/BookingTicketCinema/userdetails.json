@@ -39,13 +39,5 @@
         "gender": "Male",
         "age": 16
     },
-    {
-        "email": "customer2@gmail.com",
-        "password": "123456@",
-        "fullName": "Customer 2",
-        "role": "Customer",
-        "gender": "Male",
-        "age": 35
-    }
 
 ]

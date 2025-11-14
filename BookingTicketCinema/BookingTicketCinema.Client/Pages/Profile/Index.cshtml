@@ -1,4 +1,76 @@
 ﻿@page
 @model BookingTicketCinema.Client.Pages.Profile.IndexModel
 @{
+    ViewData["Title"] = "Hồ sơ cá nhân";
 }
+
+<style>
+    .profile-wrapper {
+        max-width: 600px;
+        margin: 40px auto;
+    }
+
+    .profile-card {
+        border-radius: 14px !important;
+        padding: 25px;
+        border: 1px solid #e1e1e1;
+        background: #ffffff;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .profile-item {
+        font-size: 17px;
+        margin-bottom: 10px;
+        padding: 10px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .profile-label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    h2 {
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .btn-primary {
+        padding: 10px 18px;
+        border-radius: 8px;
+    }
+</style>
+
+<div class="profile-wrapper">
+
+    <h2>Hồ sơ của tôi</h2>
+
+    @if (Model.Profile != null)
+    {
+        <div class="profile-card">
+            <div class="profile-item">
+                <span class="profile-label">Họ tên:</span> @Model.Profile.FullName
+            </div>
+
+            <div class="profile-item">
+                <span class="profile-label">Email:</span> @Model.Profile.Email
+            </div>
+
+            <div class="profile-item">
+                <span class="profile-label">Giới tính:</span> @Model.Profile.Gender
+            </div>
+
+            <div class="profile-item">
+                <span class="profile-label">Ngày sinh:</span> 
+                @Model.Profile.DateOfBirth?.ToString("dd/MM/yyyy")
+            </div>
+
+            <a asp-page="/Profile/Edit" class="btn btn-primary mt-3 w-100">Chỉnh sửa hồ sơ</a>
+        </div>
+    }
+    else
+    {
+        <p class="text-danger text-center">Không tải được thông tin hồ sơ.</p>
+    }
+</div>

@@ -1,4 +1,99 @@
 ﻿@page
 @model BookingTicketCinema.Client.Pages.Profile.EditModel
 @{
+    ViewData["Title"] = "Chỉnh sửa hồ sơ";
 }
+
+<style>
+    .edit-wrapper {
+        max-width: 650px;
+        margin: 40px auto;
+    }
+
+    h2 {
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 30px !important;
+    }
+
+    .edit-card {
+        border-radius: 14px;
+        padding: 30px;
+        background: #fff;
+        border: 1px solid #e1e1e1;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #333;
+    }
+
+    .form-control,
+    .form-select {
+        padding: 12px 14px;
+        border-radius: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        transition: all .2s;
+    }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
+        }
+
+    .btn-success {
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .btn-secondary {
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+    }
+</style>
+
+<div class="edit-wrapper">
+
+    <h2>Chỉnh sửa hồ sơ</h2>
+
+    <form method="post">
+        <div class="edit-card">
+
+            <div class="mb-3">
+                <label class="form-label">Họ tên</label>
+                <input asp-for="Input.FullName" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Giới tính</label>
+                <select asp-for="Input.Gender" class="form-select">
+                    <option value="">-- Chọn giới tính --</option>
+                    <option value="Male">Nam</option>
+                    <option value="Female">Nữ</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Ngày sinh</label>
+                <input asp-for="Input.DateOfBirth" class="form-control" type="date" />
+            </div>
+
+            <button type="submit" class="btn btn-success">Lưu thay đổi</button>
+            <a asp-page="/Profile/Index" class="btn btn-secondary ms-2">Hủy</a>
+
+            @if (!string.IsNullOrEmpty(Model.Message))
+            {
+                <div class="alert alert-info mt-3">@Model.Message</div>
+            }
+        </div>
+    </form>
+
+</div>

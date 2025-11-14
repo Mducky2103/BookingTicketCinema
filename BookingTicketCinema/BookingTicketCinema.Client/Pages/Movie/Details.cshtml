@@ -1,0 +1,101 @@
+﻿@page
+@model BookingTicketCinema.WebApp.Pages.Movie.DetailsModel
+@{
+    ViewData["Title"] = "Chi tiết Phim";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <img src="https://image.tmdb.org/t/p/w500/a3vWm0hLwJXZHGAJ1NnDNauG6W4.jpg" class="img-fluid rounded shadow-sm" alt="Poster Phim">
+    </div>
+
+    <div class="col-md-8">
+        <h1>Deadpool & Wolverine</h1>
+        
+        <div class="mb-3">
+            <span class="badge bg-light text-dark border me-2">Hành động</span>
+            <span class="badge bg-light text-dark border me-2">Hài hước</span>
+            <span class="badge bg-light text-dark border me-2">Viễn tưởng</span>
+        </div>
+        
+        <p class="text-muted">
+            <i class="bi bi-clock"></i> 127 phút 
+            <span class="mx-2">|</span> 
+            <i class="bi bi-calendar-event"></i> 26/07/2024
+        </p>
+        
+        <p>Wolverine đang hồi phục vết thương thì chạm trán với gã mồm mép Deadpool. Họ hợp tác để đánh bại một kẻ thù chung.</p>
+        
+        <h5 class="mt-4">Trailer</h5>
+        <div class="ratio ratio-16x9">
+            <iframe src="https://www.youtube.com/embed/uVYU-mozbVs" 
+                    title="Trailer" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5">
+    <h2><i class="bi bi-calendar3"></i> Mua vé</h2>
+    <hr />
+
+    <ul class="nav nav-pills nav-fill mb-3" id="dateTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="today-tab" data-bs-toggle="tab" data-bs-target="#date-today" type="button" role="tab">
+                <strong>Hôm nay</strong><br><span class="small">12/11</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tomorrow-tab" data-bs-toggle="tab" data-bs-target="#date-tomorrow" type="button" role="tab">
+                <strong>Ngày mai</strong><br><span class="small">13/11</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="day-after-tab" data-bs-toggle="tab" data-bs-target="#date-day-after" type="button" role="tab">
+                <strong>Thứ Sáu</strong><br><span class="small">14/11</span>
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="dateTabsContent">
+        <div class="tab-pane fade show active" id="date-today" role="tabpanel">
+            
+            <div class="card mb-3">
+                <div class="card-header">
+                    <strong>2D Phụ đề</strong> (Phòng 1)
+                </div>
+                <div class="card-body showtime-buttons">
+                    <a asp-page="/Booking/SeatMap" class="btn btn-outline-primary m-1">
+                        <strong>19:00</strong>
+                        <span class="d-block small">100 ghế trống</span>
+                    </a>
+                    <a asp-page="/Booking/SeatMap" class="btn btn-outline-primary m-1">
+                        <strong>21:30</strong>
+                        <span class="d-block small">80 ghế trống</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <strong>IMAX 2D</strong> (Phòng 2)
+                </div>
+                <div class="card-body showtime-buttons">
+                    <a asp-page="/Booking/SeatMap" class="btn btn-outline-primary m-1">
+                        <strong>20:00</strong>
+                        <span class="d-block small">120 ghế trống</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-pane fade" id="date-tomorrow" role="tabpanel">
+             <p class="text-center p-3">Chưa có lịch chiếu cho ngày này.</p>
+        </div>
+        <div class="tab-pane fade" id="date-day-after" role="tabpanel">
+             <p class="text-center p-3">Chưa có lịch chiếu cho ngày này.</p>
+        </div>
+    </div>
+</div>

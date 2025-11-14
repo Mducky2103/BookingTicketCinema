@@ -4,6 +4,9 @@
     ViewData["Title"] = "Trang chủ";
 }
 
+<link rel="stylesheet" href="~/css/site.home.css" asp-append-version="true" />
+
+
 @if (!string.IsNullOrEmpty(Model.ErrorMessage))
 {
     <div class="alert alert-danger">@Model.ErrorMessage</div>
@@ -24,9 +27,9 @@
                 var movie = Model.FeaturedMovies[i]; // Lấy phim
 
                 <div class="carousel-item @(i == 0 ? "active" : "")">
-                    <img src="@movie.BackdropUrl" class="d-block w-100" alt="@movie.Title" style="aspect-ratio: 16/7; object-fit: cover;">
+                    <img src="@(Model.ApiBaseUrl + movie.BackdropUrl)" class="d-block w-100" alt="@movie.Title" style="aspect-ratio: 16/7; object-fit: cover;">
                     <div class="carousel-caption d-none d-md-block text-start mb-5"
-                         style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); left: 0; right: 0; bottom: 0; padding-left: 10%; padding-bottom: 3rem;">
+						 style="ba-gradient(to top, rgba(0,0,0ckground: linear,0.8), transparent); left: 0; right: 0; bottom: 0; padding-left: 10%; padding-bottom: 3rem;">
                         <h1 class="display-4 fw-bold">@movie.Title</h1>
                         <a class="btn btn-primary btn-lg mt-2" asp-page="/Movie/Details" asp-route-id="@movie.Id">
                             <i class="bi bi-ticket-perforated"></i> Mua vé ngay
@@ -38,6 +41,14 @@
                 </div>
             }
         </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
 }
 

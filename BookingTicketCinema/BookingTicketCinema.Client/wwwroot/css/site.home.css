@@ -1,0 +1,151 @@
+﻿body {
+    background-color: #fefefe;
+    color: #333;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* Carousel */
+.carousel-caption h1 {
+    color: #222;
+    text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.6);
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: brightness(1.5);
+}
+
+/* Thẻ phim ngang */
+.horizontal-scroll-wrapper {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding-bottom: 10px;
+}
+
+.movie-card-horizontal {
+    min-width: 200px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+}
+
+    .movie-card-horizontal:hover {
+        transform: translateY(-5px);
+    }
+
+    .movie-card-horizontal img {
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+    }
+
+.movie-card-horizontal-content {
+    padding: 10px;
+    text-align: center;
+}
+
+    .movie-card-horizontal-content h6 {
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .movie-card-horizontal-content p {
+        margin-bottom: 10px;
+        font-size: 0.85rem;
+    }
+
+/* Thẻ phim dọc (Coming Soon) */
+.movie-card-vertical img {
+    height: 300px;
+    object-fit: cover;
+}
+
+.card-body h5 {
+    font-weight: 600;
+    color: #222;
+}
+
+.card-body p {
+    color: #555;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-outline-primary {
+    color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+    .btn-outline-primary:hover {
+        background-color: #0d6efd;
+        color: #fff;
+    }
+
+.btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
+}
+
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: #fff;
+    }
+
+.carousel-indicators button {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: rgba(13, 110, 253, 0.7); /* màu xanh dương nhạt */
+    border: 2px solid #fff;
+    box-shadow: 0 0 5px rgba(13, 110, 253, 0.7);
+    transition: all 0.3s;
+    margin: 0 4px;
+}
+
+    .carousel-indicators button:hover {
+        background-color: #0dcaf0; /* màu neon sáng */
+        transform: scale(1.5);
+        box-shadow: 0 0 10px #0dcaf0, 0 0 20px #0dcaf0;
+    }
+
+.carousel-indicators .active {
+    background-color: #ffc107; /* vàng nổi bật */
+    width: 18px;
+    height: 18px;
+    border: 2px solid #fff;
+    box-shadow: 0 0 15px #ffc107, 0 0 25px #ffc107;
+}
+/* Khung cho carousel */
+#heroCarousel {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    border: 3px solid #0d6efd; /* viền nổi bật màu xanh */
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+    /* Caption nền bán trong suốt */
+    #heroCarousel .carousel-caption {
+        background: rgba(0, 0, 0, 0.5); /* nền tối bán trong suốt */
+        padding: 2rem 3rem;
+        border-radius: 10px;
+    }
+
+        /* Buttons trong caption */
+        #heroCarousel .carousel-caption .btn {
+            margin-right: 0.5rem;
+        }
+
+/* Indicator vẫn glow */
+.carousel-indicators {
+    bottom: 10px;
+}

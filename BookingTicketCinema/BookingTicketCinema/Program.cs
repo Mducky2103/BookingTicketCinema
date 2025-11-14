@@ -62,13 +62,12 @@ static IEdmModel GetEdmModel()
     odataBuilder.EntitySet<Showtime>("Showtimes");
     return odataBuilder.GetEdmModel();
 }
+app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.ConfigureSwaggerExplorer()
                .ConfigureCORS(builder.Configuration)
                .AddIdentityAuthMiddlewares();
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
 
 app.MapControllers();
 

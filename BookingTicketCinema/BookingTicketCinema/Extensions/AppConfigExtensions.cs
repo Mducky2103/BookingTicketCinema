@@ -8,10 +8,7 @@ namespace BookingTicketCinema.Extensions
             this WebApplication app,
             IConfiguration config)
         {
-            app.UseCors(options =>
-                options.WithOrigins("http://localhost:5287")
-                   .AllowAnyMethod()
-                   .AllowAnyHeader());
+            app.UseCors("AllowSpecificOrigins");
             return app;
         }
 
@@ -20,6 +17,24 @@ namespace BookingTicketCinema.Extensions
             IConfiguration config)
         {
             services.Configure<AppSettings>(config.GetSection("AppSettings"));
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigins", policyBuilder =>
+                {
+                    // Lấy URL từ appsettings.json (an toàn hơn)
+                    var clientWebAppUrl = config["ClientUrls:WebApp"];
+                    var clientAdminUrl = config["ClientUrls:ManagementApp"];
+
+                    // (Kiểm tra null nếu cần)
+                    if (clientWebAppUrl != null && clientAdminUrl != null)
+                    {
+                        policyBuilder.WithOrigins(clientWebAppUrl, clientAdminUrl)
+                              .AllowAnyHeader()
+                              .AllowAnyMethod();
+                    }
+                });
+            });
             return services;
         }
     }

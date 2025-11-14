@@ -71,7 +71,8 @@ namespace BookingTicketCinema.Controllers
                     new Claim("userID",user.Id.ToString()),
                     new Claim("gender", user.Gender.ToString()),
                     new Claim("dob", user.DOB.ToString("o")),
-                    new Claim(ClaimTypes.Role, roles.First())
+                    new Claim(ClaimTypes.Role, roles.First()),
+                    new Claim(ClaimTypes.Name, user.FullName)          
                 });  
                 var tokenDescriptor = new SecurityTokenDescriptor
                     {

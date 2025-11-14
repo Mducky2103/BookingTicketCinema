@@ -8,10 +8,11 @@ namespace BookingTicketCinema.Client.Pages
     public class IndexModel : PageModel
     {
         private readonly IApiClientService _apiService;
-
-        public IndexModel(IApiClientService apiService)
+        public readonly string ApiBaseUrl;
+        public IndexModel(IApiClientService apiService, IConfiguration configuration)
         {
             _apiService = apiService;
+            ApiBaseUrl = configuration["ApiBaseUrl"]!;
         }
 
         public List<MovieFeaturedViewModel> FeaturedMovies { get; set; } = new();
