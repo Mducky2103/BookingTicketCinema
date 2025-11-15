@@ -30,6 +30,13 @@ namespace BookingTicketCinema.WebApp.Services
         Task<List<int>> GetTakenSeatIdsAsync(int showtimeId);
 
         // Đặt vé (từ TicketController)
-        Task<BookingResponseViewModel> BookTicketsAsync(BookingRequestViewModel request, string token);
+        //Task<BookingResponseViewModel> BookTicketsAsync(BookingRequestViewModel request, string token);
+        Task<PaymentResponseDto> CreatePendingPaymentAsync(PaymentRequestDto request, string token);
+
+        // 2. (Mới) Gọi POST /api/payment/{id}/confirm
+        Task ConfirmPaymentAsync(int paymentId, string token);
+
+        // 3. (Mới) Gọi PUT /api/payment/{id}/cancel
+        Task CancelPaymentAsync(int paymentId, string token);
     }
 }

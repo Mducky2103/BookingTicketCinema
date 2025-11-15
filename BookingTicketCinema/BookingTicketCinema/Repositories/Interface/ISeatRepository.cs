@@ -11,6 +11,7 @@ namespace BookingTicketCinema.Repositories.Interface
         Task UpdateAsync(Seat seat);
         Task DeleteAsync(Seat seat);
         Task SaveChangesAsync();
+        Task<List<Seat>> GetByIdsAsync(List<int> seatIds);
     }
 }
 

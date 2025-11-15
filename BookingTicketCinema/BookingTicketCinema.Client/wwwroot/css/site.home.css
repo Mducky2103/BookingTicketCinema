@@ -1,4 +1,7 @@
-﻿body {
+﻿/* =================================
+   STYLES GỐC CỦA BẠN (Body, Carousel, Buttons...)
+   ================================= */
+body {
     background-color: #fefefe;
     color: #333;
     font-family: "Segoe UI", sans-serif;
@@ -15,54 +18,158 @@
     filter: brightness(1.5);
 }
 
-/* Thẻ phim ngang */
+/* =================================
+   PHẦN 1: ĐANG CHIẾU (ĐÃ SỬA RỘNG)
+   ================================= */
+
+/* Container bọc ngoài (TỪ CODE CỦA BẠN) */
 .horizontal-scroll-wrapper {
     display: flex;
-    overflow-x: auto;
-    gap: 1rem;
-    padding-bottom: 10px;
+    flex-wrap: nowrap; /* Không cho xuống hàng */
+    overflow-x: auto; /* Cho phép lướt ngang */
+    padding: 1rem 0;
+    /* Ẩn thanh cuộn (tùy chọn) */
+    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none;
 }
 
+    .horizontal-scroll-wrapper::-webkit-scrollbar {
+        display: none;
+    }
+
+/* Card phim ngang (ĐÃ SỬA RỘNG - GIỐNG LƯỚI "SẮP CHIẾU") */
 .movie-card-horizontal {
-    min-width: 200px;
+    margin-right: 1.5rem; /* Giữ khoảng cách (gutter) */
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     overflow: hidden;
     flex-shrink: 0;
     transition: transform 0.2s;
+    /* SỬA LỖI 2: Thêm flex-column để đẩy nút xuống */
+    display: flex;
+    flex-direction: column;
 }
 
     .movie-card-horizontal:hover {
         transform: translateY(-5px);
     }
 
-    .movie-card-horizontal img {
-        width: 100%;
-        height: 280px;
-        object-fit: cover;
+/* SỬA LỖI 1: ĐỒNG BỘ KÍCH THƯỚC
+      Dùng @media query để ép card "Đang chiếu" (Ngang) 
+      có cùng kích thước với card "Sắp chiếu" (Lưới) 
+      (dựa trên Bootstrap grid: sm=2, md=3, lg=4)
+    */
+
+/* 1. Mặc định (XS - 1 cột) */
+.movie-card-horizontal {
+    flex-basis: 90%;
+    width: 90%;
+}
+
+/* 2. Small (SM - 2 cột) */
+@media (min-width: 576px) {
+    .movie-card-horizontal {
+        flex-basis: 255px; /* (540px / 2) - gutter */
+        width: 255px;
     }
+}
+
+/* 3. Medium (MD - 3 cột) */
+@media (min-width: 768px) {
+    .movie-card-horizontal {
+        flex-basis: 220px; /* (720px / 3) - gutter */
+        width: 220px;
+    }
+}
+
+/* 4. Large (LG - 4 cột) */
+@media (min-width: 992px) {
+    .movie-card-horizontal {
+        flex-basis: 220px; /* (960px / 4) - gutter */
+        width: 220px;
+    }
+}
+
+/* 5. Extra Large (XL - 4 cột) */
+@media (min-width: 1200px) {
+    .movie-card-horizontal {
+        flex-basis: 260px; /* (1140px / 4) - gutter */
+        width: 260px;
+    }
+}
+
+
+.movie-card-horizontal img {
+    width: 100%;
+    aspect-ratio: 2 / 3; /* Giữ tỉ lệ poster (thay cho height) */
+    object-fit: cover;
+}
 
 .movie-card-horizontal-content {
-    padding: 10px;
-    text-align: center;
+    padding: 1rem; /* Sửa lại 1rem (16px) cho giống .card-body */
+    text-align: left; /* Sửa lại text-align-left cho giống .card-body */
+    /* SỬA LỖI 2: Thêm flex-grow để lấp đầy */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
     .movie-card-horizontal-content h6 {
         font-weight: 600;
         margin-bottom: 5px;
+        /* SỬA LỖI 2: Áp dụng 2-line clamp giống card dọc */
+        min-height: 2.5em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-height: 1.25em;
+        max-height: 2.5em;
     }
 
     .movie-card-horizontal-content p {
         margin-bottom: 10px;
         font-size: 0.85rem;
+        /* SỬA LỖI 2: Cắt bớt 1 dòng */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
-/* Thẻ phim dọc (Coming Soon) */
-.movie-card-vertical img {
-    height: 300px;
+    /* SỬA LỖI 2: Đẩy nút Mua vé xuống dưới cùng */
+    .movie-card-horizontal-content .btn {
+        margin-top: auto;
+    }
+
+/* =================================
+   PHẦN 2: SẮP CHIẾU (ĐÃ SỬA CĂN CHỈNH)
+   ================================= */
+.movie-card-vertical .card-img-top {
+    aspect-ratio: 2 / 3; /* Giữ tỉ lệ poster (thay cho height) */
     object-fit: cover;
 }
+
+/* SỬA LỖI CĂN CHỈNH TIÊU ĐỀ (TỪ CODE CỦA BẠN) */
+.movie-card-vertical .card-title {
+    min-height: 2.5em; /* Đảm bảo đủ chỗ cho 2 dòng */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* Giới hạn 2 dòng, tự thêm ... */
+    line-height: 1.25em;
+    max-height: 2.5em;
+}
+
+/* SỬA LỖI CĂN CHỈNH THỂ LOẠI (TỪ CODE CỦA BẠN) */
+.movie-card-vertical .card-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* Chỉ cho phép 1 dòng */
+}
+
 
 .card-body h5 {
     font-weight: 600;
@@ -73,7 +180,9 @@
     color: #555;
 }
 
-/* Buttons */
+/* =================================
+   STYLES TÙY CHỈNH CỦA BẠN (Buttons, Carousel...)
+   ================================= */
 .btn-primary {
     background-color: #0d6efd;
     border-color: #0d6efd;

@@ -99,7 +99,6 @@ namespace BookingTicketCinema.WebApp.Services
         public async Task<List<SeatGroupViewModel>> GetSeatGroupsByRoomAsync(int roomId)
         {
             var client = CreateClient();
-            // Gọi API /seatgroups/room/{id} của bạn
             return await client.GetFromJsonAsync<List<SeatGroupViewModel>>($"api/seatgroups/room/{roomId}") ?? new();
         }
 
@@ -110,18 +109,65 @@ namespace BookingTicketCinema.WebApp.Services
             return await client.GetFromJsonAsync<List<int>>($"api/ticket/showtime/{showtimeId}/taken-seats") ?? new();
         }
 
-        // (Code hàm BookTicketsAsync vẫn giữ nguyên)
-        public async Task<BookingResponseViewModel> BookTicketsAsync(BookingRequestViewModel request, string token)
+        //public async Task<BookingResponseViewModel> BookTicketsAsync(BookingRequestViewModel request, string token)
+        //{
+        //    var client = CreateClient();
+        //    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        //    var response = await client.PostAsJsonAsync("api/ticket/book", request);
+        //    if (!response.IsSuccessStatusCode)
+        //    {
+        //        var error = await response.Content.ReadFromJsonAsync<object>();
+        //        throw new Exception($"Đặt vé thất bại: {error?.ToString()}");
+        //    }
+        //    return await response.Content.ReadFromJsonAsync<BookingResponseViewModel>() ?? new();
+        //}
+        public async Task<PaymentResponseDto> CreatePendingPaymentAsync(PaymentRequestDto request, string token)
         {
             var client = CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = await client.PostAsJsonAsync("api/ticket/book", request);
+
+            // 1. Gọi API mới
+            var response = await client.PostAsJsonAsync("api/payment/create", request);
+
             if (!response.IsSuccessStatusCode)
             {
                 var error = await response.Content.ReadFromJsonAsync<object>();
-                throw new Exception($"Đặt vé thất bại: {error?.ToString()}");
+                // Ném lỗi (ví dụ: "Ghế đã bán") về
+                throw new Exception($"Lỗi tạo đơn hàng: {error?.ToString()}");
             }
-            return await response.Content.ReadFromJsonAsync<BookingResponseViewModel>() ?? new();
+            return await response.Content.ReadFromJsonAsync<PaymentResponseDto>()
+                ?? throw new Exception("Không nhận được phản hồi Payment.");
         }
+
+        public async Task ConfirmPaymentAsync(int paymentId, string token)
+        {
+            var client = CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // 2. Gọi API mới
+            var response = await client.PostAsync($"api/payment/{paymentId}/confirm", null);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadFromJsonAsync<object>();
+                throw new Exception($"Lỗi xác nhận: {error?.ToString()}");
+            }
+        }
+
+        public async Task CancelPaymentAsync(int paymentId, string token)
+        {
+            var client = CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // 3. Gọi API mới
+            var response = await client.PutAsync($"api/payment/{paymentId}/cancel", null);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadFromJsonAsync<object>();
+                throw new Exception($"Lỗi hủy vé: {error?.ToString()}");
+            }
+        }
+
     }
 }

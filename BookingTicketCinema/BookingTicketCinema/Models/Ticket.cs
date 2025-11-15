@@ -23,6 +23,8 @@ namespace BookingTicketCinema.Models
         public string? UserId { get; set; }
         public User? User { get; set; }
 
+        [ForeignKey("Payment")]
+        public int? PaymentId { get; set; } 
         public Payment? Payment { get; set; }
 
         public enum TicketStatus

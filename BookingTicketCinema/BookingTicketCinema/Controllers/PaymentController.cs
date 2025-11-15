@@ -1,172 +1,86 @@
-﻿using BookingTicketCinema.Data;
-using BookingTicketCinema.DTO;
-using BookingTicketCinema.Models;
+﻿using System.Security.Claims;
+using BookingTicketCinema.DTO.Payment;
+using BookingTicketCinema.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookingTicketCinema.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Customer")] // Chỉ Customer mới được thanh toán
     public class PaymentController : ControllerBase
     {
-        private readonly CinemaDbContext _context;
-        public PaymentController(CinemaDbContext context)
+        private readonly IPaymentService _paymentService;
+
+        public PaymentController(IPaymentService paymentService)
         {
-            _context = context;
+            _paymentService = paymentService;
         }
 
-        /// <summary>
-        /// Giả lập tạo payment cho 1 nhóm ticket.
-        /// - Nếu Ticket đã có trạng thái Paid thì sẽ bỏ qua.
-        /// - Mỗi Ticket sẽ được tạo 1 Payment (1:1) và ticket.Status -> Paid.
-        /// </summary>
-        [HttpPost("simulate")]
-        
-        public async Task<IActionResult> SimulatePayment([FromBody] CreatePaymentDTO dto)
+        // API này được gọi khi Client bấm "Xác nhận Đặt vé"
+        // POST: api/payment/create
+        [HttpPost("create")]
+        public async Task<IActionResult> CreatePayment([FromBody] PaymentRequestDto request)
         {
-            if (dto == null || dto.TicketIds == null || !dto.TicketIds.Any())
-                return BadRequest(new { message = "TicketIds required." });
-
-            // Lấy tickets
-            var tickets = await _context.Tickets
-                .Where(t => dto.TicketIds.Contains(t.TicketId))
-                .ToListAsync();
-
-            if (tickets.Count != dto.TicketIds.Count)
-                return NotFound(new { message = "Một hoặc nhiều ticket không tồn tại." });
-
-            // Tính chia đều amount cho mỗi ticket (nếu amount được truyền)
-            decimal amountPerTicket = dto.Amount;
-            if (dto.Amount <= 0)
+            var userId = User.FindFirstValue("userID");
+            if (string.IsNullOrEmpty(userId))
             {
-                // nếu không truyền amount, cố gắng tính mặc định (nếu bạn có logic giá riêng, tích hợp ở đây)
-                amountPerTicket = 0m;
-            }
-            else
-            {
-                amountPerTicket = Math.Round(dto.Amount / tickets.Count, 2);
+                return Unauthorized();
             }
 
-            var createdPayments = new List<PaymentResponseDTO>();
-
-            foreach (var t in tickets)
+            if (request.SeatIds == null || !request.SeatIds.Any())
             {
-                if (t.Status == Ticket.TicketStatus.Paid)
-                {
-                    // Nếu đã paid: trả về thông tin và không tạo payment mới
-                    createdPayments.Add(new PaymentResponseDTO
-                    {
-                        TicketId = t.TicketId,
-                        PaymentId = t.Payment?.PaymentId ?? 0,
-                        Amount = t.Payment?.Amount ?? 0m,
-                        Status = t.Payment != null ? (PaymentStatusEnum)t.Payment.Status : PaymentStatusEnum.Completed
-                    });
-                    continue;
-                }
-
-                var payment = new Payment
-                {
-                    Amount = amountPerTicket,
-                    Method = dto.Method,
-                    Status = Payment.PaymentStatus.Completed, // vì đây là simulate: giả lập thanh toán thành công
-                    CreatedAt = DateTime.UtcNow,
-                    TicketId = t.TicketId
-                };
-
-                // thêm payment
-                _context.Add(payment);
-
-                // cập nhật ticket
-                t.Payment = payment;
-                t.Status = Ticket.TicketStatus.Paid;
-                t.UpdatedAt = DateTime.UtcNow;
-
-                createdPayments.Add(new PaymentResponseDTO
-                {
-                    TicketId = t.TicketId,
-                    PaymentId = 0, // sẽ có sau khi SaveChanges
-                    Amount = payment.Amount,
-                    Status = PaymentStatusEnum.Completed
-                });
+                return BadRequest(new { message = "Vui lòng chọn ít nhất 1 ghế." });
             }
 
-            await _context.SaveChangesAsync();
-
-            // cập nhật PaymentId trả về
-            var paymentIds = createdPayments
-                .Select(pdto =>
-                {
-                    var p = _context.Payments.FirstOrDefault(x => x.TicketId == pdto.TicketId);
-                    if (p != null) pdto.PaymentId = p.PaymentId;
-                    return pdto;
-                })
-                .ToList();
-
-            return Ok(new
+            try
             {
-                message = "Simulated payment completed.",
-                payments = paymentIds
-            });
+                var paymentResponse = await _paymentService.CreatePaymentAsync(request, userId);
+                return Ok(paymentResponse);
+            }
+            catch (Exception ex)
+            {
+                // Bắt lỗi (ví dụ: "Ghế đã bán", "Suất chiếu đã bắt đầu")
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
-        /// <summary>
-        /// Confirm payment (dùng nếu bạn muốn endpoint riêng để xác nhận/ webhooks)
-        /// - Bổ sung: chuyển status Payment -> Completed và Ticket -> Paid
-        /// </summary>
-        [HttpPost("confirm/{paymentId:int}")]
-        
-        public async Task<IActionResult> ConfirmPayment([FromRoute] int paymentId)
+        [HttpPost("{paymentId}/confirm")]
+        public async Task<IActionResult> ConfirmPayment(int paymentId)
         {
-            var payment = await _context.Set<Payment>()
-                .Include(p => p.Ticket)
-                .FirstOrDefaultAsync(p => p.PaymentId == paymentId);
+            var userId = User.FindFirstValue("userID");
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
 
-            if (payment == null)
-                return NotFound(new { message = "Payment not found." });
-
-            // Set trạng thái
-            payment.Status = Payment.PaymentStatus.Completed;
-            payment.UpdatedAt = DateTime.UtcNow;
-
-            if (payment.Ticket != null)
+            try
             {
-                payment.Ticket.Status = Ticket.TicketStatus.Paid;
-                payment.Ticket.UpdatedAt = DateTime.UtcNow;
+                await _paymentService.ConfirmPaymentAsync(paymentId, userId);
+                return Ok(new { message = "Thanh toán thành công!" });
             }
-
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Payment confirmed and ticket(s) marked as Paid.", paymentId = payment.PaymentId });
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
-        /// <summary>
-        /// Lấy trạng thái payment
-        /// </summary>
-        [HttpGet("{paymentId:int}")]
-        
-        public async Task<IActionResult> GetPayment(int paymentId)
+        // --- THÊM API "HỦY VÉ" ---
+        // (API này sẽ được gọi từ trang Lịch sử vé)
+        // PUT: api/payment/123/cancel
+        [HttpPut("{paymentId}/cancel")]
+        public async Task<IActionResult> CancelPayment(int paymentId)
         {
-            var payment = await _context.Set<Payment>()
-                .Include(p => p.Ticket)
-                .Where(p => p.PaymentId == paymentId)
-                .Select(p => new
-                {
-                    p.PaymentId,
-                    p.Amount,
-                    p.Method,
-                    Status = p.Status,
-                    TicketId = p.TicketId,
-                    TicketStatus = p.Ticket != null ? p.Ticket.Status : (Ticket.TicketStatus?)null,
-                    p.CreatedAt,
-                    p.UpdatedAt
-                })
-                .FirstOrDefaultAsync();
+            var userId = User.FindFirstValue("userID");
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
 
-            if (payment == null) return NotFound();
-            return Ok(payment);
+            try
+            {
+                await _paymentService.CancelPaymentAsync(paymentId, userId);
+                return Ok(new { message = "Đã hủy vé thành công." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
-
 }

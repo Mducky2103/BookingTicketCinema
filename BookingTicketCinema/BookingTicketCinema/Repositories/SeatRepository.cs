@@ -1,4 +1,4 @@
-using BookingTicketCinema.Data;
+﻿using BookingTicketCinema.Data;
 using BookingTicketCinema.Models;
 using BookingTicketCinema.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +34,15 @@ namespace BookingTicketCinema.Repositories
 
         public async Task SaveChangesAsync() =>
             await _context.SaveChangesAsync();
+
+        public async Task<List<Seat>> GetByIdsAsync(List<int> seatIds)
+        {
+            // Lấy ghế và thông tin loại ghế (VIP/Thường)
+            return await _context.Seats
+                .Include(s => s.SeatGroup)
+                .Where(s => seatIds.Contains(s.SeatId))
+                .ToListAsync();
+        }
     }
 }
 

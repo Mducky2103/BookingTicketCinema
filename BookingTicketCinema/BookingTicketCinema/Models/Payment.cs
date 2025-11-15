@@ -17,9 +17,12 @@ namespace BookingTicketCinema.Models
         [Required]
         public PaymentStatus Status { get; set; }
 
-        [ForeignKey("Ticket")]
-        public int TicketId { get; set; }
-        public Ticket Ticket { get; set; } = null!;
+        [ForeignKey("User")]
+        public string UserId { get; set; } = string.Empty;
+        public User User { get; set; } = null!;
+
+        // 1 Payment (Đơn hàng) sẽ có NHIỀU Vé
+        public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 
         public enum PaymentMethod
         {

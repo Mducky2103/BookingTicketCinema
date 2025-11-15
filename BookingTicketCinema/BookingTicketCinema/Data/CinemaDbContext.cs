@@ -75,12 +75,12 @@ namespace BookingTicketCinema.Data
                 .HasForeignKey(t => t.SeatId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // ---- Ticket <-> Payment (1:1) ----
-            builder.Entity<Ticket>()
-                .HasOne(t => t.Payment)
-                .WithOne(p => p.Ticket)
-                .HasForeignKey<Payment>(p => p.TicketId)
-                .OnDelete(DeleteBehavior.Cascade);
+            // ---- Ticket <-> Payment (Many:1) ----
+            builder.Entity<Payment>()
+                .HasMany(p => p.Tickets)      
+                .WithOne(t => t.Payment)     
+                .HasForeignKey(t => t.PaymentId) 
+                .OnDelete(DeleteBehavior.Restrict);
 
             // ---- Promotion <> VoucherRedemption ----
             builder.Entity<VoucherRedemption>()
