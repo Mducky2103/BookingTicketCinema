@@ -1,0 +1,123 @@
+﻿/* Container cho sơ đồ ghế */
+.seat-map-container {
+    perspective: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 800px; /* Điều chỉnh độ rộng tối đa */
+    padding: 10px;
+    overflow-x: auto; /* Cho phép cuộn ngang nếu phòng quá rộng */
+    background: #f4f4f4;
+    border-radius: 8px;
+}
+
+/* Màn hình */
+.screen {
+    width: 80%;
+    min-width: 400px; /* Đảm bảo màn hình không quá hẹp */
+    height: 50px;
+    background: #333;
+    color: white;
+    text-align: center;
+    line-height: 50px;
+    transform: rotateX(-45deg);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.7);
+    margin: 0 auto 50px auto !important;
+}
+
+/* Hàng ghế */
+.seat-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+    min-width: 500px; /* Đảm bảo các hàng không bị vỡ khi cuộn */
+}
+
+/* Nhãn hàng (A, B, C) */
+.seat-label {
+    width: 25px;
+    font-weight: bold;
+    color: #888;
+    flex-shrink: 0;
+    line-height: 25px; /* Căn giữa với ghế */
+    text-align: center;
+}
+
+/* Ghế */
+.seat {
+    width: 25px;
+    height: 25px;
+    margin: 3px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    flex-shrink: 0;
+}
+
+    .seat:hover:not(.seat-occupied) {
+        transform: scale(1.1);
+    }
+
+/* --- ĐỊNH NGHĨA CÁC LOẠI GHẾ --- */
+
+/* 1. Ghế Thường (Available) */
+.seat-available {
+    background-color: #d6d6d6;
+}
+
+    .seat-available:hover {
+        background-color: #b0b0b0;
+    }
+
+/* 2. Ghế VIP */
+.seat-vip {
+    background-color: #f7b731; /* Vàng */
+}
+
+    .seat-vip:hover {
+        background-color: #f5a623;
+    }
+
+/* 3. Ghế Đôi (Double) */
+.seat-double {
+    background-color: #e83e8c; /* Hồng */
+    width: 56px; /* Rộng gấp đôi (25*2 + 3*2) */
+}
+
+    .seat-double:hover {
+        background-color: #d63384;
+    }
+
+/* --- ĐỊNH NGHĨA TRẠNG THÁI GHẾ --- */
+
+/* 4. Ghế Đang Chọn (Selected) */
+.seat-selected {
+    background-color: #0d6efd; /* Xanh dương */
+    transform: scale(1.05);
+}
+
+/* 5. Ghế Đã Bán (Occupied) */
+.seat-occupied {
+    background-color: #6c757d; /* Xám tối */
+    cursor: not-allowed;
+}
+
+/* --- THANH TÓM TẮT --- */
+
+/* Thanh toán dính */
+.booking-summary-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    padding: 1.5rem 0;
+    border-top: 1px solid #ddd;
+    z-index: 100;
+}
+
+/* Thêm khoảng đệm ở cuối trang để thanh dính không che nội dung */
+body {
+    padding-bottom: 150px;
+}

@@ -1,0 +1,46 @@
+﻿@page
+@model BookingTicketCinema.WebApp.Pages.DebugClaimsModel
+@{
+    ViewData["Title"] = "Debug Claims";
+}
+
+<div class="container">
+    <h1 class="text-danger">@ViewData["Title"]</h1>
+    <p>Đây là tất cả thông tin (Claims) đang được lưu trong Cookie xác thực của bạn.</p>
+
+    <div class="alert alert-info">
+        <strong>Hãy tìm dòng có "Type" là:</strong>
+        <code>http://schemas.microsoft.com/ws/2008/06/identity/claims/role</code>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Claim Type (Loại)</th>
+                <th>Claim Value (Giá trị)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model.Claims)
+            {
+                <tr>
+                    <td>
+                        @if (claim.Item1 == System.Security.Claims.ClaimTypes.Name)
+                        {
+                            <strong class="text-success">@claim.Item1 (Name)</strong>
+                        }
+                        else if (claim.Item1 == System.Security.Claims.ClaimTypes.Role)
+                        {
+                            <strong class="text-danger">@claim.Item1 (Role)</strong>
+                        }
+                        else
+                        {
+                            @claim.Item1
+                        }
+                    </td>
+                    <td>@claim.Item2</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

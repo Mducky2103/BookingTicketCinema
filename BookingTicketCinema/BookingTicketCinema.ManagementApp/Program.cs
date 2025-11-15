@@ -2,35 +2,33 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BookingTicketCinema.ManagementApp.Services;
-using BookingTicketCinema.WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-
-builder.Services.AddHttpClient("ApiClient", client =>
-{
-    client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]);
-});
-builder.Services.AddScoped<IApiClientService, ApiClientService>();
+var configuration = builder.Configuration; 
 
 builder.Services.AddScoped<IManagementApiService, ManagementApiService>();
 
 // Add MVC support alongside Razor Pages
 builder.Services.AddControllersWithViews();
 // Cấu hình HttpClientFactory để gọi Backend API
-builder.Services.AddHttpClient("ApiClient", (serviceProvider, client) =>
+builder.Services.AddHttpClient<ApiClient>(client =>
 {
-    // Lấy URL của Backend API từ appsettings.json
-    var apiBaseUrl = builder.Configuration["ApiBaseUrl"];
-    client.BaseAddress = new Uri(apiBaseUrl!);
-    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-});
+    var apiBaseUrl = configuration["ApiBaseUrl"];
 
-// Add HTTP Client for API calls (for MVC controllers)
-builder.Services.AddHttpClient<ApiClient>();
-builder.Services.AddScoped<ApiClient>();
+    // Kiểm tra xem appsettings.json có ApiBaseUrl không
+    if (string.IsNullOrEmpty(apiBaseUrl))
+    {
+        throw new InvalidOperationException(
+            "ApiBaseUrl is not set in appsettings.json for ManagementApp");
+    }
+
+    client.BaseAddress = new Uri(apiBaseUrl);
+    client.DefaultRequestHeaders.Accept.Add(
+        new MediaTypeWithQualityHeaderValue("application/json"));
+});
 
 // Cần thiết để truy cập HttpContext (và token) từ các dịch vụ khác
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -52,7 +50,7 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole("Admin"));
 
     options.AddPolicy("RequireStaff", policy =>
-        policy.RequireRole("Staff", "Admin")); // Staff hoặc Admin đều được
+        policy.RequireRole("Staff", "Admin")); 
 });
 // Gán Policy cho thư mục
 builder.Services.Configure<RazorPagesOptions>(options =>

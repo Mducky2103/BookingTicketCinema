@@ -1,4 +1,5 @@
-﻿using BookingTicketCinema.WebApp.ViewModel;
+﻿using System.Net.Http.Headers;
+using BookingTicketCinema.WebApp.ViewModel;
 
 namespace BookingTicketCinema.WebApp.Services
 {
@@ -73,6 +74,54 @@ namespace BookingTicketCinema.WebApp.Services
         {
             var client = CreateClient();
             return await client.GetFromJsonAsync<List<ShowtimeDetailViewModel>>($"api/showtimes/GetShowtimesByMovie/{movieId}") ?? new();
+        }
+
+        public async Task<ShowtimeBookingViewModel> GetShowtimeForBookingAsync(int showtimeId)
+        {
+            var client = CreateClient();
+            return await client.GetFromJsonAsync<ShowtimeBookingViewModel>($"api/showtimes/GetShowtimeById/{showtimeId}")
+                ?? throw new Exception("Không tìm thấy suất chiếu.");
+        }
+
+        public async Task<RoomViewModel> GetRoomByIdAsync(int roomId)
+        {
+            var client = CreateClient();
+            return await client.GetFromJsonAsync<RoomViewModel>($"api/rooms/{roomId}")
+                ?? throw new Exception("Không tìm thấy phòng.");
+        }
+
+        public async Task<List<SeatViewModel>> GetSeatsByRoomAsync(int roomId)
+        {
+            var client = CreateClient();
+            return await client.GetFromJsonAsync<List<SeatViewModel>>($"api/seats/room/{roomId}") ?? new();
+        }
+
+        public async Task<List<SeatGroupViewModel>> GetSeatGroupsByRoomAsync(int roomId)
+        {
+            var client = CreateClient();
+            // Gọi API /seatgroups/room/{id} của bạn
+            return await client.GetFromJsonAsync<List<SeatGroupViewModel>>($"api/seatgroups/room/{roomId}") ?? new();
+        }
+
+        public async Task<List<int>> GetTakenSeatIdsAsync(int showtimeId)
+        {
+            var client = CreateClient();
+            // Gọi API mới trong TicketController
+            return await client.GetFromJsonAsync<List<int>>($"api/ticket/showtime/{showtimeId}/taken-seats") ?? new();
+        }
+
+        // (Code hàm BookTicketsAsync vẫn giữ nguyên)
+        public async Task<BookingResponseViewModel> BookTicketsAsync(BookingRequestViewModel request, string token)
+        {
+            var client = CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await client.PostAsJsonAsync("api/ticket/book", request);
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadFromJsonAsync<object>();
+                throw new Exception($"Đặt vé thất bại: {error?.ToString()}");
+            }
+            return await response.Content.ReadFromJsonAsync<BookingResponseViewModel>() ?? new();
         }
     }
 }

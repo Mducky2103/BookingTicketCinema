@@ -36,6 +36,13 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("CustomerOnly", policy =>
+        policy.RequireRole("Customer"));
+});
+
 // Cấu hình bảo vệ thư mục
 builder.Services.Configure<RazorPagesOptions>(options =>
 {

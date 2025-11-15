@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
+using BookingTicketCinema.ManagementApp.Services;
 using BookingTicketCinema.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,8 +10,8 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
 {
     public class IndexModel : PageModel
     {
-        private readonly IApiClientService _api;
-        public IndexModel(IApiClientService api)
+        private readonly ApiClient _api;
+        public IndexModel(ApiClient api)
         {
             _api = api;
         }
@@ -18,7 +19,7 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
         // =========================
         // PROPERTIES
         // =========================
-        public List<ShowtimeViewModel> Showtimes { get; set; } = new();
+        public List<ShowtimeViewModel1> Showtimes { get; set; } = new();
         public List<SelectListItem> MovieOptions { get; set; } = new();
         public List<SelectListItem> RoomOptions { get; set; } = new();
 
@@ -50,7 +51,7 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
                 if (res.IsSuccessStatusCode)
                 {
                     var json = await res.Content.ReadAsStringAsync();
-                    Showtimes = JsonSerializer.Deserialize<List<ShowtimeViewModel>>(json,
+                    Showtimes = JsonSerializer.Deserialize<List<ShowtimeViewModel1>>(json,
                         new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
                 }
                 else
@@ -225,7 +226,7 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
         // =========================
         // VIEW MODEL
         // =========================
-        public class ShowtimeViewModel
+        public class ShowtimeViewModel1
         {
             public int ShowtimeId { get; set; }
             public int MovieId { get; set; }
