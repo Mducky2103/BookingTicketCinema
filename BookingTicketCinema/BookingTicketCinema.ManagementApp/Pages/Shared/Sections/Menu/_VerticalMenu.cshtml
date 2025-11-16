@@ -50,12 +50,20 @@
     </li>
 
     <!-- POS -->
-    <li class='menu-item@(currentPage.StartsWith("/POS") ? " active" : "")'>
-      <a asp-page="/POS/Index" class="menu-link">
+    <li class='menu-item@(currentPage.StartsWith("/POS") && !currentPage.StartsWith("/POS/POSHistory") ? " active" : "")'>
+            <a asp-page="/POS/Index" class="menu-link">
         <i class="menu-icon icon-base bx bx-laptop"></i>
         <div class="text-truncate">Bán vé tại quầy (POS)</div>
       </a>
     </li>
+
+		<!-- POS History -->
+    <li class='menu-item@(currentPage.StartsWith("/POS/POSHistory") ? " active" : "")'>
+      <a asp-page="/POS/POSHistory" class="menu-link">
+        <i class="menu-icon icon-base bx bx-history"></i>
+        <div class="text-truncate">Lịch sử bán vé</div>
+	  </a>
+	</li>
 
     @if (User.IsInRole("Admin"))
     {

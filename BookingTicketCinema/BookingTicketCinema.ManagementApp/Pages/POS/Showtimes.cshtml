@@ -1,0 +1,61 @@
+﻿@page
+@model BookingTicketCinema.ManagementApp.Pages.POS.ShowtimesModel
+@{
+    ViewData["Title"] = "Chọn suất chiếu";
+}
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card sticky-top" style="top: 20px;">
+                @if (!string.IsNullOrEmpty(Model.MoviePosterUrl))
+                {
+                    <img src="@(Model.ApiBaseUrl + Model.MoviePosterUrl)" class="card-img-top" alt="@Model.MovieTitle">
+                }
+                <div class="card-body">
+                    <h4 class="card-title">@Model.MovieTitle</h4>
+                    <a asp-page="/POS/Index" class="btn btn-outline-secondary w-100">
+                        <i class="bx bx-chevron-left"></i> Quay lại chọn phim
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <h2>Chọn suất chiếu</h2>
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="alert alert-danger">@Model.ErrorMessage</div>
+            }
+
+            @if (!Model.GroupedShowtimes.Any())
+            {
+                <div class="alert alert-warning">Phim này hiện chưa có suất chiếu nào sắp tới.</div>
+            }
+
+            @foreach (var dateGroup in Model.GroupedShowtimes)
+            {
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">@dateGroup.Key.ToString("dddd, dd/MM/yyyy")</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach (var st in dateGroup)
+                            {
+                                <a asp-page="/POS/SeatMap" asp-route-showtimeId="@st.Id"
+                                   class="btn btn-outline-primary p-3"
+                                   title="Phòng: @st.RoomName">
+                                    <strong>@st.StartTime.ToString("HH:mm")</strong>
+                                    <br />
+                                    <small>@st.RoomName</small>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

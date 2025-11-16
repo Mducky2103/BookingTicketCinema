@@ -1,0 +1,106 @@
+﻿@page
+@model BookingTicketCinema.ManagementApp.Pages.POS.SeatMapModel
+@{
+    ViewData["Title"] = "Chọn Ghế";
+}
+
+<link rel="stylesheet" href="~/css/seat-map.css" asp-append-version="true" />
+
+<div class="container my-4" style="padding-bottom: 120px;">
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+    }
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h3 class="card-title">@Model.Showtime.MovieTitle</h3>
+            <p class="card-text fs-5 mb-1">
+                <i class="bx bx-calendar"></i> @Model.Showtime.StartTime.ToString("dd/MM/yyyy")
+                <i class="bx bx-time-five ms-3"></i> @Model.Showtime.StartTime.ToString("HH:mm")
+                <i class="bx bx-movie-play ms-3"></i> @Model.Room.Name
+            </p>
+        </div>
+    </div>
+
+    <div class="seat-map-container card shadow-sm">
+        <div class="screen">MÀN HÌNH</div>
+
+        @foreach (var row in Model.SeatsByRow)
+        {
+            <div class="seat-row">
+                <div class="row-name">@row.Key</div>
+                @foreach (var seat in row.Value)
+                {
+                    string seatClass = "seat";
+                    string seatType = "normal";
+                    string disabled = "";
+
+                    if (seat.SeatType == 1) seatType = "vip";
+                    if (seat.SeatType == 2) seatType = "double";
+                    if (seat.Status == 1) disabled = "disabled"; // 1 = Taken
+
+                    <div class="@seatClass @seatType @disabled"
+                         data-seat-id="@seat.SeatId"
+                         data-seat-name="@seat.SeatNumber"
+                         data-seat-type="@seat.SeatType">
+                        @seat.SeatNumber
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <div class="seat-legend">
+        <div class="legend-item"><div class="seat normal"></div> Ghế thường</div>
+        <div class="legend-item"><div class="seat vip"></div> Ghế VIP</div>
+        <div class="legend-item"><div class="seat double"></div> Ghế đôi</div>
+        <div class="legend-item"><div class="seat selected"></div> Đang chọn</div>
+        <div class="legend-item"><div class="seat disabled"></div> Đã bán</div>
+    </div>
+</div>
+
+<div class="pos-booking-bar shadow-lg">
+    <form method="post" id="pos-form" class="container">
+
+        <input type="hidden" name="showtimeId" value="@Model.ShowtimeId" />
+        <input type="hidden" name="seatIds" id="hidden-seat-ids" />
+
+        <div class="row align-items-center">
+            <div class="col">
+                <span class="d-block text-muted">Đang chọn:</span>
+                <strong id="selected-seats" class="fs-5">Chưa chọn ghế</strong>
+            </div>
+            <div class="col">
+                <span class="d-block text-muted">Tổng cộng:</span>
+                <strong id="total-price" class="fs-5 text-primary">0đ</strong>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label text-muted">Hình thức:</label>
+                <select class="form-select" name="paymentMethod" required>
+                    <option value="0">Tiền mặt (Cash)</option>
+                    <option value="1">Thẻ (CreditCard)</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <button type="submit" id="btn-checkout" class="btn btn-success btn-lg w-100 disabled">
+                    <i class="bx bx-check-circle"></i> Xác nhận Bán vé
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/js/seat-selection.js" asp-append-version="true"></script>
+
+    <script>
+        document.addEventListener('customSeatUpdate', function (e) {
+            // "e.detail.ids" là mảng ID ghế được gửi từ seat-selection.js
+            const hiddenInput = document.getElementById('hidden-seat-ids');
+            hiddenInput.value = e.detail.ids.join(',');
+        });
+    </script>
+}

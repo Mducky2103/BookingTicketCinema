@@ -16,20 +16,17 @@ namespace BookingTicketCinema.ManagementApp.Services
             _logger = logger;
         }
 
-        // 🧠 Gắn JWT token từ cookie claims hoặc session vào header Authorization
+        //Gắn JWT token từ cookie claims hoặc session vào header Authorization
         private void AttachToken()
         {
             var context = _httpContextAccessor.HttpContext;
             if (context == null) return;
 
-            // 🔹 Lấy token từ Claims (cookie đăng nhập)
             var token = context.User?.Claims.FirstOrDefault(c => c.Type == "access_token")?.Value;
 
-            // 🔹 Nếu không có trong claim, thử lấy từ Session
             if (string.IsNullOrEmpty(token))
                 token = context.Session.GetString("AccessToken");
 
-            // 🔹 Gắn token vào header
             if (!string.IsNullOrEmpty(token))
             {
                 _httpClient.DefaultRequestHeaders.Authorization =
@@ -42,10 +39,6 @@ namespace BookingTicketCinema.ManagementApp.Services
             }
         }
 
-
-        // -------------------------
-        // GỌI API CHUẨN HÓA
-        // -------------------------
         public async Task<HttpResponseMessage> GetAsync(string endpoint)
         {
             AttachToken();
@@ -70,6 +63,64 @@ namespace BookingTicketCinema.ManagementApp.Services
             var res = await _httpClient.DeleteAsync(endpoint);
             _logger.LogInformation($"DELETE {endpoint} => {res.StatusCode}");
             return res;
+        }
+
+
+        // POS Bước 1: Chọn Phim
+        public async Task<HttpResponseMessage> GetMoviesAsync()
+        {
+            // (API này bên Backend đang AllowAnonymous, 
+            // nhưng chúng ta cứ gắn token để bảo mật nếu cần)
+            return await GetAsync("api/Movie");
+        }
+
+        // POS Bước 2: Chọn Suất chiếu
+        public async Task<HttpResponseMessage> GetShowtimesByMovieAsync(int movieId)
+        {
+            return await GetAsync($"api/showtimes/GetShowtimesByMovie/{movieId}");
+        }
+
+        // POS Bước 3: Lấy chi tiết sơ đồ ghế
+        public async Task<HttpResponseMessage> GetShowtimeForBookingAsync(int showtimeId)
+        {
+            return await GetAsync($"api/showtimes/GetShowtimeById/{showtimeId}");
+        }
+
+        public async Task<HttpResponseMessage> GetRoomByIdAsync(int roomId)
+        {
+            return await GetAsync($"api/rooms/{roomId}");
+        }
+
+        public async Task<HttpResponseMessage> GetSeatsByRoomAsync(int roomId)
+        {
+            return await GetAsync($"api/seats/room/{roomId}");
+        }
+
+        public async Task<HttpResponseMessage> GetSeatGroupsByRoomAsync(int roomId)
+        {
+            return await GetAsync($"api/seatgroups/room/{roomId}");
+        }
+
+        public async Task<HttpResponseMessage> GetTakenSeatIdsAsync(int showtimeId)
+        {
+            // API này trong TicketController
+            return await GetAsync($"api/ticket/showtime/{showtimeId}/taken-seats");
+        }
+
+        // POS Bước 4: Bán vé
+        public async Task<HttpResponseMessage> BookAtCounterAsync(HttpContent content)
+        {
+            return await PostAsync("api/POS/book", content);
+        }
+
+        // POS Bước 5: Lấy Hóa đơn
+        public async Task<HttpResponseMessage> GetReceiptAsync(int paymentId)
+        {
+            return await GetAsync($"api/pos/receipt/{paymentId}");
+        }
+        public async Task<HttpResponseMessage> GetMyPOSHistoryAsync(int pageNumber, int pageSize)
+        {
+            return await GetAsync($"api/pos/my-history?pageNumber={pageNumber}&pageSize={pageSize}");
         }
     }
 }

@@ -25,9 +25,9 @@ namespace BookingTicketCinema.Repositories
 
         public async Task<Payment?> GetByIdAsync(int paymentId)
         {
-            // Lấy Payment và các Ticket liên quan
             return await _context.Payments
                 .Include(p => p.Tickets)
+                .ThenInclude(t => t.Showtime)
                 .FirstOrDefaultAsync(p => p.PaymentId == paymentId);
         }
 
@@ -45,6 +45,31 @@ namespace BookingTicketCinema.Repositories
             return await _context.Payments
                 .Include(p => p.Tickets) 
                 .Where(p => p.Status == Payment.PaymentStatus.Pending && p.CreatedAt < cutoffTime)
+                .ToListAsync();
+        }
+
+        public async Task<int> GetCountByUserIdAsync(string userId)
+        {
+            return await _context.Payments
+                .Where(p => p.UserId == userId)
+                .CountAsync();
+        }
+
+        public async Task<List<Payment>> GetByUserIdPagedAsync(string userId, int pageNumber, int pageSize)
+        {
+            return await _context.Payments
+                .Where(p => p.UserId == userId)
+                .OrderByDescending(p => p.CreatedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Include(p => p.Tickets)
+                    .ThenInclude(t => t.Seat)
+                .Include(p => p.Tickets)
+                    .ThenInclude(t => t.Showtime)
+                        .ThenInclude(s => s.Movie)
+                .Include(p => p.Tickets)
+                    .ThenInclude(t => t.Showtime)
+                        .ThenInclude(s => s.Room)
                 .ToListAsync();
         }
     }

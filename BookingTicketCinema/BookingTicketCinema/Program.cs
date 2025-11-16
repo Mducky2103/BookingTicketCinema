@@ -38,35 +38,8 @@ builder.Services.AddHangfire(config => config
 
 builder.Services.AddHangfireServer();
 builder.Services.AddScoped<IBackgroundJobService, BackgroundJobService>();
+builder.Services.AddApplicationServices();
 
-builder.Services.AddSingleton<EmailService>();
-
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
-
-builder.Services.AddScoped<IRoomRepository, RoomRepository>();
-builder.Services.AddScoped<IRoomService, RoomService>();
-
-builder.Services.AddScoped<ISeatGroupRepository, SeatGroupRepository>();
-builder.Services.AddScoped<ISeatGroupService, SeatGroupService>();
-
-builder.Services.AddScoped<ISeatRepository, SeatRepository>();
-builder.Services.AddScoped<ISeatService, SeatService>();
-
-builder.Services.AddScoped<IShowtimeRepository, ShowtimeRepository>();
-builder.Services.AddScoped<IShowtimeService, ShowtimeService>();
-
-builder.Services.AddScoped<IPriceRuleRepository, PriceRuleRepository>();
-builder.Services.AddScoped<IPriceRuleService, PriceRuleService>();
-
-builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-builder.Services.AddScoped<IMovieService, MovieService>();
-
-builder.Services.AddScoped<ITicketRepository, TicketRepository>();
-builder.Services.AddScoped<ITicketService, TicketService>();
-
-builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
-builder.Services.AddScoped<IPaymentService, PaymentService>();
 var app = builder.Build();
 
 // Build EDM model for OData

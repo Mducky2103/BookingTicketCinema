@@ -1,0 +1,138 @@
+﻿/* Container chính của sơ đồ ghế */
+.seat-map-container {
+    padding: 2rem;
+    overflow-x: auto; /* Cho phép cuộn ngang nếu phòng quá rộng */
+    background-color: #fff;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Màn hình (phía trên) */
+.screen {
+    width: 80%;
+    margin: 0 auto 2rem auto;
+    padding: 0.75rem;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #495057;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Một hàng ghế */
+.seat-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+/* Tên hàng (A, B, C...) */
+.row-name {
+    width: 30px;
+    flex-shrink: 0;
+    text-align: center;
+    font-weight: bold;
+    color: #6c757d;
+}
+
+/* Định nghĩa một ghế */
+.seat {
+    width: 30px;
+    height: 30px;
+    margin: 3px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #ced4da; /* Màu ghế trống (available) */
+    color: #000;
+    font-size: 0.7rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+    /* Hiệu ứng khi di chuột qua ghế trống */
+    .seat:not(.disabled):hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+    }
+
+    /* Ghế thường (mặc định) */
+    .seat.normal {
+        background-color: #ced4da; /* Màu xám nhạt */
+    }
+
+    /* Ghế VIP */
+    .seat.vip {
+        background-color: #f7c32e; /* Màu vàng */
+    }
+
+    /* Ghế đôi */
+    .seat.double {
+        background-color: #e83e8c; /* Màu hồng */
+        width: 66px; /* Rộng gấp đôi (30*2 + 3*2) */
+    }
+
+    /* Ghế đã bán (bị vô hiệu hóa) */
+    .seat.disabled {
+        background-color: #495057; /* Màu xám đậm */
+        color: #fff;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    /* Ghế đang chọn */
+    .seat.selected {
+        background-color: #0d6efd; /* Màu xanh dương (primary) */
+        color: white;
+        transform: scale(1.1);
+    }
+
+/* Chú thích (Legend) */
+.seat-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+    /* Style cho các ô vuông trong chú thích (dùng lại .seat) */
+    .legend-item .seat {
+        cursor: default;
+        margin: 0;
+    }
+
+        .legend-item .seat:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+/* CSS cho thanh thanh toán dính ở dưới (POS Bar) */
+.pos-booking-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border-top: 1px solid #dee2e6;
+    padding: 1.25rem;
+    z-index: 1000;
+}
+
+/* Đảm bảo nội dung trang không bị che bởi thanh POS */
+body {
+    padding-bottom: 150px; /* (Tùy chỉnh chiều cao này nếu thanh POS cao hơn) */
+}

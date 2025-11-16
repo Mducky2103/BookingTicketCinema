@@ -1,0 +1,22 @@
+﻿@page
+@model BookingTicketCinema.ManagementApp.Pages.POS.IndexModel
+@{
+    ViewData["Title"] = "Bán vé tại quầy (Bước 1: Chọn Phim)";
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="row">
+    @foreach (var movie in Model.Movies)
+    {
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <img src="@(Model.ApiBaseUrl + movie.PosterUrl)" class="card-img-top" />
+                <div class="card-body">
+                    <h5 class="card-title">@movie.Title</h5>
+                    <a asp-page="/POS/Showtimes" asp-route-movieId="@movie.MovieId" 
+                       class="btn btn-primary w-100">Chọn Phim</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

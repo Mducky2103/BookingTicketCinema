@@ -145,14 +145,19 @@ namespace BookingTicketCinema.Services
         {
             var payment = await _paymentRepository.GetByIdAsync(paymentId);
 
-            // Kiểm tra bảo mật
             if (payment == null || payment.UserId != userId)
                 throw new Exception("Không tìm thấy đơn hàng.");
 
-            // Chỉ hủy đơn đang chờ hoặc đã thanh toán
-            if (payment.Status == PaymentStatus.Failed)
+            // Đơn hàng đã thất bại hoặc bị hủy thì không thể hủy lại
+            if (payment.Status == PaymentStatus.Failed || payment.Status == PaymentStatus.Cancelled)
                 throw new Exception("Đơn hàng này đã được hủy trước đó.");
 
+            //Đơn hàng đã hoàn thành thì không thể hủy
+            if (payment.Status == PaymentStatus.Completed)
+            {
+                // (Sau này bạn có thể thêm logic check Giờ chiếu ở đây)
+                throw new Exception("Không thể hủy đơn hàng đã thanh toán thành công.");
+            }
             payment.Status = PaymentStatus.Failed;
             payment.UpdatedAt = DateTime.UtcNow;
 
