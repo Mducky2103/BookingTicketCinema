@@ -40,6 +40,9 @@ namespace BookingTicketCinema.Extensions
 
             services.AddScoped<IPOSService, POSService>();
 
+            services.AddScoped<IStatisticsRepository, StatisticsRepository>();
+            services.AddScoped<IStatisticsService, StatisticsService>();
+
             return services;
         }
     }

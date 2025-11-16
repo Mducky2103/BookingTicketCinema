@@ -18,9 +18,8 @@
           <a class="btn btn-label-success btn-lg" asp-page="/POS/Index">
             <i class="icon-base bx bx-laptop icon-md me-2"></i> Bán vé tại quầy
           </a>
-        <a class="btn btn-label-success btn-lg" asp-page="/POS/POSHistory">
-                        <i class="icon-base bx bx-history icon-md me-2"></i> Lịch sử bán vé
-        </a>
+          <a class="btn btn-label-info btn-lg" asp-page="/POS/POSHistory"> <i class="icon-base bx bx-history icon-md me-2"></i> Lịch sử bán vé
+          </a>
           
           @if (User.IsInRole("Admin"))
           {
@@ -47,7 +46,8 @@
         </div>
         <div class="card-body">
           <div class="row">
-            <div class="col-md-4 mb-4">
+            
+            <div class="col-lg-3 col-md-6 mb-4">
               <div class="card bg-primary text-white">
                 <div class="card-body">
                   <h5 class="card-title">Doanh thu hôm nay</h5>
@@ -55,7 +55,8 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-4 mb-4">
+            
+            <div class="col-lg-3 col-md-6 mb-4">
               <div class="card bg-success text-white">
                 <div class="card-body">
                   <h5 class="card-title">Vé đã bán (Hôm nay)</h5>
@@ -63,6 +64,24 @@
                 </div>
               </div>
             </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="card bg-info text-white">
+                <div class="card-body">
+                  <h5 class="card-title">Tổng Khách hàng</h5>
+                  <p class="card-text display-6 fw-bold">@(Model.Stats?.TotalCustomers ?? 0)</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="card bg-warning text-dark"> <div class="card-body">
+                  <h5 class="card-title">Tổng số Phim</h5>
+                  <p class="card-text display-6 fw-bold">@(Model.Stats?.TotalMovies ?? 0)</p>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

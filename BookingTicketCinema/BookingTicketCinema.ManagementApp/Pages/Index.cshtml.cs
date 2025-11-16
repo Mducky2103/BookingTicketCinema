@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Headers;
+using System.Text.Json;
 using BookingTicketCinema.ManagementApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,11 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BookingTicketCinema.ManagementApp.Pages
 {
-    [Authorize(Policy = "RequireStaff")]
     public class IndexModel : PageModel
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<IndexModel> _logger; // (Thêm Logger)
 
         // Model cho các thẻ KPI (Admin)
         [BindProperty]
@@ -21,43 +22,41 @@ namespace BookingTicketCinema.ManagementApp.Pages
         public List<ShowtimeViewModel> TodayShowtimes { get; set; } = new();
 
         public string? ErrorMessage { get; set; }
+        public readonly string ApiBaseUrl; // (Dùng cho Poster)
 
-        public IndexModel(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public IndexModel(IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<IndexModel> logger)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
+            ApiBaseUrl = _configuration["ApiBaseUrl"]!;
+            _logger = logger;
         }
 
         public async Task OnGetAsync()
         {
-            // Lấy token từ phiên đăng nhập (cookie)
             var accessToken = User.Claims.FirstOrDefault(c => c.Type == "access_token")?.Value;
             if (string.IsNullOrEmpty(accessToken))
             {
                 ErrorMessage = "Lỗi xác thực. Vui lòng đăng nhập lại.";
-                return; // Sẽ bị chặn bởi [Authorize] nhưng cẩn thận vẫn hơn
+                return;
             }
 
             var httpClient = _httpClientFactory.CreateClient("ApiClient");
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var apiBaseUrl = _configuration["ApiBaseUrl"];
 
-            var tasks = new List<Task>();
-
-            // === TẢI DỮ LIỆU ===
+            // --- SỬA LỖI: CHẠY TUẦN TỰ (Sequential) ---
 
             // 1. Chỉ tải Thống kê nếu là Admin
             if (User.IsInRole("Admin"))
             {
-                // Giả định bạn có endpoint này ở API
-                tasks.Add(LoadDashboardStats(httpClient, apiBaseUrl));
+                await LoadDashboardStats(httpClient, apiBaseUrl);
             }
 
             // 2. Luôn tải Lịch chiếu
-            // Giả định bạn có endpoint này ở API
-            tasks.Add(LoadTodayShowtimes(httpClient, apiBaseUrl));
+            await LoadTodayShowtimes(httpClient, apiBaseUrl);
 
-            await Task.WhenAll(tasks);
+            // --- HẾT PHẦN SỬA ---
         }
 
         // Hàm gọi API lấy thống kê (Admin)
@@ -68,13 +67,19 @@ namespace BookingTicketCinema.ManagementApp.Pages
                 var response = await client.GetAsync($"{baseUrl}/api/statistics/dashboard");
                 if (response.IsSuccessStatusCode)
                 {
-                    Stats = await response.Content.ReadFromJsonAsync<DashboardStatsViewModel>();
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    Stats = await response.Content.ReadFromJsonAsync<DashboardStatsViewModel>(options);
+                }
+                else
+                {
+                    _logger.LogWarning("API /api/statistics/dashboard thất bại, code: {StatusCode}", response.StatusCode);
+                    ErrorMessage = "Không thể tải thống kê.";
                 }
             }
             catch (Exception ex)
             {
-                // Ghi log lỗi
-                ErrorMessage = "Không thể tải thống kê.";
+                _logger.LogError(ex, "Lỗi khi gọi LoadDashboardStats");
+                ErrorMessage = "Lỗi (Stats): " + ex.Message;
             }
         }
 
@@ -83,16 +88,23 @@ namespace BookingTicketCinema.ManagementApp.Pages
         {
             try
             {
-                var response = await client.GetAsync($"{baseUrl}/api/showtimes/today");
+                // (API này chúng ta sẽ tạo ở Bước 2)
+                var response = await client.GetAsync($"{baseUrl}/api/showtime/today");
                 if (response.IsSuccessStatusCode)
                 {
-                    TodayShowtimes = await response.Content.ReadFromJsonAsync<List<ShowtimeViewModel>>() ?? new();
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    TodayShowtimes = await response.Content.ReadFromJsonAsync<List<ShowtimeViewModel>>(options) ?? new();
+                }
+                else
+                {
+                    _logger.LogWarning("API /api/showtime/today thất bại, code: {StatusCode}", response.StatusCode);
+                    ErrorMessage = "Không thể tải lịch chiếu hôm nay.";
                 }
             }
             catch (Exception ex)
             {
-                // Ghi log lỗi
-                ErrorMessage = "Không thể tải lịch chiếu.";
+                _logger.LogError(ex, "Lỗi khi gọi LoadTodayShowtimes");
+                ErrorMessage = "Lỗi (Showtimes): " + ex.Message;
             }
         }
     }

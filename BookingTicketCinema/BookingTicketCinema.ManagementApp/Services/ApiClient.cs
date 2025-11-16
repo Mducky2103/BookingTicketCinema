@@ -122,5 +122,17 @@ namespace BookingTicketCinema.ManagementApp.Services
         {
             return await GetAsync($"api/pos/my-history?pageNumber={pageNumber}&pageSize={pageSize}");
         }
+        public async Task<HttpResponseMessage> GetDashboardStatsAsync()
+        {
+            return await GetAsync("api/statistics/dashboard");
+        }
+        public async Task<HttpResponseMessage> GetSalesReportAsync(DateTime startDate, DateTime endDate)
+        {
+            // Format ngày theo chuẩn yyyy-MM-dd để API hiểu
+            var start = startDate.ToString("yyyy-MM-dd");
+            var end = endDate.ToString("yyyy-MM-dd");
+
+            return await GetAsync($"api/statistics/sales-report?startDate={start}&endDate={end}");
+        }
     }
 }

@@ -1,0 +1,90 @@
+﻿@page
+@model BookingTicketCinema.ManagementApp.Pages.Reports.SalesModel
+@{
+    ViewData["Title"] = "Báo cáo Doanh thu";
+}
+
+<h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Quản trị /</span> @ViewData["Title"]
+</h4>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger">@Model.ErrorMessage</div>
+}
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Tùy chọn Báo cáo</h5>
+    </div>
+    <div class="card-body">
+        <form method="get">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label asp-for="StartDate" class="form-label">Từ ngày</label>
+                    <input asp-for="StartDate" type="date" class="form-control" />
+                </div>
+                <div class="col-md-5">
+                    <label asp-for="EndDate" class="form-label">Đến ngày</label>
+                    <input asp-for="EndDate" type="date" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bx bx-search me-1"></i> Xem
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.Report != null)
+{
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                Kết quả: 
+                <span class="text-primary">
+                    @Model.Report.StartDate.ToString("dd/MM/yyyy") - @Model.Report.EndDate.ToString("dd/MM/yyyy")
+                </span>
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-4 col-md-12 mb-4">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Tổng Doanh thu</h5>
+                            <p class="card-text display-6 fw-bold">
+                                @Model.Report.TotalRevenue.ToString("N0") ₫
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Tổng Vé đã bán</h5>
+                            <p class="card-text display-6 fw-bold">
+                                @Model.Report.TotalTicketsSold vé
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Tổng Giao dịch</h5>
+                            <p class="card-text display-6 fw-bold">
+                                @Model.Report.TotalPayments
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            </div>
+    </div>
+}
