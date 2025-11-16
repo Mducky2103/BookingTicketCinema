@@ -42,5 +42,19 @@ namespace BookingTicketCinema.Controllers
             var movies = await _movieService.GetComingSoonMoviesAsync();
             return Ok(movies);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMovies([FromQuery] string? search = null)
+        {
+            try
+            {
+                var movies = await _movieService.GetMoviesAsync(search);
+                return Ok(movies);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

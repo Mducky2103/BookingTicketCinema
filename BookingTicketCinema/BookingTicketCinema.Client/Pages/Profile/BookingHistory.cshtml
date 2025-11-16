@@ -75,7 +75,7 @@
                             @if (status == 1) // 0 = Pending (Đang chờ)
                             {
                                 <a asp-page="/Booking/Checkout"
-                                   asp-route-paymentId="@paymentGroup.PaymentId"
+                                   asp-route-PaymentIdFromHistory="@paymentGroup.PaymentId"
                                    class="btn btn-primary">
                                     <i class="bi bi-credit-card"></i> Thanh toán
                                 </a>
@@ -90,8 +90,10 @@
                             }
                             else if (status == 2) // 1 = Booked (Đã thanh toán)
                             {
-                                <a href="#" class="btn btn-success disabled">
-                                    <i class="bi bi-qr-code"></i> Xem mã QR
+                                <a asp-page="/Profile/TicketDetails"
+                                   asp-route-paymentId="@paymentGroup.PaymentId"
+                                   class="btn btn-success">
+                                    <i class="bi bi-ticket-detailed"></i> Xem chi tiết vé
                                 </a>
                             }
                         </div>

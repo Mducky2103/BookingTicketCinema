@@ -197,5 +197,32 @@ namespace BookingTicketCinema.Services
                 SeatNumbers = seats.Select(s => s.SeatNumber).ToList()
             };
         }
+        public async Task<PaymentResponseDto> GetPaymentDetailsAsync(int paymentId, string userId)
+        {
+            var payment = await _paymentRepository.GetByIdAsync(paymentId);
+
+            if (payment == null || payment.UserId != userId)
+                throw new Exception("Không tìm thấy đơn hàng.");
+
+            var tickets = payment.Tickets;
+            var firstTicket = tickets.FirstOrDefault();
+            if (firstTicket == null)
+                throw new Exception("Đơn hàng không có vé.");
+
+            var showtime = await _showtimeRepository.GetByIdAsync(firstTicket.ShowtimeId);
+            var seats = await _seatRepository.GetByIdsAsync(tickets.Select(t => t.SeatId).ToList());
+
+            return new PaymentResponseDto
+            {
+                PaymentId = payment.PaymentId,
+                Amount = payment.Amount,
+                Status = payment.Status, 
+                CreatedAt = payment.CreatedAt,
+                MovieTitle = showtime.Movie.Title,
+                RoomName = showtime.Room.Name,
+                Showtime = showtime.StartTime,
+                SeatNumbers = seats.Select(s => s.SeatNumber).ToList()
+            };
+        }
     }
 }

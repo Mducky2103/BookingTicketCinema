@@ -8,5 +8,6 @@ namespace BookingTicketCinema.Services.Interface
         Task<IEnumerable<MovieCardDto>> GetNowShowingMoviesAsync();
         Task<IEnumerable<MovieCardDto>> GetComingSoonMoviesAsync();
         Task<IEnumerable<MovieFeaturedDto>> GetFeaturedMoviesAsync();
+        Task<IEnumerable<MovieViewModel>> GetMoviesAsync(string? searchTerm = null);
     }
 }

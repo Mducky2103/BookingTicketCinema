@@ -55,5 +55,20 @@ namespace BookingTicketCinema.Services
                 TrailerUrl = m.TrailerUrl
             });
         }
+        public async Task<IEnumerable<MovieViewModel>> GetMoviesAsync(string? searchTerm = null)
+        {
+            var movies = await _movieRepository.GetMoviesAsync(searchTerm);
+
+            // Map từ Model (Movie) sang DTO (MovieViewModel)
+            return movies.Select(m => new MovieViewModel
+            {
+                Id = m.MovieId,
+                Title = m.Title,
+                PosterUrl = m.PosterUrl,
+                ReleaseDate = m.ReleaseDate.ToDateTime(TimeOnly.MinValue),
+                Duration = (int)m.Duration.TotalMinutes,
+                Genre = m.Genre
+            });
+        }
     }
 }

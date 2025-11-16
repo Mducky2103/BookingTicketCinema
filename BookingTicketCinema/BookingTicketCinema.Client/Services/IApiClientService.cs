@@ -32,5 +32,7 @@ namespace BookingTicketCinema.WebApp.Services
 
         Task<List<TicketHistoryDto>> GetMyTicketHistoryAsync(string token);
         Task<PaymentResponseDto> GetPaymentSummaryAsync(int paymentId, string token);
+        Task<PaymentResponseDto> GetPaymentDetailsAsync(int paymentId, string token);
+        Task<List<MovieViewModel>> GetMoviesAsync(string? searchTerm = null);
     }
 }

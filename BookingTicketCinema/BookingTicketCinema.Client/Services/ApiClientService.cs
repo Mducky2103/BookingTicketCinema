@@ -180,6 +180,34 @@ namespace BookingTicketCinema.WebApp.Services
             return await client.GetFromJsonAsync<PaymentResponseDto>($"api/payment/summary/{paymentId}")
                 ?? throw new Exception("Không tìm thấy đơn hàng.");
         }
+        public async Task<PaymentResponseDto> GetPaymentDetailsAsync(int paymentId, string token)
+        {
+            var client = CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
+            // Gọi API mới
+            var response = await client.GetAsync($"api/payment/details/{paymentId}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadFromJsonAsync<object>();
+                throw new Exception($"Lỗi tải chi tiết vé: {error?.ToString()}");
+            }
+            // Dùng lại DTO "PaymentResponseDto" (đã có)
+            return await response.Content.ReadFromJsonAsync<PaymentResponseDto>()
+                ?? throw new Exception("Không nhận được phản hồi chi tiết vé.");
+        }
+        public async Task<List<MovieViewModel>> GetMoviesAsync(string? searchTerm = null)
+        {
+            var client = CreateClient();
+
+            string endpoint = "api/MovieForClient";
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                endpoint += $"?search={Uri.EscapeDataString(searchTerm)}";
+            }
+
+            return await client.GetFromJsonAsync<List<MovieViewModel>>(endpoint) ?? new();
+        }
     }
 }

@@ -1,0 +1,51 @@
+﻿@page
+@model BookingTicketCinema.WebApp.Pages.Movie.ComingSoonModel
+@{
+    ViewData["Title"] = "Phim Sắp Chiếu";
+}
+
+<div class="container my-5">
+    <h1 class="mb-4">@ViewData["Title"]</h1>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+    }
+
+    <div class="row g-4">
+        @if (!Model.ComingSoonMovies.Any())
+        {
+            <div class="col-12">
+                <div class="alert alert-info">Chưa có thông tin phim sắp chiếu.</div>
+            </div>
+        }
+        else
+        {
+            @foreach (var movie in Model.ComingSoonMovies)
+            {
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card movie-card h-100 shadow-sm">
+                        <a asp-page="/Movie/Details" asp-route-id="@movie.Id">
+                            <img src="@(Model.ApiBaseUrl + movie.PosterUrl)"
+                                 class="card-img-top" alt="@movie.Title">
+                        </a>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-truncate">
+                                <a asp-page="/Movie/Details" asp-route-id="@movie.Id" class="text-dark text-decoration-none">
+                                    @movie.Title
+                                </a>
+                            </h5>
+                            <p class="card-text text-muted small">
+                                @movie.Genre | @movie.Duration phút
+                            </p>
+                            <a asp-page="/Movie/Details" asp-route-id="@movie.Id"
+                               class="btn btn-primary mt-auto">
+                                <i class="bi bi-ticket-perforated"></i> Đặt vé
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

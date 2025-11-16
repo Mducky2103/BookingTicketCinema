@@ -1,0 +1,64 @@
+﻿@page
+@model BookingTicketCinema.WebApp.Pages.Movie.IndexModel
+@{
+    ViewData["Title"] = "Danh sách Phim";
+}
+
+<div class="container my-5">
+
+    <div class="row mb-4">
+        <div class="col-md-8 mx-auto">
+            <form method="get" class="d-flex">
+                <input asp-for="SearchTerm" class="form-control form-control-lg me-2"
+                       type="search" placeholder="Tìm tên phim..." aria-label="Search">
+                <button class="btn btn-primary" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+    }
+
+    <div class="row g-4">
+        @if (!Model.Movies.Any())
+        {
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    Không tìm thấy phim nào khớp với "@Model.SearchTerm".
+                </div>
+            </div>
+        }
+        else
+        {
+            @foreach (var movie in Model.Movies)
+            {
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card movie-card h-100 shadow-sm">
+                        <a asp-page="/Movie/Details" asp-route-id="@movie.Id">
+                            <img src="@(Model.ApiBaseUrl + movie.PosterUrl)"
+                                 class="card-img-top" alt="@movie.Title">
+                        </a>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-truncate">
+                                <a asp-page="/Movie/Details" asp-route-id="@movie.Id" class="text-dark text-decoration-none">
+                                    @movie.Title
+                                </a>
+                            </h5>
+                            <p class="card-text text-muted small">
+                                @movie.Genre | @movie.Duration phút
+                            </p>
+                            <a asp-page="/Movie/Details" asp-route-id="@movie.Id"
+                               class="btn btn-primary mt-auto">
+                                <i class="bi bi-ticket-perforated"></i> Đặt vé
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

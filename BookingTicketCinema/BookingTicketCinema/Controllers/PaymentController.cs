@@ -94,5 +94,21 @@ namespace BookingTicketCinema.Controllers
             }
         }
 
+        [HttpGet("details/{paymentId}")]
+        public async Task<IActionResult> GetPaymentDetails(int paymentId)
+        {
+            var userId = User.FindFirstValue("userID");
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+            try
+            {
+                var details = await _paymentService.GetPaymentDetailsAsync(paymentId, userId);
+                return Ok(details);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

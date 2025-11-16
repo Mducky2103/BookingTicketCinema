@@ -31,21 +31,21 @@ namespace BookingTicketCinema.Repositories
 
         public async Task<IEnumerable<Movie>> GetComingSoonMoviesAsync(DateTime today)
         {
-            // 1. Lấy ID các phim đang chiếu HÔM NAY (để loại trừ)
+            // Lấy ID các phim đang chiếu HÔM NAY (để loại trừ)
             var nowShowingIds = await _context.Showtimes
                 .Where(s => s.StartTime.Date == today.Date)
                 .Select(s => s.MovieId)
                 .Distinct()
                 .ToListAsync();
 
-            // 2. Lấy ID các phim có suất chiếu TRONG TƯƠNG LAI
+            // Lấy ID các phim có suất chiếu TRONG TƯƠNG LAI
             var futureMovieIds = await _context.Showtimes
                 .Where(s => s.StartTime.Date > today.Date)
                 .Select(s => s.MovieId)
                 .Distinct()
                 .ToListAsync();
 
-            // 3. Lấy ID phim SẮP CHIẾU (chỉ có trong tương lai, KHÔNG có hôm nay)
+            // Lấy ID phim SẮP CHIẾU (chỉ có trong tương lai, KHÔNG có hôm nay)
             var comingSoonIds = futureMovieIds.Except(nowShowingIds);
 
             return await _context.Movies
@@ -61,5 +61,18 @@ namespace BookingTicketCinema.Repositories
                 .Take(5)
                 .ToListAsync();
         }
+        public async Task<IEnumerable<Movie>> GetMoviesAsync(string? searchTerm = null)
+        {
+            var query = _context.Movies.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                var term = searchTerm.ToLower();
+                query = query.Where(m => m.Title.ToLower().Contains(term));
+            }
+
+            return await query.OrderByDescending(m => m.ReleaseDate).ToListAsync();
+        }
+
     }
 }
