@@ -31,10 +31,12 @@ namespace BookingTicketCinema.Repositories
 
         public async Task<IEnumerable<Ticket>> GetByUserIdAsync(string userId)
         {
-            // Query gốc của bạn từ TicketManagement
             return await _context.Tickets
-                .Include(t => t.Showtime).ThenInclude(s => s.Movie)
-                .Include(t => t.Seat)
+                .Include(t => t.Showtime)
+                    .ThenInclude(s => s.Movie) 
+                .Include(t => t.Showtime)
+                    .ThenInclude(s => s.Room)  
+                .Include(t => t.Seat)         
                 .Where(t => t.UserId == userId)
                 .OrderByDescending(t => t.CreatedAt)
                 .ToListAsync();
@@ -42,9 +44,9 @@ namespace BookingTicketCinema.Repositories
 
         public async Task<IEnumerable<Ticket>> GetByShowtimeIdAsync(int showtimeId)
         {
-            // Query gốc của bạn từ BookingController
             return await _context.Tickets
-                .Where(t => t.ShowtimeId == showtimeId && t.Status != TicketStatus.Cancelled)
+                .Where(t => t.ShowtimeId == showtimeId &&
+                            (t.Status == Ticket.TicketStatus.Reserved || t.Status == Ticket.TicketStatus.Paid))
                 .ToListAsync();
         }
     }

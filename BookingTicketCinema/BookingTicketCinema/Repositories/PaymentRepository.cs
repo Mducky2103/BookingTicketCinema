@@ -38,5 +38,14 @@ namespace BookingTicketCinema.Repositories
             _context.Payments.Update(payment);
             await _context.SaveChangesAsync();
         }
+        public async Task<List<Payment>> FindExpiredPendingPaymentsAsync(int minutes)
+        {
+            var cutoffTime = DateTime.UtcNow.AddMinutes(-minutes);
+
+            return await _context.Payments
+                .Include(p => p.Tickets) 
+                .Where(p => p.Status == Payment.PaymentStatus.Pending && p.CreatedAt < cutoffTime)
+                .ToListAsync();
+        }
     }
 }

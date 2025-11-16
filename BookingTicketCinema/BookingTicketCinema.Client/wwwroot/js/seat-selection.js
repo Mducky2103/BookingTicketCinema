@@ -19,6 +19,16 @@
     const PRICE_VIP = 70000;
     const PRICE_DOUBLE = 140000; // (Ghế đôi)
 
+    checkoutButton.addEventListener('click', function (e) {
+        if (selectedSeats.length > 0) {
+            if (!confirm("Bạn có chắc muốn tiếp tục đặt " + selectedSeats.length + " ghế này?")) {
+                e.preventDefault(); // Ngăn trình duyệt chuyển trang
+            }
+        } else {
+            // Prevent navigation when no seats are selected (safety)
+            e.preventDefault();
+        }
+    });
     // Lắng nghe sự kiện click trên toàn bộ container
     seatsContainer.addEventListener("click", function (e) {
 

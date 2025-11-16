@@ -11,36 +11,38 @@
 
 @if (Model.PaymentSummary != null)
 {
-    <form method="post">
-        <input type="hidden" asp-for="PaymentId" />
-        
-        <input type="hidden" asp-for="ShowtimeId" />
-        <input type="hidden" asp-for="SeatIds" />
-        
-        <div class="row g-5">
-            <div class="col-md-7 col-lg-8">
-                <h4 class="mb-3">Tóm tắt đơn hàng</h4>
-                <div class="card shadow-sm mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">@Model.PaymentSummary.MovieTitle</h5>
-                        <p class="card-text text-muted mb-1">
-                            @Model.PaymentSummary.Showtime.ToString("dd/MM/yyyy") | 
-                            <strong>@Model.PaymentSummary.Showtime.ToString("HH:mm")</strong> | 
-                            @Model.PaymentSummary.RoomName
-                        </p>
-                        <p class="card-text mb-0">
-                            <strong>Ghế: </strong>
-                            @string.Join(", ", Model.PaymentSummary.SeatNumbers)
-                            (@Model.PaymentSummary.SeatNumbers.Count Ghế)
-                        </p>
-                        <p class="card-text text-danger mt-2">
-                            (Đơn hàng <strong>#@Model.PaymentSummary.PaymentId</strong> đang chờ thanh toán)
-                        </p>
-                    </div>
+    <div class="row g-5">
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Tóm tắt đơn hàng</h4>
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.PaymentSummary.MovieTitle</h5>
+                    <p class="card-text text-muted mb-1">
+                        @Model.PaymentSummary.Showtime.ToString("dd/MM/yyyy") |
+                        <strong>@Model.PaymentSummary.Showtime.ToString("HH:mm")</strong> |
+                        @Model.PaymentSummary.RoomName
+                    </p>
+                    <p class="card-text mb-0">
+                        <strong>Ghế: </strong>
+                        @string.Join(", ", Model.PaymentSummary.SeatNumbers)
+                        (@Model.PaymentSummary.SeatNumbers.Count Ghế)
+                    </p>
+                    <p class="card-text text-danger mt-2">
+                        (Đơn hàng <strong>#@Model.PaymentSummary.PaymentId</strong> đang chờ thanh toán)
+                    </p>
                 </div>
-                </div>
+            </div>
+        </div>
 
-            <div class="col-md-5 col-lg-4">
+        <div class="col-md-5 col-lg-4">
+
+            <form method="post" asp-page-handler="">
+                <input type="hidden" asp-for="PaymentId" />
+
+                <input type="hidden" asp-for="ShowtimeId" />
+                <input type="hidden" asp-for="SeatIds" />
+                <input type="hidden" asp-for="PaymentIdFromHistory" />
+
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
                     <span class="text-primary">Thanh toán</span>
                 </h4>
@@ -50,13 +52,28 @@
                         <strong>@Model.PaymentSummary.Amount.ToString("N0")đ</strong>
                     </li>
                 </ul>
-                
+
                 <button type="submit" class="btn btn-primary btn-lg w-100">
                     Xác nhận Thanh toán
                 </button>
-            </div>
+            </form>
+
+            <form method="post" asp-page-handler="Cancel" class="mt-3">
+
+                <input type="hidden" asp-for="PaymentId" />
+
+                <input type="hidden" asp-for="ShowtimeId" />
+                <input type="hidden" asp-for="PaymentIdFromHistory" />
+
+                <button type="submit"
+                        class="btn btn-outline-danger w-100"
+                        onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này? Ghế sẽ được giải phóng ngay lập tức.')">
+                    <i class="bi bi-x-circle"></i> Hủy Đơn Hàng
+                </button>
+            </form>
+
         </div>
-    </form>
+    </div>
 }
 else if (string.IsNullOrEmpty(Model.ErrorMessage))
 {

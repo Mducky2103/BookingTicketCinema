@@ -8,7 +8,7 @@ namespace BookingTicketCinema.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Customer")] // Chỉ Customer mới được thanh toán
+    [Authorize(Roles = "Customer")] 
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _paymentService;
@@ -18,8 +18,6 @@ namespace BookingTicketCinema.Controllers
             _paymentService = paymentService;
         }
 
-        // API này được gọi khi Client bấm "Xác nhận Đặt vé"
-        // POST: api/payment/create
         [HttpPost("create")]
         public async Task<IActionResult> CreatePayment([FromBody] PaymentRequestDto request)
         {
@@ -41,7 +39,6 @@ namespace BookingTicketCinema.Controllers
             }
             catch (Exception ex)
             {
-                // Bắt lỗi (ví dụ: "Ghế đã bán", "Suất chiếu đã bắt đầu")
                 return BadRequest(new { message = ex.Message });
             }
         }
@@ -63,9 +60,6 @@ namespace BookingTicketCinema.Controllers
             }
         }
 
-        // --- THÊM API "HỦY VÉ" ---
-        // (API này sẽ được gọi từ trang Lịch sử vé)
-        // PUT: api/payment/123/cancel
         [HttpPut("{paymentId}/cancel")]
         public async Task<IActionResult> CancelPayment(int paymentId)
         {
@@ -82,5 +76,23 @@ namespace BookingTicketCinema.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+        
+        [HttpGet("summary/{paymentId}")]
+        public async Task<IActionResult> GetPaymentSummary(int paymentId)
+        {
+            var userId = User.FindFirstValue("userID");
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+            try
+            {
+                var summary = await _paymentService.GetPaymentSummaryAsync(paymentId, userId);
+                return Ok(summary);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
     }
 }

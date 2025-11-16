@@ -7,5 +7,6 @@ namespace BookingTicketCinema.Repositories.Interface
         Task<Payment> CreateAsync(Payment payment);
         Task<Payment?> GetByIdAsync(int paymentId);
         Task UpdateAsync(Payment payment);
+        Task<List<Payment>> FindExpiredPendingPaymentsAsync(int minutes);
     }
 }

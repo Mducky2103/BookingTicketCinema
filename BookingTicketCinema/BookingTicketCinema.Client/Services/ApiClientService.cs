@@ -105,7 +105,6 @@ namespace BookingTicketCinema.WebApp.Services
         public async Task<List<int>> GetTakenSeatIdsAsync(int showtimeId)
         {
             var client = CreateClient();
-            // Gọi API mới trong TicketController
             return await client.GetFromJsonAsync<List<int>>($"api/ticket/showtime/{showtimeId}/taken-seats") ?? new();
         }
 
@@ -126,13 +125,11 @@ namespace BookingTicketCinema.WebApp.Services
             var client = CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // 1. Gọi API mới
             var response = await client.PostAsJsonAsync("api/payment/create", request);
 
             if (!response.IsSuccessStatusCode)
             {
                 var error = await response.Content.ReadFromJsonAsync<object>();
-                // Ném lỗi (ví dụ: "Ghế đã bán") về
                 throw new Exception($"Lỗi tạo đơn hàng: {error?.ToString()}");
             }
             return await response.Content.ReadFromJsonAsync<PaymentResponseDto>()
@@ -144,7 +141,6 @@ namespace BookingTicketCinema.WebApp.Services
             var client = CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // 2. Gọi API mới
             var response = await client.PostAsync($"api/payment/{paymentId}/confirm", null);
 
             if (!response.IsSuccessStatusCode)
@@ -159,7 +155,6 @@ namespace BookingTicketCinema.WebApp.Services
             var client = CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // 3. Gọi API mới
             var response = await client.PutAsync($"api/payment/{paymentId}/cancel", null);
 
             if (!response.IsSuccessStatusCode)
@@ -167,6 +162,23 @@ namespace BookingTicketCinema.WebApp.Services
                 var error = await response.Content.ReadFromJsonAsync<object>();
                 throw new Exception($"Lỗi hủy vé: {error?.ToString()}");
             }
+        }
+
+        public async Task<List<TicketHistoryDto>> GetMyTicketHistoryAsync(string token)
+        {
+            var client = CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            // Gọi API trong TicketController
+            return await client.GetFromJsonAsync<List<TicketHistoryDto>>("api/ticket/my-history") ?? new();
+        }
+
+        public async Task<PaymentResponseDto> GetPaymentSummaryAsync(int paymentId, string token)
+        {
+            var client = CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            // Gọi API mới trong PaymentController
+            return await client.GetFromJsonAsync<PaymentResponseDto>($"api/payment/summary/{paymentId}")
+                ?? throw new Exception("Không tìm thấy đơn hàng.");
         }
 
     }

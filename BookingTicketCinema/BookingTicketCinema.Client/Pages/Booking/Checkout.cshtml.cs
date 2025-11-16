@@ -10,15 +10,22 @@ namespace BookingTicketCinema.WebApp.Pages.Booking
     {
         private readonly IApiClientService _apiService;
 
+        // Dùng để lưu MovieId tạm thời khi redirect
+        [TempData]
+        public int? LastMovieId { get; set; }
+
         public CheckoutModel(IApiClientService apiService)
         {
             _apiService = apiService;
         }
 
         [BindProperty(SupportsGet = true)]
-        public int ShowtimeId { get; set; }
+        public int? ShowtimeId { get; set; }
         [BindProperty(SupportsGet = true)]
-        public string SeatIds { get; set; } = string.Empty;
+        public string? SeatIds { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int? PaymentIdFromHistory { get; set; }
 
         [BindProperty]
         public int PaymentId { get; set; }
@@ -28,58 +35,93 @@ namespace BookingTicketCinema.WebApp.Pages.Booking
 
         public async Task<IActionResult> OnGetAsync()
         {
-            if (ShowtimeId == 0 || string.IsNullOrEmpty(SeatIds))
-            {
-                return RedirectToPage("/Index");
-            }
-
             try
             {
                 var accessToken = GetToken();
-                var request = new PaymentRequestDto
+
+                if (PaymentIdFromHistory.HasValue)
                 {
-                    ShowtimeId = this.ShowtimeId,
-                    SeatIds = this.SeatIds.Split(',').Select(int.Parse).ToList()
-                };
+                    PaymentSummary = await _apiService.GetPaymentSummaryAsync(PaymentIdFromHistory.Value, accessToken);
+                }
+                else if (ShowtimeId.HasValue && !string.IsNullOrEmpty(SeatIds))
+                {
+                    var request = new PaymentRequestDto
+                    {
+                        ShowtimeId = this.ShowtimeId.Value,
+                        SeatIds = this.SeatIds.Split(',').Select(int.Parse).ToList()
+                    };
 
-                // Gọi API để tạo đơn hàng "Pending" VÀ lấy tổng tiền
-                PaymentSummary = await _apiService.CreatePendingPaymentAsync(request, accessToken);
+                    PaymentSummary = await _apiService.CreatePendingPaymentAsync(request, accessToken);
 
-                // Lưu PaymentId để dùng cho OnPost
-                PaymentId = PaymentSummary.PaymentId;
+                    var showtime = await _apiService.GetShowtimeForBookingAsync(ShowtimeId.Value);
+                    LastMovieId = showtime.MovieId;
 
+                    return RedirectToPage(new { PaymentIdFromHistory = PaymentSummary.PaymentId });
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Yêu cầu không hợp lệ.";
+                    return RedirectToPage("/Index");
+                }
+
+                this.PaymentId = PaymentSummary.PaymentId;
                 return Page();
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Không thể đặt vé: {ex.Message}";
-                return RedirectToPage("/Movie/Details", new { id = TempData["LastMovieId"] ?? 1 });
+                TempData["ErrorMessage"] = $"Lỗi: {ex.Message}";
+                if (PaymentIdFromHistory.HasValue)
+                    return RedirectToPage("/Profile/BookingHistory");
+                else
+                    return RedirectToPage("/Movie/Details", new { id = LastMovieId ?? 1 });
             }
         }
-
         public async Task<IActionResult> OnPostAsync()
         {
             if (PaymentId == 0)
             {
-                ErrorMessage = "Đơn hàng không hợp lệ.";
-                await OnGetAsync(); 
+                ErrorMessage = "Đơn hàng không hợp lệ, vui lòng thử lại.";
                 return Page();
             }
-
             try
             {
                 var accessToken = GetToken();
-
                 await _apiService.ConfirmPaymentAsync(PaymentId, accessToken);
-
-                TempData["SuccessMessage"] = "Thanh toán thành công! Vé của bạn đã được xác nhận.";
+                TempData["SuccessMessage"] = "Thanh toán thành công!";
                 return RedirectToPage("/Profile/BookingHistory");
             }
             catch (Exception ex)
             {
                 ErrorMessage = $"Thanh toán thất bại: {ex.Message}";
-                await OnGetAsync(); 
+                PaymentSummary = await _apiService.GetPaymentSummaryAsync(this.PaymentId, GetToken());
                 return Page();
+            }
+        }
+
+        public async Task<IActionResult> OnPostCancelAsync()
+        {
+            if (PaymentId == 0)
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy đơn hàng để hủy.";
+                return RedirectToPage("/Index");
+            }
+            try
+            {
+                var accessToken = GetToken();
+                await _apiService.CancelPaymentAsync(PaymentId, accessToken);
+                TempData["SuccessMessage"] = "Đã hủy đơn hàng thành công.";
+
+                int.TryParse(Request.Form["ShowtimeId"], out int showtimeId);
+                if (showtimeId > 0)
+                {
+                    return RedirectToPage("/Movie/Details", new { id = LastMovieId ?? 1 });
+                }
+                return RedirectToPage("/Profile/BookingHistory");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Lỗi khi hủy: {ex.Message}";
+                return RedirectToPage(new { PaymentIdFromHistory = this.PaymentId });
             }
         }
 

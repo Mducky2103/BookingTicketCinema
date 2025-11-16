@@ -1,4 +1,4 @@
-html {
+﻿html {
   font-size: 14px;
 }
 
@@ -19,4 +19,31 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+.history-poster {
+    width: 150px; /* Chiều rộng cố định */
+    height: 225px; /* Chiều cao cố định (tỷ lệ 2:3 cho poster) */
+    object-fit: cover; /* Đảm bảo ảnh không bị méo và cắt nếu cần */
+    border-radius: 8px; /* Bo góc nhẹ */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Thêm đổ bóng nhẹ */
+}
+
+/* Điều chỉnh lại cột nếu ảnh quá nhỏ hoặc quá lớn */
+@media (max-width: 767px) {
+    /* Trên màn hình nhỏ hơn md, ảnh có thể rộng hơn 100% của cột */
+    .history-poster {
+        width: 100px; /* Nhỏ hơn trên mobile */
+        height: 150px;
+        margin-bottom: 15px; /* Thêm khoảng trống dưới ảnh */
+    }
+    /* Cột ảnh có thể không cần chiếm 3 cột trên mobile */
+    .card-body .row .col-md-3 {
+        flex: 0 0 auto;
+        width: auto; /* Để ảnh tự co giãn theo nội dung */
+        margin-right: 1rem;
+    }
+
+    .card-body .row .col-md-9 {
+        flex: 1 1 auto; /* Cột nội dung sẽ chiếm phần còn lại */
+    }
 }

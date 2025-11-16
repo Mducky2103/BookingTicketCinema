@@ -1,13 +1,14 @@
-﻿using BookingTicketCinema.Models;
-using BookingTicketCinema.Services;
-using BookingTicketCinema.Controllers;
+﻿using BookingTicketCinema.Controllers;
 using BookingTicketCinema.Extensions;
-using BookingTicketCinema.Services.Interface;
-using BookingTicketCinema.Repositories.Interface;
+using BookingTicketCinema.Models;
 using BookingTicketCinema.Repositories;
+using BookingTicketCinema.Repositories.Interface;
+using BookingTicketCinema.Services;
+using BookingTicketCinema.Services.Interface;
+using Hangfire;
+using Microsoft.AspNetCore.OData;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
-using Microsoft.AspNetCore.OData;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,16 @@ builder.Services.AddSwaggerExplorer()
                             .AddIdentityHandlersAndStores()
                             .ConfigureIdentityOptions()
                             .AddIdentityAuth(builder.Configuration);
+
+builder.Services.AddHangfire(config => config
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSqlServerStorage(builder.Configuration.GetConnectionString("conn"))); 
+
+builder.Services.AddHangfireServer();
+builder.Services.AddScoped<IBackgroundJobService, BackgroundJobService>();
+
 builder.Services.AddSingleton<EmailService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -75,7 +86,13 @@ app.ConfigureSwaggerExplorer()
                .AddIdentityAuthMiddlewares();
 
 app.MapControllers();
+app.UseHangfireDashboard("/hangfire"); 
 
+RecurringJob.AddOrUpdate<IBackgroundJobService>(
+    "job-id-don-dep-ve-treo", 
+    service => service.CancelExpiredPaymentsAsync(), 
+    Cron.MinuteInterval(2) 
+);
 app.MapGroup("/api")
     .MapIdentityApi<User>();
 

@@ -64,11 +64,13 @@ namespace BookingTicketCinema.Services
             return tickets.Select(t => new TicketHistoryDto
             {
                 TicketId = t.TicketId,
-                Movie = t.Showtime.Movie.Title,
-                PosterUrl = t.Showtime.Movie.PosterUrl,
+                PaymentId = t.PaymentId ?? 0, 
+                Movie = t.Showtime?.Movie?.Title ?? "N/A",
+                PosterUrl = t.Showtime?.Movie?.PosterUrl,
                 StartTime = t.Showtime.StartTime,
-                RoomName = t.Showtime.Room.Name,
-                Seat = t.Seat.SeatNumber,
+                RoomName = t.Showtime?.Room?.Name ?? "N/A", // <-- SỬA LỖI CHÍNH
+                Seat = t.Seat?.SeatNumber ?? "N/A",
+
                 Status = t.Status,
                 CreatedAt = t.CreatedAt
             });

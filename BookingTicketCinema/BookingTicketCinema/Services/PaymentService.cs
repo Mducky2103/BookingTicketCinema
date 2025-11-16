@@ -128,7 +128,6 @@ namespace BookingTicketCinema.Services
             if (payment.Status != PaymentStatus.Pending)
                 throw new Exception("Đơn hàng này đã được xử lý.");
 
-            // Cập nhật trạng thái (Fake payment success)
             payment.Status = PaymentStatus.Completed;
             payment.UpdatedAt = DateTime.UtcNow;
 
@@ -165,6 +164,33 @@ namespace BookingTicketCinema.Services
 
             await _paymentRepository.UpdateAsync(payment);
             return true;
+        }
+        public async Task<PaymentResponseDto> GetPaymentSummaryAsync(int paymentId, string userId)
+        {
+            var payment = await _paymentRepository.GetByIdAsync(paymentId);
+
+            if (payment == null || payment.UserId != userId)
+                throw new Exception("Không tìm thấy đơn hàng.");
+
+            if (payment.Status != PaymentStatus.Pending)
+                throw new Exception("Đơn hàng này không còn chờ thanh toán.");
+
+            var tickets = payment.Tickets;
+            var showtime = await _showtimeRepository.GetByIdAsync(tickets.First().ShowtimeId);
+            var seats = await _seatRepository.GetByIdsAsync(tickets.Select(t => t.SeatId).ToList());
+
+            // Map sang DTO
+            return new PaymentResponseDto
+            {
+                PaymentId = payment.PaymentId,
+                Amount = payment.Amount,
+                Status = payment.Status,
+                CreatedAt = payment.CreatedAt,
+                MovieTitle = showtime.Movie.Title,
+                RoomName = showtime.Room.Name,
+                Showtime = showtime.StartTime,
+                SeatNumbers = seats.Select(s => s.SeatNumber).ToList()
+            };
         }
     }
 }

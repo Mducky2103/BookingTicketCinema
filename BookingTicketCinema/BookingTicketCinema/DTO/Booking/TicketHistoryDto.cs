@@ -1,10 +1,13 @@
-﻿using static BookingTicketCinema.Models.Ticket;
+﻿using System.Text.Json.Serialization;
+using static BookingTicketCinema.Models.Ticket;
 
 namespace BookingTicketCinema.DTO.Booking
 {
     public class TicketHistoryDto
     {
         public int TicketId { get; set; }
+        [JsonPropertyName("paymentId")]
+        public int PaymentId { get; set; }
         public string Movie { get; set; } = string.Empty;
         public string? PosterUrl { get; set; } 
         public DateTime StartTime { get; set; }
