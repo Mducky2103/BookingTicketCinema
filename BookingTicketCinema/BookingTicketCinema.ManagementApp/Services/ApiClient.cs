@@ -134,5 +134,23 @@ namespace BookingTicketCinema.ManagementApp.Services
 
             return await GetAsync($"api/statistics/sales-report?startDate={start}&endDate={end}");
         }
+        public async Task<HttpResponseMessage> CreatePromotionAsync(HttpContent content)
+        {
+            return await PostAsync("api/Promotion", content);
+        }
+        public async Task<HttpResponseMessage> GetPromotionsAsync()
+        {
+            return await GetAsync("api/Promotion");
+        }
+
+        public async Task<HttpResponseMessage> GetPromotionByIdAsync(int id)
+        {
+            return await GetAsync($"api/Promotion/{id}");
+        }
+
+        public async Task<HttpResponseMessage> UpdatePromotionAsync(int id, HttpContent content)
+        {
+            return await PutAsync($"api/Promotion/{id}", content);
+        }
     }
 }

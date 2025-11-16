@@ -34,5 +34,6 @@ namespace BookingTicketCinema.WebApp.Services
         Task<PaymentResponseDto> GetPaymentSummaryAsync(int paymentId, string token);
         Task<PaymentResponseDto> GetPaymentDetailsAsync(int paymentId, string token);
         Task<List<MovieViewModel>> GetMoviesAsync(string? searchTerm = null);
+        Task<PaymentResponseDto> ApplyVoucherAsync(int paymentId, string code, string token);
     }
 }

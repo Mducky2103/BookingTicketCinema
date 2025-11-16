@@ -110,5 +110,32 @@ namespace BookingTicketCinema.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+        public class VoucherApplyDto
+        {
+            public int PaymentId { get; set; }
+            public string Code { get; set; } = string.Empty;
+        }
+
+        // POST: api/payment/apply-voucher
+        [HttpPost("apply-voucher")]
+        public async Task<IActionResult> ApplyVoucher([FromBody] VoucherApplyDto dto)
+        {
+            var userId = User.FindFirstValue("userID");
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+            if (string.IsNullOrEmpty(dto.Code))
+                return BadRequest(new { message = "Vui lòng nhập mã voucher." });
+
+            try
+            {
+                // Gọi Service
+                var updatedPayment = await _paymentService.ApplyVoucherAsync(dto.PaymentId, dto.Code, userId);
+                return Ok(updatedPayment); // Trả về tóm tắt mới
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

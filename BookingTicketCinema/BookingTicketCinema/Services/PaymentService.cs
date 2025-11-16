@@ -1,4 +1,5 @@
-﻿using BookingTicketCinema.DTO.Payment;
+﻿using BookingTicketCinema.Data;
+using BookingTicketCinema.DTO.Payment;
 using BookingTicketCinema.Models;
 using BookingTicketCinema.Repositories.Interface;
 using BookingTicketCinema.Services.Interface;
@@ -13,6 +14,9 @@ namespace BookingTicketCinema.Services
         private readonly ITicketRepository _ticketRepository; // (Từ TicketController)
         private readonly ISeatRepository _seatRepository;     // (Từ SeatEndpoints)
         private readonly IShowtimeRepository _showtimeRepository; // (Từ ShowtimeEndpoints)
+        private readonly IPromotionRepository _promotionRepository;
+        private readonly IVoucherRedemptionRepository _redemptionRepository;
+        private readonly CinemaDbContext _context;
 
         private const decimal PRICE_NORMAL = 60000;
         private const decimal PRICE_VIP = 70000;
@@ -21,12 +25,18 @@ namespace BookingTicketCinema.Services
             IPaymentRepository paymentRepository,
             ITicketRepository ticketRepository,
             ISeatRepository seatRepository,
-            IShowtimeRepository showtimeRepository)
+            IShowtimeRepository showtimeRepository,
+            IPromotionRepository promotionRepository,
+            IVoucherRedemptionRepository redemptionRepository,
+            CinemaDbContext context)
         {
             _paymentRepository = paymentRepository;
             _ticketRepository = ticketRepository;
             _seatRepository = seatRepository;
             _showtimeRepository = showtimeRepository;
+            _promotionRepository = promotionRepository; 
+            _redemptionRepository = redemptionRepository; 
+            _context = context; 
         }
 
         public async Task<PaymentResponseDto> CreatePaymentAsync(PaymentRequestDto dto, string userId)
@@ -136,8 +146,26 @@ namespace BookingTicketCinema.Services
                 ticket.Status = TicketStatus.Paid;
                 ticket.UpdatedAt = DateTime.UtcNow;
             }
+            if (payment.PromotionId.HasValue)
+            {
+                // Kiểm tra lần cuối (phòng trường hợp User mở 2 tab)
+                if (await _redemptionRepository.HasUserRedeemedAsync(payment.PromotionId.Value, userId))
+                {
+                    // (Tình huống hiếm gặp: User thanh toán 2 đơn cùng lúc)
+                    throw new Exception("Lỗi: Mã khuyến mãi đã được sử dụng ở một giao dịch khác.");
+                }
 
-            await _paymentRepository.UpdateAsync(payment);
+                var redemption = new VoucherRedemption
+                {
+                    PromotionId = payment.PromotionId.Value,
+                    UserId = userId,
+                    UsedAt = DateTime.UtcNow
+                };
+                // Thêm vào context để SaveChangesAsync
+                await _redemptionRepository.AddAsync(redemption);
+            }
+
+            await _context.SaveChangesAsync();
             return true;
         }
 
@@ -223,6 +251,49 @@ namespace BookingTicketCinema.Services
                 Showtime = showtime.StartTime,
                 SeatNumbers = seats.Select(s => s.SeatNumber).ToList()
             };
+        }
+
+        public async Task<PaymentResponseDto> ApplyVoucherAsync(int paymentId, string code, string userId)
+        {
+            var payment = await _paymentRepository.GetByIdAsync(paymentId);
+            if (payment == null || payment.UserId != userId)
+                throw new Exception("Không tìm thấy đơn hàng.");
+            if (payment.Status != Payment.PaymentStatus.Pending)
+                throw new Exception("Đơn hàng không còn ở trạng thái chờ.");
+
+            var promotion = await _promotionRepository.GetByCodeAsync(code);
+
+            // --- Logic kiểm tra mã ---
+            if (promotion == null)
+                throw new Exception("Mã khuyến mãi không tồn tại.");
+            if (!promotion.IsActive)
+                throw new Exception("Mã khuyến mãi đã bị vô hiệu hóa.");
+
+            var today = DateOnly.FromDateTime(DateTime.UtcNow);
+            if (today < promotion.StartDate || today > promotion.EndDate)
+                throw new Exception("Mã khuyến mãi không nằm trong thời gian áp dụng.");
+
+            if (await _redemptionRepository.HasUserRedeemedAsync(promotion.PromotionId, userId))
+                throw new Exception("Mã khuyến mãi này đã được bạn sử dụng.");
+
+            // --- Tính toán lại giá ---
+            // 1. Lấy giá gốc (phòng trường hợp áp dụng 2 lần)
+            var seats = await _seatRepository.GetByIdsAsync(payment.Tickets.Select(t => t.SeatId).ToList());
+            decimal originalAmount = seats.Sum(seat => CalculatePrice(seat));
+
+            // 2. Tính tiền sau giảm giá
+            decimal discount = originalAmount * promotion.DiscountPercent;
+            decimal finalAmount = originalAmount - discount;
+
+            // 3. Cập nhật Payment
+            payment.Amount = finalAmount;
+            payment.PromotionId = promotion.PromotionId; // (Lưu tạm)
+
+            await _paymentRepository.UpdateAsync(payment);
+
+            // 4. Trả về DTO mới
+            // (Gọi lại GetPaymentSummaryAsync để lấy DTO đã map)
+            return await GetPaymentSummaryAsync(paymentId, userId);
         }
     }
 }

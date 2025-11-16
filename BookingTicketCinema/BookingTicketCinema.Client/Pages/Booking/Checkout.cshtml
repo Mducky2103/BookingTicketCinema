@@ -49,7 +49,8 @@
                 <ul class="list-group mb-3 shadow-sm">
                     <li class="list-group-item d-flex justify-content-between fs-5">
                         <strong>Tổng cộng</strong>
-                        <strong>@Model.PaymentSummary.Amount.ToString("N0")đ</strong>
+                        @* <strong>@Model.PaymentSummary.Amount.ToString("N0")đ</strong> *@
+                        <strong id="total-amount">@Model.PaymentSummary.Amount.ToString("N0")đ</strong>
                     </li>
                 </ul>
 
@@ -57,6 +58,18 @@
                     Xác nhận Thanh toán
                 </button>
             </form>
+
+            <hr class="my-4">
+            <div id="voucher-section">
+                <h5 class="mb-3">Mã khuyến mãi</h5>
+                <div id="voucher-alert-placeholder"></div>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Nhập mã voucher" id="voucher-code-input">
+                    <button class="btn btn-secondary" type="button" id="btn-apply-voucher">
+                        Áp dụng
+                    </button>
+                </div>
+            </div>
 
             <form method="post" asp-page-handler="Cancel" class="mt-3">
 
@@ -78,4 +91,81 @@
 else if (string.IsNullOrEmpty(Model.ErrorMessage))
 {
     <div class="alert alert-info">Đang tải thông tin thanh toán...</div>
+}
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const applyButton = document.getElementById("btn-apply-voucher");
+            const voucherInput = document.getElementById("voucher-code-input");
+            const totalAmountDisplay = document.getElementById("total-amount");
+            const alertPlaceholder = document.getElementById("voucher-alert-placeholder");
+
+            // Lấy PaymentId từ Model (ẩn)
+            const paymentId = @Model.PaymentId;
+            const antiforgeryToken = '@Model.RequestVerificationToken';
+            applyButton.addEventListener("click", function () {
+                const code = voucherInput.value;
+                if (!code) {
+                    showAlert("Vui lòng nhập mã khuyến mãi.", "warning");
+                    return;
+                }
+
+                // Vô hiệu hóa nút
+                applyButton.disabled = true;
+                applyButton.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Đang xử lý...';
+
+                // Gọi API (Dùng Page Handler làm proxy cho AJAX)
+                applyVoucher(code);
+            });
+
+            async function applyVoucher(code) {
+                let result; // (Đưa result ra ngoài)
+
+                try {
+                    const response = await fetch('?handler=ApplyVoucher', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': antiforgeryToken
+                        },
+                        body: JSON.stringify({
+                            paymentId: paymentId,
+                            code: code
+                        })
+                    });
+
+                    // 1. Kiểm tra OK trước
+                    if (!response.ok) {
+                        // Nếu 400 (BadRequest), đọc JSON lỗi
+                        result = await response.json();
+                        showAlert(result.message, "danger");
+                    } else {
+                        // Nếu 200 (OK), đọc JSON thành công
+                        result = await response.json();
+                        showAlert("Áp dụng mã thành công!", "success");
+                        totalAmountDisplay.innerText = result.amount.toLocaleString('vi-VN') + 'đ';
+                        voucherInput.disabled = true;
+                        applyButton.disabled = true;
+                        applyButton.innerText = "Đã áp dụng";
+                    }
+                } catch (error) {
+                    // Lỗi này là lỗi SyntaxError (nếu body rỗng)
+                    // hoặc lỗi mạng.
+                    console.error("Fetch error:", error);
+                    showAlert("Lỗi hệ thống khi áp dụng mã. " + error.message, "danger");
+                } finally {
+                    if (!applyButton.disabled) {
+                        applyButton.disabled = false;
+                        applyButton.innerText = "Áp dụng";
+                    }
+                }
+            }
+
+            function showAlert(message, type) {
+                alertPlaceholder.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">'
+                    + message
+                    + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+            }
+        });
+    </script>
 }

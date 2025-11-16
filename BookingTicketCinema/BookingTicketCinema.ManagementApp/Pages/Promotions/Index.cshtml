@@ -1,0 +1,68 @@
+﻿@page
+@model BookingTicketCinema.ManagementApp.Pages.Promotions.IndexModel
+@{
+    ViewData["Title"] = "Quản lý Khuyến mãi";
+}
+
+<h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Quản trị /</span> @ViewData["Title"]
+</h4>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Danh sách Mã</h5>
+        <a asp-page="/Promotions/Create" class="btn btn-success">
+            <i class="bx bx-plus me-1"></i> Tạo mới
+        </a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Giảm giá</th>
+                    <th>Hiệu lực</th>
+                    <th>Trạng thái</th>
+                    <th>Đã dùng</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var promo in Model.Promotions)
+                {
+                    <tr>
+                        <td><strong class="text-primary">@promo.Code</strong></td>
+                        <td>@(promo.DiscountPercent * 100)%</td>
+                        <td>@promo.StartDate.ToString("dd/MM") - @promo.EndDate.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            @if (promo.IsActive && promo.EndDate.ToDateTime(TimeOnly.MinValue) >= DateTime.Today)
+                            {
+                                <span class="badge bg-label-success">Hoạt động</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-label-secondary">Hết hạn</span>
+                            }
+                        </td>
+                        <td>@promo.UsageCount lần</td>
+                        <td>
+                            <a asp-page="/Promotions/Edit" asp-route-id="@promo.PromotionId"
+                               class="btn btn-sm btn-info" title="Sửa">
+                                <i class="bx bx-edit"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

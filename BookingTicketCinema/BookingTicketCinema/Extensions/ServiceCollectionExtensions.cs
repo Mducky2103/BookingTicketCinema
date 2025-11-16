@@ -43,6 +43,14 @@ namespace BookingTicketCinema.Extensions
             services.AddScoped<IStatisticsRepository, StatisticsRepository>();
             services.AddScoped<IStatisticsService, StatisticsService>();
 
+            services.AddScoped<IPromotionRepository, PromotionRepository>();
+            services.AddScoped<IPromotionService, PromotionService>();
+
+            services.AddScoped<IPromotionRepository, PromotionRepository>();
+            services.AddScoped<IPromotionService, PromotionService>();
+
+            services.AddScoped<IVoucherRedemptionRepository, VoucherRedemptionRepository>();
+
             return services;
         }
     }

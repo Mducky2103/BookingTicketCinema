@@ -9,5 +9,6 @@ namespace BookingTicketCinema.Services.Interface
         Task<bool> CancelPaymentAsync(int paymentId, string userId);
         Task<PaymentResponseDto> GetPaymentSummaryAsync(int paymentId, string userId);
         Task<PaymentResponseDto> GetPaymentDetailsAsync(int paymentId, string userId);
+        Task<PaymentResponseDto> ApplyVoucherAsync(int paymentId, string code, string userId);
     }
 }

@@ -21,7 +21,9 @@ namespace BookingTicketCinema.Models
         public string UserId { get; set; } = string.Empty;
         public User User { get; set; } = null!;
 
-        // 1 Payment (Đơn hàng) sẽ có NHIỀU Vé
+        [ForeignKey("Promotion")]
+        public int? PromotionId { get; set; } 
+        public Promotion? Promotion { get; set; }
         public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 
         public enum PaymentMethod

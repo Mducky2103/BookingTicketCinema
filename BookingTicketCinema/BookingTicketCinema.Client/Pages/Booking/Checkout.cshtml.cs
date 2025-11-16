@@ -1,5 +1,6 @@
 ﻿using BookingTicketCinema.WebApp.Services;
 using BookingTicketCinema.WebApp.ViewModel;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,14 +10,17 @@ namespace BookingTicketCinema.WebApp.Pages.Booking
     public class CheckoutModel : PageModel
     {
         private readonly IApiClientService _apiService;
+        private readonly IAntiforgery _antiforgery; 
+        public string RequestVerificationToken { get; private set; } 
 
         // Dùng để lưu MovieId tạm thời khi redirect
         [TempData]
         public int? LastMovieId { get; set; }
 
-        public CheckoutModel(IApiClientService apiService)
+        public CheckoutModel(IApiClientService apiService, IAntiforgery antiforgery) 
         {
             _apiService = apiService;
+            _antiforgery = antiforgery; 
         }
 
         [BindProperty(SupportsGet = true)]
@@ -32,7 +36,38 @@ namespace BookingTicketCinema.WebApp.Pages.Booking
 
         public PaymentResponseDto? PaymentSummary { get; set; }
         public string? ErrorMessage { get; set; }
+        public class VoucherApplyInput
+        {
+            public int PaymentId { get; set; }
+            public string Code { get; set; } = string.Empty;
+        }
+        public async Task<IActionResult> OnPostApplyVoucherAsync([FromBody] VoucherApplyInput input)
+        {
+            // (Xác thực Token thủ công cho AJAX)
+            try
+            {
+                await _antiforgery.ValidateRequestAsync(HttpContext);
+            }
+            catch (AntiforgeryValidationException)
+            {
+                return new BadRequestObjectResult(new { message = "Lỗi bảo mật." });
+            }
 
+            try
+            {
+                var accessToken = GetToken();
+                // Gọi Service đã viết
+                var updatedPayment = await _apiService.ApplyVoucherAsync(input.PaymentId, input.Code, accessToken);
+
+                // Trả về DTO mới (chỉ chứa giá tiền)
+                return new OkObjectResult(new { amount = updatedPayment.Amount });
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi (VD: "Mã đã dùng")
+                return new BadRequestObjectResult(new { message = ex.Message });
+            }
+        }
         public async Task<IActionResult> OnGetAsync()
         {
             try
@@ -65,6 +100,7 @@ namespace BookingTicketCinema.WebApp.Pages.Booking
                 }
 
                 this.PaymentId = PaymentSummary.PaymentId;
+                RequestVerificationToken = _antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
                 return Page();
             }
             catch (Exception ex)

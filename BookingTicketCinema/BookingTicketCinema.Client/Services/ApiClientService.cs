@@ -1,4 +1,6 @@
 ﻿using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 using BookingTicketCinema.WebApp.ViewModel;
 
 namespace BookingTicketCinema.WebApp.Services
@@ -208,6 +210,30 @@ namespace BookingTicketCinema.WebApp.Services
             }
 
             return await client.GetFromJsonAsync<List<MovieViewModel>>(endpoint) ?? new();
+        }
+
+        public async Task<PaymentResponseDto> ApplyVoucherAsync(int paymentId, string code, string token)
+        {
+            var client = CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var request = new { PaymentId = paymentId, Code = code };
+            var json = JsonSerializer.Serialize(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync("api/payment/apply-voucher", content);
+
+            // Xử lý lỗi (quan trọng)
+            if (!response.IsSuccessStatusCode)
+            {
+                // Đọc lỗi từ API (VD: "Mã đã dùng rồi")
+                var errorResponse = await response.Content.ReadFromJsonAsync<object>();
+                throw new Exception(errorResponse?.ToString() ?? "Lỗi không xác định");
+            }
+
+            // Trả về Payment DTO mới
+            return await response.Content.ReadFromJsonAsync<PaymentResponseDto>()
+                ?? throw new Exception("Không nhận được phản hồi sau khi áp dụng mã.");
         }
     }
 }
