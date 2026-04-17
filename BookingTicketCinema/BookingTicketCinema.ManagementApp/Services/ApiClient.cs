@@ -35,7 +35,7 @@ namespace BookingTicketCinema.ManagementApp.Services
             else
             {
                 _httpClient.DefaultRequestHeaders.Authorization = null;
-                _logger.LogWarning("⚠️ Không tìm thấy token đăng nhập để gắn vào request.");
+                _logger.LogWarning(" Không tìm thấy token đăng nhập để gắn vào request.");
             }
         }
 

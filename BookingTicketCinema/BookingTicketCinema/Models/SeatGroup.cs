@@ -11,6 +11,9 @@ namespace BookingTicketCinema.Models
         [Required, MaxLength(100)]
         public string GroupName { get; set; } = null!; // Ví dụ: Standard, VIP, Couple
 
+        [MaxLength(20)]
+        public string? ColorCode { get; set; }
+
         [Required]
         public SeatType Type { get; set; }
 

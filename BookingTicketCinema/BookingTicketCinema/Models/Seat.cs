@@ -11,6 +11,12 @@ namespace BookingTicketCinema.Models
         [Required, MaxLength(10)]
         public string SeatNumber { get; set; } = null!;
 
+        // Tọa độ để vẽ lên Grid
+        [Required]
+        public int RowIndex { get; set; }   
+        [Required]
+        public int ColumnIndex { get; set; } 
+
         [Required]
         public SeatStatus Status { get; set; } = SeatStatus.Empty;
 

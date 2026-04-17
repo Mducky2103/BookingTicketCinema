@@ -12,6 +12,10 @@ namespace BookingTicketCinema.Models
 
         public int Capacity { get; set; }
 
+        // Lưu thông tin về số hàng và số cột để dễ dàng quản lý chỗ ngồi
+        public int TotalRows { get; set; }  
+        public int TotalColumns { get; set; }
+
         [Required]
         public RoomType Type { get; set; }
 

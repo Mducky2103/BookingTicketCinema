@@ -21,21 +21,18 @@ namespace BookingTicketCinema.WebApp.Services
         public async Task<List<MovieFeaturedViewModel>> GetFeaturedMoviesAsync()
         {
             var client = CreateClient();
-            // Gọi endpoint mới
             return await client.GetFromJsonAsync<List<MovieFeaturedViewModel>>("api/MovieForClient/featured") ?? new();
         }
 
         public async Task<List<MovieCardViewModel>> GetNowShowingMoviesAsync()
         {
             var client = CreateClient();
-            // Gọi endpoint mới
             return await client.GetFromJsonAsync<List<MovieCardViewModel>>("api/MovieForClient/now-showing") ?? new();
         }
 
         public async Task<List<MovieCardViewModel>> GetComingSoonMoviesAsync()
         {
             var client = CreateClient();
-            // Gọi endpoint mới
             return await client.GetFromJsonAsync<List<MovieCardViewModel>>("api/MovieForClient/coming-soon") ?? new();
         }
 
