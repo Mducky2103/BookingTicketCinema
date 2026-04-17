@@ -17,6 +17,17 @@ namespace BookingTicketCinema.Models
         [Required]
         public PaymentStatus Status { get; set; }
 
+        // --- BỔ SUNG CHO NGHIỆP VỤ CHECK-IN ---
+
+        [MaxLength(20)]
+        public string? BookingCode { get; set; } // Mã rút gọn (VD: BK7A8D2) để check-in thủ công
+
+        public bool IsCheckedIn { get; set; } = false; // Đánh dấu đã soát vé chưa
+
+        public DateTime? CheckInTime { get; set; } // Thời điểm thực hiện soát vé tại quầy
+
+        // --------------------------------------
+
         [ForeignKey("User")]
         public string UserId { get; set; } = string.Empty;
         public User User { get; set; } = null!;
