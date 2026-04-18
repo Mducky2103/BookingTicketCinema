@@ -57,6 +57,20 @@ namespace BookingTicketCinema.Repositories
                 .OrderBy(s => s.StartTime)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Showtime>> GetOverlappingShowtimesAsync(int roomId, DateTime start, DateTime end)
+        {
+            return await _context.Showtimes
+                .AsNoTracking()
+                .Include(s => s.Movie)
+                .Where(s => s.RoomId == roomId && start < s.EndTime && end > s.StartTime)
+                .ToListAsync();
+        }
+
+        public async Task AddRangeAsync(IEnumerable<Showtime> showtimes)
+        {
+            await _context.Showtimes.AddRangeAsync(showtimes);
+        }
     }
 }
 

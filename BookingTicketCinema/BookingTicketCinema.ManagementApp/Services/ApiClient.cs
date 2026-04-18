@@ -69,8 +69,6 @@ namespace BookingTicketCinema.ManagementApp.Services
         // POS Bước 1: Chọn Phim
         public async Task<HttpResponseMessage> GetMoviesAsync()
         {
-            // (API này bên Backend đang AllowAnonymous, 
-            // nhưng chúng ta cứ gắn token để bảo mật nếu cần)
             return await GetAsync("api/Movie");
         }
 

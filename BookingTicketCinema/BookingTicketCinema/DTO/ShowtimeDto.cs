@@ -29,6 +29,12 @@ namespace BookingTicketCinema.DTO
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
+    public class ShowTimeBulkCreateDto
+    {
+        public int MovieId { get; set; }
+        public int RoomId { get; set; }
+        public List<DateTime> StartTimes { get; set; } = new List<DateTime>();
+    }
 }
 
 

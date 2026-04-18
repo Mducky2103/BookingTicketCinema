@@ -12,6 +12,8 @@ namespace BookingTicketCinema.Repositories.Interface
         Task UpdateAsync(Showtime showtime);
         Task DeleteAsync(Showtime showtime);
         Task SaveChangesAsync();
+        Task<IEnumerable<Showtime>> GetOverlappingShowtimesAsync(int roomId, DateTime start, DateTime end);
+        Task AddRangeAsync(IEnumerable<Showtime> showtimes);
     }
 }
 

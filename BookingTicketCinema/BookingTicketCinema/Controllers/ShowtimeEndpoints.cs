@@ -17,7 +17,53 @@ namespace BookingTicketCinema.Controllers
             app.MapGet("/showtimes/GetShowtimeById/{id}", GetShowtimeById);
             app.MapGet("/showtimes/GetShowtimesByRoom/{roomId}", GetShowtimesByRoom);
             app.MapGet("/showtimes/GetShowtimesByMovie/{movieId}", GetShowtimesByMovieId);
+
+            // 1. Đăng ký Endpoint tạo hàng loạt (Bulk Create)
+            app.MapPost("/showtimes/CreateBulkShowtime", CreateBulkShowtime);
+
+            // 2. Đăng ký Endpoint kiểm tra trùng lịch nhanh (Check Overlap)
+            app.MapGet("/showtimes/CheckOverlap", CheckOverlap);
             return app;
+        }
+
+        // ===================== PHẦN CODE TẠO HÀNG LOẠT =====================
+        [Authorize(Roles = "Admin, Staff")]
+        private static async Task<IResult> CreateBulkShowtime(
+            [FromBody] ShowTimeBulkCreateDto bulkDto,
+            IShowtimeService showtimeService)
+        {
+            if (bulkDto == null || bulkDto.StartTimes == null || !bulkDto.StartTimes.Any())
+            {
+                return Results.BadRequest(new { message = "Danh sách giờ bắt đầu không được để trống." });
+            }
+
+            // Gọi service xử lý logic bulk
+            var result = await showtimeService.CreateBulkAsync(bulkDto);
+
+            return Results.Ok(new
+            {
+                message = $"Đã xử lý xong. Thành công: {result.Success.Count}, Thất bại: {result.Errors.Count}",
+                successData = result.Success,
+                errors = result.Errors // Trả về danh sách các suất bị trùng để báo lỗi trên form
+            });
+        }
+
+        // ===================== KIỂM TRA TRÙNG LỊCH NHANH =====================
+        [Authorize(Roles = "Admin, Staff")]
+        private static async Task<IResult> CheckOverlap(
+            [FromQuery] int roomId,
+            [FromQuery] DateTime startTime,
+            [FromQuery] int movieId,
+            IShowtimeService showtimeService)
+        {
+            // API này dùng để Frontend gọi ngay khi Admin vừa nhập giờ để báo lỗi đỏ tại chỗ
+            var isOverlap = await showtimeService.IsOverlapAsync(roomId, startTime, movieId);
+
+            return Results.Ok(new
+            {
+                isOverlap = isOverlap,
+                message = isOverlap ? "Khung giờ này đã có suất chiếu khác!" : "Khung giờ hợp lệ."
+            });
         }
 
         [Authorize(Roles = "Admin, Staff")]
