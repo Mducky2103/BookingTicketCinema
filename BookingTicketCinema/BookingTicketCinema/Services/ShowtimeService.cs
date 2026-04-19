@@ -19,10 +19,30 @@ namespace BookingTicketCinema.Services
         }
 
         // ===================== GET ALL =====================
-        public async Task<IEnumerable<ShowtimeResponseDto>> GetAllAsync()
+        public async Task<PagedResult<ShowtimeResponseDto>> GetAllAsync(int pageNumber, int pageSize)
         {
-            var showtimes = await _showtimeRepository.GetAllAsync();
-            return showtimes.Select(MapToResponseDto);
+            if (pageNumber <= 0) pageNumber = 1;
+            if (pageSize <= 0) pageSize = 15;
+            var all = (await _showtimeRepository.GetAllAsync()).AsQueryable();
+
+            var ordered = all.OrderByDescending(s => s.StartTime);
+
+            var totalCount = ordered.Count();
+
+            var paged = ordered
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var items = paged.Select(MapToResponseDto).ToList();
+
+            return new PagedResult<ShowtimeResponseDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
         }
 
         // ===================== CREATE =====================
@@ -32,8 +52,6 @@ namespace BookingTicketCinema.Services
             // 1️⃣ Validate thời gian
             if (dto.StartTime <= DateTime.Now)
                 throw new InvalidOperationException("StartTime phải nằm trong tương lai.");
-            if (dto.EndTime <= dto.StartTime)
-                throw new InvalidOperationException("EndTime phải sau StartTime.");
 
             // 2️⃣ Validate Movie và Room có tồn tại
             //var movieExists = await _context.Movies.AnyAsync(m => m.MovieId == dto.MovieId);
@@ -52,13 +70,13 @@ namespace BookingTicketCinema.Services
 
             // 3️⃣ Check trùng lịch trong cùng phòng
             var overlap = await _context.Showtimes
-                .AnyAsync(s => s.RoomId == dto.RoomId &&
-                               ((dto.StartTime >= s.StartTime && dto.StartTime < s.EndTime) ||
-                                (dto.EndTime > s.StartTime && dto.EndTime <= s.EndTime) ||
-                                (dto.StartTime <= s.StartTime && dto.EndTime >= s.EndTime)));
+                                 .AnyAsync(s => s.RoomId == dto.RoomId &&
+                                                ((dto.StartTime >= s.StartTime && dto.StartTime < s.EndTime) ||
+                                                 (calculatedEndTime > s.StartTime && calculatedEndTime <= s.EndTime) ||
+                                                 (dto.StartTime <= s.StartTime && calculatedEndTime >= s.EndTime)));
             if (overlap)
                 throw new InvalidOperationException("Phòng này đã có suất chiếu trùng giờ.");
-            
+
             // 4️⃣ Tạo mới
             var showtime = new Showtime
             {
@@ -178,54 +196,55 @@ namespace BookingTicketCinema.Services
         {
             var showtime = await _showtimeRepository.GetByIdAsync(id);
             if (showtime == null)
-                throw new InvalidOperationException("Không tìm thấy showtime.");
+                throw new InvalidOperationException("Không tìm thấy suất chiếu.");
 
-            // 1️⃣ Validate thời gian
+            // 1️⃣ Chuẩn bị dữ liệu mới (Nếu không gửi thì lấy giá trị cũ)
+            var newStartTime = dto.StartTime ?? showtime.StartTime;
+            var newMovieId = dto.MovieId ?? showtime.MovieId;
+            var newRoomId = dto.RoomId ?? showtime.RoomId;
+
+            // 2️⃣ Validate thời gian bắt đầu
             if (dto.StartTime.HasValue && dto.StartTime.Value <= DateTime.Now)
-                throw new InvalidOperationException("StartTime phải nằm trong tương lai.");
+                throw new InvalidOperationException("Thời gian bắt đầu phải nằm trong tương lai.");
 
-            if (dto.EndTime.HasValue && dto.StartTime.HasValue && dto.EndTime <= dto.StartTime)
-                throw new InvalidOperationException("EndTime phải sau StartTime.");
+            // 3️⃣ Lấy thông tin phim để tính EndTime (Cần lấy Duration)
+            var movie = await _context.Movies.AsNoTracking()
+                .FirstOrDefaultAsync(m => m.MovieId == newMovieId);
 
-            // 2️⃣ Validate Movie và Room tồn tại
-            if (dto.MovieId.HasValue)
-            {
-                var movieExists = await _context.Movies.AnyAsync(m => m.MovieId == dto.MovieId.Value);
-                if (!movieExists)
-                    throw new InvalidOperationException($"MovieId {dto.MovieId.Value} không tồn tại.");
-            }
+            if (movie == null)
+                throw new InvalidOperationException($"Phim ID {newMovieId} không tồn tại.");
 
+            var newEndTime = newStartTime.Add(movie.Duration).AddMinutes(CLEANING_MINUTES);
+            // 4️⃣ Validate Room tồn tại
             if (dto.RoomId.HasValue)
             {
                 var roomExists = await _context.Rooms.AnyAsync(r => r.RoomId == dto.RoomId.Value);
                 if (!roomExists)
-                    throw new InvalidOperationException($"RoomId {dto.RoomId.Value} không tồn tại.");
+                    throw new InvalidOperationException($"Phòng ID {dto.RoomId.Value} không tồn tại.");
             }
 
-            // 3️⃣ Check trùng lịch nếu có đổi phòng hoặc giờ
-            var newRoomId = dto.RoomId ?? showtime.RoomId;
-            var newStart = dto.StartTime ?? showtime.StartTime;
-            var newEnd = dto.EndTime ?? showtime.EndTime;
-
+            // 5️⃣ Check trùng lịch (Dùng newEndTime vừa tính)
             var overlap = await _context.Showtimes
                 .AnyAsync(s => s.ShowtimeId != id &&
                                s.RoomId == newRoomId &&
-                               ((newStart >= s.StartTime && newStart < s.EndTime) ||
-                                (newEnd > s.StartTime && newEnd <= s.EndTime) ||
-                                (newStart <= s.StartTime && newEnd >= s.EndTime)));
-            if (overlap)
-                throw new InvalidOperationException("Phòng này đã có suất chiếu trùng giờ.");
+                               ((newStartTime >= s.StartTime && newStartTime < s.EndTime) ||
+                                (newEndTime > s.StartTime && newEndTime <= s.EndTime) ||
+                                (newStartTime <= s.StartTime && newEndTime >= s.EndTime)));
 
-            // 4️⃣ Cập nhật
-            showtime.StartTime = newStart;
-            showtime.EndTime = newEnd;
-            showtime.MovieId = dto.MovieId ?? showtime.MovieId;
+            if (overlap)
+                throw new InvalidOperationException("Phòng này đã có suất chiếu khác trùng vào khung giờ này.");
+
+            // 6️⃣ Cập nhật thông tin
+            showtime.MovieId = newMovieId;
             showtime.RoomId = newRoomId;
+            showtime.StartTime = newStartTime;
+            showtime.EndTime = newEndTime; // Gán EndTime tự động
             showtime.UpdatedAt = DateTime.UtcNow;
 
             await _showtimeRepository.UpdateAsync(showtime);
             await _showtimeRepository.SaveChangesAsync();
 
+            // Load lại dữ liệu để trả về đầy đủ MovieName, RoomName
             var reloaded = await _context.Showtimes
                 .Include(s => s.Movie)
                 .Include(s => s.Room)

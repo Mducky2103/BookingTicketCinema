@@ -23,6 +23,12 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
         public List<SelectListItem> MovieOptions { get; set; } = new();
         public List<SelectListItem> RoomOptions { get; set; } = new();
 
+        // Paging
+        public int CurrentPage { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
+        public int TotalPages { get; set; }
+        public int TotalCount { get; set; }
+
         [TempData] public string? Success { get; set; }
         [TempData] public string? Error { get; set; }
 
@@ -35,24 +41,49 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
             public int MovieId { get; set; }
             public int RoomId { get; set; }
             public DateTime StartTime { get; set; }
-            public DateTime EndTime { get; set; }
+            //public DateTime EndTime { get; set; }
         }
 
         // =========================
         // HIỂN THỊ DANH SÁCH
         // =========================
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int pageNumber = 1, int pageSize = 15)
         {
+            CurrentPage = pageNumber <= 0 ? 1 : pageNumber;
+            PageSize = pageSize <= 0 ? 15 : pageSize;
+
             await LoadDropdownDataAsync();
 
             try
             {
-                var res = await _api.GetAsync("/api/showtimes/GetAllShowtime");
+                var url = $"/api/showtimes/GetAllShowtime?pageNumber={CurrentPage}&pageSize={PageSize}";
+                var res = await _api.GetAsync(url);
+
                 if (res.IsSuccessStatusCode)
                 {
                     var json = await res.Content.ReadAsStringAsync();
-                    Showtimes = JsonSerializer.Deserialize<List<ShowtimeViewModel1>>(json,
-                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
+
+                    // Try to parse paged result first; fall back to plain list for backward compatibility
+                    if (!string.IsNullOrWhiteSpace(json) && json.TrimStart().StartsWith("["))
+                    {
+                        // old format: list
+                        Showtimes = JsonSerializer.Deserialize<List<ShowtimeViewModel1>>(json,
+                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
+                        TotalCount = Showtimes.Count;
+                        TotalPages = (int)Math.Ceiling(TotalCount / (double)PageSize);
+                    }
+                    else
+                    {
+                        var paged = JsonSerializer.Deserialize<PagedResult<ShowtimeViewModel1>>(json,
+                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                                   ?? new PagedResult<ShowtimeViewModel1>();
+
+                        Showtimes = paged.Items ?? new List<ShowtimeViewModel1>();
+                        CurrentPage = paged.PageNumber <= 0 ? CurrentPage : paged.PageNumber;
+                        PageSize = paged.PageSize <= 0 ? PageSize : paged.PageSize;
+                        TotalCount = paged.TotalCount;
+                        TotalPages = paged.TotalPages;
+                    }
                 }
                 else
                 {
@@ -73,7 +104,6 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
         {
             try
             {
-                // --- Movies ---
                 var resMovie = await _api.GetAsync("/api/Movie");
                 if (resMovie.IsSuccessStatusCode)
                 {
@@ -88,7 +118,6 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
                     }).ToList();
                 }
 
-                // --- Rooms ---
                 var resRoom = await _api.GetAsync("/api/rooms");
                 if (resRoom.IsSuccessStatusCode)
                 {
@@ -126,21 +155,16 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
                 var res = await _api.PostAsync("/api/showtimes/CreateShowtime", content);
 
                 if (res.IsSuccessStatusCode)
-                {
-                    Success = "Đã thêm suất chiếu mới thành công.";
-                }
+                    Success = "Tạo suất chiếu thành công";
                 else
-                {
-                    var err = await res.Content.ReadAsStringAsync();
-                    Error = $"Thêm thất bại: {ExtractApiError(err)}";
-                }
+                    Error = ExtractApiError(await res.Content.ReadAsStringAsync());
             }
             catch (Exception ex)
             {
-                Error = $"Lỗi hệ thống khi thêm: {ex.Message}";
+                Error = ex.Message;
             }
 
-            return RedirectToPage();
+            return RedirectToPage(new { pageNumber = CurrentPage, pageSize = PageSize });
         }
 
         // =========================
@@ -155,21 +179,16 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
                 var res = await _api.PutAsync($"/api/showtimes/UpdateShowtime/{input.ShowtimeId}", content);
 
                 if (res.IsSuccessStatusCode)
-                {
-                    Success = "Cập nhật suất chiếu thành công.";
-                }
+                    Success = "Cập nhật thành công";
                 else
-                {
-                    var err = await res.Content.ReadAsStringAsync();
-                    Error = $"Cập nhật thất bại: {ExtractApiError(err)}";
-                }
+                    Error = ExtractApiError(await res.Content.ReadAsStringAsync());
             }
             catch (Exception ex)
             {
-                Error = $"Lỗi hệ thống khi cập nhật: {ex.Message}";
+                Error = ex.Message;
             }
 
-            return RedirectToPage();
+            return RedirectToPage(new { pageNumber = CurrentPage, pageSize = PageSize });
         }
 
         // =========================
@@ -182,21 +201,59 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
                 var res = await _api.DeleteAsync($"/api/showtimes/DeleteShowtime/{id}");
 
                 if (res.IsSuccessStatusCode)
+                    Success = "Xóa thành công";
+                else
+                    Error = ExtractApiError(await res.Content.ReadAsStringAsync());
+            }
+            catch (Exception ex)
+            {
+                Error = ex.Message;
+            }
+
+            return RedirectToPage(new { pageNumber = CurrentPage, pageSize = PageSize });
+        }
+
+        // =========================
+        // CREATE BULK
+        // =========================
+        public async Task<IActionResult> OnPostCreateBulkAsync(int MovieId, int RoomId, string StartTimesText)
+        {
+            try
+            {
+                var times = StartTimesText
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(t => DateTime.Parse(t.Trim()))
+                    .ToList();
+
+                var payload = new
                 {
-                    Success = "Đã xóa suất chiếu thành công.";
+                    MovieId,
+                    RoomId,
+                    StartTimes = times
+                };
+
+                var json = JsonSerializer.Serialize(payload);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var res = await _api.PostAsync("/api/showtimes/CreateBulkShowtime", content);
+
+                if (res.IsSuccessStatusCode)
+                {
+                    var response = await res.Content.ReadAsStringAsync();
+                    Success = "Tạo hàng loạt thành công!";
                 }
                 else
                 {
                     var err = await res.Content.ReadAsStringAsync();
-                    Error = $"Xóa thất bại: {ExtractApiError(err)}";
+                    Error = ExtractApiError(err);
                 }
             }
             catch (Exception ex)
             {
-                Error = $"Lỗi hệ thống khi xóa: {ex.Message}";
+                Error = $"Lỗi bulk: {ex.Message}";
             }
 
-            return RedirectToPage();
+            return RedirectToPage(new { pageNumber = CurrentPage, pageSize = PageSize });
         }
 
         // =========================
@@ -205,22 +262,15 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
         private static string ExtractApiError(string rawError)
         {
             if (string.IsNullOrWhiteSpace(rawError))
-                return "Không rõ nguyên nhân.";
+                return "Không rõ lỗi";
 
-            string msg = rawError;
+            if (rawError.Contains(" at "))
+                rawError = rawError.Split(" at ")[0];
 
-            // Cắt phần stack trace
-            if (msg.Contains(" at "))
-                msg = msg.Split(" at ")[0];
+            if (rawError.Contains(":"))
+                rawError = rawError.Split(':').Last().Trim();
 
-            // Lấy phần sau dấu ":" cuối cùng (thường là thông điệp lỗi chính)
-            if (msg.Contains(":"))
-                msg = msg.Split(':').LastOrDefault()?.Trim() ?? msg;
-
-            // Làm sạch ký tự đặc biệt và dòng thừa
-            msg = msg.Replace("\r", "").Replace("\n", "").Trim();
-
-            return msg;
+            return rawError.Replace("\n", "").Replace("\r", "").Trim();
         }
 
         // =========================
@@ -251,6 +301,16 @@ namespace BookingTicketCinema.ManagementApp.Pages.Showtimes
             public int RoomId { get; set; }
             public string Name { get; set; } = string.Empty;
             public byte Type { get; set; }
+        }
+
+        // Local PagedResult to match API response without adding a shared DTO reference
+        private class PagedResult<T>
+        {
+            public List<T> Items { get; set; } = new();
+            public int TotalCount { get; set; }
+            public int PageNumber { get; set; }
+            public int PageSize { get; set; }
+            public int TotalPages => PageSize == 0 ? 0 : (int)Math.Ceiling((double)TotalCount / PageSize);
         }
     }
 }

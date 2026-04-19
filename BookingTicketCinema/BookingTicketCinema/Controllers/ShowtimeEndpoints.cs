@@ -49,7 +49,7 @@ namespace BookingTicketCinema.Controllers
         }
 
         // ===================== KIỂM TRA TRÙNG LỊCH NHANH =====================
-        [Authorize(Roles = "Admin, Staff")]
+        [AllowAnonymous]
         private static async Task<IResult> CheckOverlap(
             [FromQuery] int roomId,
             [FromQuery] DateTime startTime,
@@ -107,10 +107,14 @@ namespace BookingTicketCinema.Controllers
         }
 
         [AllowAnonymous]
-        private static async Task<IResult> GetAllShowtimes(IShowtimeService showtimeService)
+        private static async Task<IResult> GetAllShowtimes(
+            IShowtimeService showtimeService,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 15)
         {
-            var showtimes = await showtimeService.GetAllAsync();
-            return Results.Ok(showtimes);
+            // service now returns a PagedResult<ShowtimeResponseDto>
+            var paged = await showtimeService.GetAllAsync(pageNumber, pageSize);
+            return Results.Ok(paged);
         }
 
         [AllowAnonymous]

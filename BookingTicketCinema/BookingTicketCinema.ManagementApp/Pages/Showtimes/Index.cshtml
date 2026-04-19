@@ -26,11 +26,19 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title m-0 me-2">Suất chiếu</h5>
-                <button type="button" class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#createShowtimeModal">
-                    <i class="bx bx-plus me-1"></i>
-                    <span>Thêm Suất Chiếu Mới</span>
-                </button>
+                <h5 class="card-title m-0 me-2">Suát chiếu</h5>
+                <div class="d-flex align-items-center">
+                    <button type="button" class="btn btn-success shadow-sm me-2"
+                            data-bs-toggle="modal"
+                            data-bs-target="#bulkShowtimeModal">
+                        <i class="bx bx-layer-plus me-1"></i>
+                        <span>Tạo hàng loạt</span>
+                    </button>
+                    <button type="button" class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#createShowtimeModal">
+                        <i class="bx bx-plus me-1"></i>
+                        <span>Thêm Suất Chiếu Mới</span>
+                    </button>
+                </div>
             </div>
             <div class="table-responsive text-nowrap">
                 <table class="table table-striped table-hover align-middle mb-0">
@@ -67,8 +75,7 @@
                                                 data-showtime-id="@s.ShowtimeId"
                                                 data-movie-id="@s.MovieId"
                                                 data-room-id="@s.RoomId"
-                                                data-start="@s.StartTime.ToString("yyyy-MM-ddTHH:mm")"
-                                                data-end="@s.EndTime.ToString("yyyy-MM-ddTHH:mm")">
+                                                data-start="@s.StartTime.ToString("yyyy-MM-ddTHH:mm")">
                                             <i class="bx bx-pencil"></i>
                                         </button>
                                         <button type="button"
@@ -96,6 +103,73 @@
                     </tbody>
                 </table>
             </div>
+
+            @* ========== PAGINATION ========== *@
+            @if (Model.TotalPages > 1)
+            {
+                <div class="card-footer d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+                    <div class="text-muted small">
+                        Hiển thị @Model.Showtimes.Count() trên tổng @Model.TotalCount kết quả
+                    </div>
+
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination mb-0">
+                            <li class="page-item @(Model.CurrentPage <= 1 ? "disabled" : "")">
+                                <a class="page-link" asp-page="./Index" asp-route-pageNumber="@(Model.CurrentPage - 1)" asp-route-pageSize="@(Model.PageSize)">‹</a>
+                            </li>
+
+                            @for (int i = 1; i <= Model.TotalPages; i++)
+                            {
+                                // Simple condense: show all if small count, otherwise show current ±2 and first/last
+                                bool show = Model.TotalPages <= 9
+                                            || i == 1
+                                            || i == Model.TotalPages
+                                            || (i >= Model.CurrentPage - 2 && i <= Model.CurrentPage + 2);
+
+                                if (!show)
+                                {
+                                    // place ellipsis where appropriate
+                                    if (i == 2 && Model.CurrentPage - 3 > 2)
+                                    {
+                                        <li class="page-item disabled"><span class="page-link">…</span></li>
+                                    }
+                                    else if (i == Model.TotalPages - 1 && Model.CurrentPage + 3 < Model.TotalPages - 1)
+                                    {
+                                        <li class="page-item disabled"><span class="page-link">…</span></li>
+                                    }
+                                    continue;
+                                }
+
+                                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                    <a class="page-link" asp-page="./Index" asp-route-pageNumber="@i" asp-route-pageSize="@(Model.PageSize)">@i</a>
+                                </li>
+                            }
+
+                            <li class="page-item @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
+                                <a class="page-link" asp-page="./Index" asp-route-pageNumber="@(Model.CurrentPage + 1)" asp-route-pageSize="@(Model.PageSize)">›</a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <div>
+                        <form method="get" class="d-inline-block">
+                            <input type="hidden" name="pageNumber" value="1" />
+                            <select name="pageSize" class="form-select form-select-sm" style="width:auto; display:inline-block;" onchange="this.form.pageNumber.value=1; this.form.submit();">
+                                <option value="5" selected="@(Model.PageSize == 5 ? "selected" : null)">5</option>
+                                <option value="10" selected="@(Model.PageSize == 10 ? "selected" : null)">10</option>
+                                <option value="15" selected="@(Model.PageSize == 15 ? "selected" : null)">15</option>
+                                <option value="25" selected="@(Model.PageSize == 25 ? "selected" : null)">25</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card-footer">
+                    <div class="text-muted small">Hiển thị tất cả kết quả</div>
+                </div>
+            }
         </div>
     </div>
 </div>
@@ -132,11 +206,8 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Thời gian bắt đầu</label>
-                        <input type="datetime-local" class="form-control" name="StartTime" required />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Thời gian kết thúc</label>
-                        <input type="datetime-local" class="form-control" name="EndTime" required />
+                        <input type="datetime-local" class="form-control" id="createStartTime" name="StartTime" required />
+                        <small id="createOverlapMsg" class="text-danger d-none"></small>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -182,10 +253,7 @@
                     <div class="mb-3">
                         <label class="form-label">Thời gian bắt đầu</label>
                         <input type="datetime-local" id="editStartTime" class="form-control" name="StartTime" required />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Thời gian kết thúc</label>
-                        <input type="datetime-local" id="editEndTime" class="form-control" name="EndTime" required />
+                        <small id="editOverlapMsg" class="text-danger d-none"></small>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -226,6 +294,73 @@
     </div>
 </div>
 
+@* ====================== MODAL: Tạo Hàng Loạt ====================== *@
+<div class="modal fade" id="bulkShowtimeModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Tạo suất chiếu hàng loạt</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form method="post" asp-page-handler="CreateBulk">
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label class="form-label">Phim</label>
+                        <select class="form-select" name="MovieId" required>
+                            <option value="">Chọn phim</option>
+                            @foreach (var m in Model.MovieOptions)
+                            {
+                                <option value="@m.Value">@m.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Phòng</label>
+                        <select class="form-select" name="RoomId" required>
+                            @foreach (var r in Model.RoomOptions)
+                            {
+                                <option value="@r.Value">@r.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Danh sách giờ bắt đầu</label>
+
+                        <div id="timeList">
+                            <div class="input-group mb-2 time-item">
+                                <div class="input-group">
+                                    <input type="datetime-local" class="form-control time-input" required />
+                                    <button type="button" class="btn btn-danger remove-time">
+                                        <i class="bx bx-trash"></i>
+                                    </button>
+                                </div>
+                                <small class="text-danger overlap-msg d-none"></small>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="addTimeBtn">
+                            <i class="bx bx-plus"></i> Thêm giờ
+                        </button>
+
+                        <input type="hidden" name="StartTimesText" id="hiddenTimes" />
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Tạo hàng loạt</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
 @section PageScripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -238,7 +373,7 @@
                     document.getElementById('editMovieId').value = btn.getAttribute('data-movie-id');
                     document.getElementById('editRoomId').value = btn.getAttribute('data-room-id');
                     document.getElementById('editStartTime').value = btn.getAttribute('data-start');
-                    document.getElementById('editEndTime').value = btn.getAttribute('data-end');
+                    // document.getElementById('editEndTime').value = btn.getAttribute('data-end');
                 });
             }
 
@@ -251,6 +386,196 @@
                     document.getElementById('deleteMovieName').textContent = btn.getAttribute('data-movie-name');
                     document.getElementById('deleteRoomName').textContent = btn.getAttribute('data-room-name');
                 });
+            }
+
+			// Bulk Modal
+            const timeList = document.getElementById('timeList');
+            const addBtn = document.getElementById('addTimeBtn');
+            const hiddenInput = document.getElementById('hiddenTimes');
+
+            // Thêm time mới
+            if (addBtn) {
+                addBtn.addEventListener('click', function () {
+                    const div = document.createElement('div');
+                    div.className = 'input-group mb-2 time-item';
+                    div.innerHTML = `
+                        <div class="input-group">
+                            <input type="datetime-local" class="form-control time-input" required />
+                            <button type="button" class="btn btn-danger remove-time">
+                                <i class="bx bx-trash"></i>
+                            </button>
+                        </div>
+                        <small class="text-danger overlap-msg d-none"></small>
+                    `;
+                    timeList.appendChild(div);
+                });
+            }
+
+            // Xóa time
+            if (timeList) {
+                timeList.addEventListener('click', function (e) {
+                    if (e.target.closest('.remove-time')) {
+                        const items = document.querySelectorAll('.time-item');
+                        if (items.length > 1) {
+                            e.target.closest('.time-item').remove();
+                        } else {
+                            alert("Phải có ít nhất một suất chiếu!");
+                        }
+                    }
+                });
+            }
+
+            // ========================================================
+            // XỬ LÝ SUBMIT CHUNG (GOM DATA BULK & CHẶN LỖI)
+            // ========================================================
+
+            document.addEventListener('submit', function (e) {
+                const form = e.target;
+                const currentHidden = form.querySelector('#hiddenTimes');
+
+                // Nếu là Form Bulk (có chứa input ẩn hiddenTimes)
+                if (currentHidden) {
+                    // Kiểm tra lỗi trùng giờ trước khi cho phép gửi
+                    if (form.querySelector('.is-invalid')) {
+                        e.preventDefault();
+                        alert("Thông tin suất chiếu không hợp lệ. Vui lòng kiểm tra lại các ô báo đỏ!");
+                        return;
+                    }
+
+                    const times = [];
+                    // Gom tất cả các giá trị từ các ô .time-input TRONG form này
+                    form.querySelectorAll('.time-input').forEach(input => {
+                        if (input.value) {
+                            times.push(input.value);
+                        }
+                    });
+
+                    // Cập nhật chuỗi vào input ẩn (Chống lỗi null Server-side)
+                    if (times.length > 0) {
+                        currentHidden.value = times.join(',');
+                    } else {
+                        e.preventDefault();
+                        alert("Vui lòng nhập ít nhất một khung giờ!");
+                    }
+                }
+                else {
+                    // Logic chặn submit cho Create/Edit lẻ
+                    if (form.querySelector('.is-invalid')) {
+                        e.preventDefault();
+                        alert("Có suất chiếu bị trùng giờ!");
+                    }
+                }
+            });
+
+        // ===== CREATE =====
+        const createStart = document.querySelector('#createShowtimeModal [name="StartTime"]');
+        const createRoom = document.querySelector('#createShowtimeModal [name="RoomId"]');
+        const createMovie = document.querySelector('#createShowtimeModal [name="MovieId"]');
+
+        if (createStart) {
+            createStart.addEventListener('change', async () => {
+                const isOverlap = await checkOverlap(
+                    createRoom.value,
+                    createMovie.value,
+                    createStart.value
+                );
+
+                if (isOverlap) {
+                    createStart.classList.add('is-invalid');
+                } else {
+                    createStart.classList.remove('is-invalid');
+                }
+            });
+        }
+
+        // ===== EDIT =====
+        const editStart = document.getElementById('editStartTime');
+        const editRoom = document.getElementById('editRoomId');
+        const editMovie = document.getElementById('editMovieId');
+
+        if (editStart) {
+            editStart.addEventListener('change', async () => {
+                const isOverlap = await checkOverlap(
+                    editRoom.value,
+                    editMovie.value,
+                    editStart.value
+                );
+
+                if (isOverlap) {
+                    editStart.classList.add('is-invalid');
+                } else {
+                    editStart.classList.remove('is-invalid');
+                }
+            });
+        }
+
+        // ===== BULK =====
+        document.addEventListener('change', async function (e) {
+            if (e.target.classList.contains('time-input')) {
+                const input = e.target;
+
+                const container = input.closest('.time-item'); // Tìm lớp bao quanh
+                if (!container) return;
+
+                const modal = document.getElementById('bulkShowtimeModal');
+                const room = modal.querySelector('[name="RoomId"]')?.value;
+                const movie = modal.querySelector('[name="MovieId"]')?.value;
+
+                const selectedTime = new Date(input.value);
+                const currentTime = new Date();
+
+                const msg = container.querySelector('.overlap-msg');
+                // Kiểm tra quá khứ
+               if (input.value && selectedTime < currentTime) {
+                    input.classList.add('is-invalid');
+                    if (msg) {
+                        msg.textContent = "Không được chọn thời gian trong quá khứ!";
+                        msg.classList.remove('d-none');
+                    }
+                    return;
+                }
+
+                // Kiểm tra trùng qua API
+                const isOverlap = await checkOverlap(room, movie, input.value);
+
+                if (isOverlap) {
+                    input.classList.add('is-invalid');
+                    if (msg) {
+                        msg.textContent = "Khung giờ này đã có suất chiếu khác!";
+                        msg.classList.remove('d-none');
+                    }
+                } else {
+                    input.classList.remove('is-invalid');
+                    if (msg) msg.classList.add('d-none');
+                }
+            }
+        });
+
+
+            // ========================================================
+            // GỌI API CHECK TRÙNG
+            // ========================================================
+            async function checkOverlap(roomId, movieId, startTime) {
+                if (!roomId || !movieId || !startTime) return false;
+                try {
+                    const baseUrl = "https://localhost:7123";
+
+                    const url = `${baseUrl}/api/showtimes/CheckOverlap?roomId=${roomId}&movieId=${movieId}&startTime=${encodeURIComponent(startTime)}`;
+
+                    console.log("JS đang gọi thử:", url);
+
+                    const res = await fetch(url);
+
+                    if (!res.ok) {
+                        console.error("API trả về lỗi:", res.status);
+                        return false;
+                    }
+                    const data = await res.json();
+                    return data.isOverlap;
+                } catch (err) {
+                    console.error("Không thể kết nối đến API check trùng:", err);
+                    return false;
+                }
             }
         });
     </script>

@@ -5,14 +5,14 @@ namespace BookingTicketCinema.DTO
     public class ShowTimeCreateDto
     {
         public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        //public DateTime EndTime { get; set; }
         public int MovieId { get; set; }
         public int RoomId { get; set; }
     }
     public class ShowTimeUpdateDto
     {
         public DateTime? StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
+        //public DateTime? EndTime { get; set; }
         public int? MovieId { get; set; }
         public int? RoomId { get; set; }
     }
